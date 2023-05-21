@@ -1,0 +1,20 @@
+{
+  "name": "auto-sd",
+  "version": "1.0.0",
+  "scripts": {
+    "startup": "ts-node src/startup.ts",
+    "shutdown": "ts-node src/shutdown.ts",
+    "run": "ts-node src/index.ts"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@aws-sdk/client-ec2": "^3.332.0",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.14.4",
+    "dotenv": "^16.0.3",
+    "fs-extra": "^11.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}
