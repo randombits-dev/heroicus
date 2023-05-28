@@ -5,7 +5,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const {deployments, getNamedAccounts} = hre;
   const {deploy} = deployments;
 
-  const {deployer, user1} = await getNamedAccounts();
+  const {deployer} = await getNamedAccounts();
 
   await deploy('USDC', {
     contract: 'TestToken',
@@ -13,6 +13,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: ['USDC', 'USDC'],
     log: true,
   });
+
 };
 export default func;
 func.tags = ['USDC'];

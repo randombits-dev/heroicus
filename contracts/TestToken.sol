@@ -7,7 +7,7 @@ contract TestToken is ERC20 {
     string memory _name,
     string memory _symbol
   ) ERC20(_name, _symbol) {
-    
+
   }
 
   function giveMe(uint256 amount) public {
