@@ -4,7 +4,6 @@ import {useAccount, useBalance} from 'wagmi'
 import {USDCAddress} from "../utils/addresses";
 import {useTemplateList} from "../hooks/useTemplateList";
 import TemplateCard from "./TemplateCard";
-import Allowance from "./Allowance";
 
 export function GPURent() {
   const {address} = useAccount()
@@ -15,21 +14,9 @@ export function GPURent() {
   // const nftList = useNftList();
 
   return (
-    <div>
-
-
-      {data && (
-        <div>
-          {data?.formatted} {data.symbol}
-        </div>
-      )}
-      {/*{isLoading && <div>Fetching token...</div>}*/}
-      {/*{isError && <div>Error: {error?.message}</div>}*/}
-
-      <Allowance/>
-      <hr/>
-
-      <div>
+    <div className="text-center m-10">
+      <div className="text-3xl">Available Rentals</div>
+      <div className="flex justify-center">
         {
           templateInfo.map(template => {
             return <TemplateCard key={template.name} templateInfo={template}/>;

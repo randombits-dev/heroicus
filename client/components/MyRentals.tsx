@@ -2,24 +2,25 @@ import {useMyRentals} from "../hooks/useMyRentals";
 import RentalCard from "./RentalCard";
 
 const MyRentals = () => {
-  // const {address} = useAccount();
-  // const [hours, setHours] = useState(2);
-  // const {price} = useEstimatePrice(templateInfo, hours);
-  // const {execute} = useRent(String(hours));
 
-  const {rentalBalance, tokenIds, myRentals} = useMyRentals();
-  
-  return <div className="card">
-    <div>Balance is {rentalBalance}</div>
+  const {myRentals} = useMyRentals();
 
-    {/*<div>Token Ids: {tokenIds.map(item => <div>{item}</div>)}</div>*/}
-    <div>My Rentals</div>
-    <div>Length {myRentals?.length}</div>
-    {
-      myRentals?.map(rental => {
+  const renderRentals = () => {
+    if (myRentals?.length > 0) {
+      return myRentals.map(rental => {
         return <RentalCard key={rental.token} rental={rental}/>
       })
+    } else {
+      return <div>None</div>;
     }
+  };
+
+  return <div className="m-10 text-center">
+    <div className="text-3xl">My Rentals</div>
+    <div className="flex justify-center">
+      {renderRentals()}
+    </div>
+
   </div>
 };
 

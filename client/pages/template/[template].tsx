@@ -1,17 +1,20 @@
+import {useAccount} from "wagmi";
+import {useRouter} from "next/router";
+import {useRent} from "../../hooks/useRent";
 import {useState} from "react";
-import {useEstimatePrice} from "../hooks/useEstimatePrice";
-import {useRent} from "../hooks/useRent";
-import {TEMPLATE_LIST} from "../utils/templates";
+import {useEstimatePrice} from "../../hooks/useEstimatePrice";
+import {useTemplateInfo} from "../../hooks/useTemplateInfo";
+import {TEMPLATE_LIST} from "../../utils/templates";
 
-const TemplateCard = ({templateInfo}: any) => {
-  // const {address} = useAccount();
+export function Template() {
+  const {address} = useAccount();
+  const router = useRouter();
+  const templateId = router.query.template as string;
+  console.log(templateId);
   const [hours, setHours] = useState(2);
+  const templateInfo = useTemplateInfo({templateId});
   const {price} = useEstimatePrice(templateInfo, hours);
-  const {execute, receipt, status} = useRent(templateInfo.name, String(hours));
-
-  const details = () => {
-    window.location.href = '/template/' + templateInfo.name;
-  };
+  const {execute, receipt, status} = useRent(templateInfo?.name, String(hours));
 
   const writeContents = () => {
     if (status === 'error') {
@@ -20,7 +23,7 @@ const TemplateCard = ({templateInfo}: any) => {
       </div>;
     } else if (status === 'loading') {
       return <div className="spinner"></div>;
-    } else {
+    } else if (templateInfo) {
       const templateDetails = TEMPLATE_LIST.find(t => t.id === templateInfo.name);
       return <div className="">
         <div className="text-2xl mb-4">{templateDetails.name}</div>
@@ -37,7 +40,6 @@ const TemplateCard = ({templateInfo}: any) => {
         <div>Total Price: {price}</div>
 
         <button className="bg-blue-900 px-10 py-3" onClick={execute}>Rent this server</button>
-        <button className="bg-blue-900 px-10 py-3" onClick={details}>Details</button>
       </div>
     }
   };
@@ -45,7 +47,6 @@ const TemplateCard = ({templateInfo}: any) => {
   return <div className="bg-zinc-950 rounded-lg m-10 px-10 py-5 w-96">
     {writeContents()}
   </div>;
+}
 
-};
-
-export default TemplateCard;
+export default Template;

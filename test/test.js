@@ -1,13 +1,47 @@
-const TestToken = artifacts.require("TestToken");
+import {deployments, ethers} from "hardhat";
 
-contract('TestCoin', (accounts) => {
-    
-    it('should have minted', async () => {
-        const instance = await TestToken.deployed();
-        const balance = await instance.balanceOf.call(accounts[2]);
+import {expect} from 'chai';
 
-        assert.equal(balance.valueOf(), 1000);
+// const setupTest = deployments.createFixture(
+//   async ({deployments, getNamedAccounts, ethers}, options) => {
+//     await deployments.fixture(); // ensure you start from a fresh deployments
+//     const {deployer, user1} = await getNamedAccounts();
+//     const TokenContract = await ethers.getContract('Token', tokenOwner);
+//     await TokenContract.mint(10).then((tx) => tx.wait()); //this mint is executed once and then `createFixture` will ensure it is snapshotted
+//     return {
+//       tokenOwner: {
+//         address: tokenOwner,
+//         TokenContract,
+//       },
+//     };
+//   }
+// );
+
+const setupTest = deployments.createFixture(
+  async ({deployments, getNamedAccounts, ethers}, options) => {
+    await deployments.fixture(); // ensure you start from a fresh deployments
+    const {deployer} = await getNamedAccounts();
+    const usdc = await deployments.deploy('USDC', {
+      contract: 'TestToken',
+      from: deployer,
+      args: ['USDC', 'USDC'],
+      log: true,
     });
+    return {
+      usdc
+    };
+  }
+);
+
+describe('USDC', (accounts) => {
+
+  it('should have minted', async () => {
+    const {user1} = await getNamedAccounts();
+    await deployments.fixture(['USDC']);
+    await deployments.execute('USDC', {from: user1}, 'giveMe', ethers.utils.parseEther('100'));
+    const result = await deployments.read('USDC', 'balanceOf', user1);
+    expect(Number(ethers.utils.formatEther(result))).to.equal(100);
+  });
 //     it('should call a function that depends on a linked library', async () => {
 //         const metaCoinInstance = await MetaCoin.deployed();
 //         const metaCoinBalance = (await metaCoinInstance.getBalance.call(accounts[0])).toNumber();

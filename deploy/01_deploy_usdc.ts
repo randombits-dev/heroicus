@@ -1,13 +1,11 @@
 import {HardhatRuntimeEnvironment} from 'hardhat/types';
 import {DeployFunction} from 'hardhat-deploy/types';
+import {deployments, getNamedAccounts} from 'hardhat';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const {deployments, getNamedAccounts} = hre;
-  const {deploy} = deployments;
-
   const {deployer} = await getNamedAccounts();
 
-  await deploy('USDC', {
+  await deployments.deploy('USDC', {
     contract: 'TestToken',
     from: deployer,
     args: ['USDC', 'USDC'],

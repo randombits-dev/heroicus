@@ -9,7 +9,7 @@ export default defineConfig({
       commands: {
         clean: 'pnpm run clean',
         build: 'pnpm run compile',
-        rebuild: 'pnpm hardhat compile',
+        rebuild: 'pnpm run compile',
       },
       project: '../',
     }),

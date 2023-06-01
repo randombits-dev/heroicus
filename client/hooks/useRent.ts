@@ -14,12 +14,17 @@ export const useRent = (template: string, amount: string) => {
   //   }
   // });
 
-  const {config} = usePrepareContractWrite({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
-    functionName: 'rent',
-    args: [formatBytes32String(template), parseEther(amount), parseEther('0')]
-  });
+  let contractDetails = {};
+  if (template) {
+    contractDetails = {
+      address: GPURentalAddress,
+      abi: gpuRentalABI,
+      functionName: 'rent',
+      args: [formatBytes32String(template), 1, parseEther(amount)]
+    };
+  }
+
+  const {config} = usePrepareContractWrite(contractDetails);
   const {data, write} = useContractWrite(config);
 
   const {
@@ -31,7 +36,6 @@ export const useRent = (template: string, amount: string) => {
   });
 
   if (receipt) {
-    console.log(receipt);
     const lastLog = receipt.logs.pop();
     const rentEvent = decodeEventLog({
       abi: gpuRentalABI,
@@ -39,19 +43,6 @@ export const useRent = (template: string, amount: string) => {
       topics: lastLog.topics
     });
     const tokenId = Number(rentEvent.args.tokenId);
-    // const decodedLogs = receipt.logs.map(log => {
-    //   try {
-    //     return decodeEventLog({
-    //       abi: gpuRentalABI,
-    //       data: log.data,
-    //       topics: log.topics
-    //     });
-    //   } catch (e) {
-    //     console.log(e);
-    //     return null;
-    //   }
-    //
-    // });
     fetch('/api/create', {
       method: 'POST',
       body: JSON.stringify({token: tokenId})

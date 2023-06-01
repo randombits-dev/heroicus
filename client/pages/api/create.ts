@@ -5,6 +5,8 @@ import {hardhat} from 'viem/chains';
 import {parseBytes32String} from 'ethers/lib/utils';
 import {GPURentalAddress} from '../../utils/addresses';
 import {gpuRentalABI} from '../../generated';
+import {withErrorHandler} from '../../errorHandler';
+import {getClientToken} from '../../utils/aws';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -27,28 +29,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const expired = userInfo[1];
 
   if (expired) {
-    res.json({error: 'Expired rental'});
-    return;
+    throw 'Expired Rental';
   }
 
   const ec2 = new EC2Client({region: 'us-east-2'});
 
   const command = new DescribeInstancesCommand({
-    Filters: [{Name: 'client-token', Values: [String(token)]}]
+    Filters: [{Name: 'client-token', Values: [getClientToken(token)]}]
   });
   const {Reservations} = await ec2.send(command);
   if (Reservations.length > 0) {
-    res.json({error: 'Server already exists'});
-    return;
+    throw 'Server already exists';
   }
 
   const cmd = new RunInstancesCommand({
     LaunchTemplate: {LaunchTemplateName: templateId},
     MinCount: 1,
     MaxCount: 1,
-    ClientToken: String(token)
+    ClientToken: getClientToken(token)
   });
-  const {Instances} = await ec2.send(cmd);
+  await ec2.send(cmd);
   res.json({success: true});
   // await waitUntilInstanceStatusOk(
   //   {client: ec2, maxWaitTime: 240},
@@ -56,4 +56,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // );
 };
 
-export default handler;
+export default withErrorHandler(handler);

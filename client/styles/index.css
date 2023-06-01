@@ -1,4 +1,37 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
 .card {
   border: 1px solid black;
   padding: 20px;
+}
+
+
+.spinner {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.spinner:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #777;
+  border-color: #777 transparent #777 transparent;
+  animation: spinner 1.2s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

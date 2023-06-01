@@ -16,7 +16,7 @@ const RentalCard = ({rental}) => {
     window.open(`/auto/${rental.token}`, '_blank');
   };
 
-  return <div className="card">
+  return <div className="bg-neutral-950 rounded-lg m-10 px-10 py-5">
     <div>{rental.token}</div>
     <div>Template is {rental.template}</div>
     <div>Expires {rental.expires.toISOString()}</div>
@@ -25,8 +25,8 @@ const RentalCard = ({rental}) => {
       timeLeft < 0 ? <div>Expired</div> : <div>Running</div>
     }
 
-    <button onClick={execute}>Pause Rental</button>
-    <button onClick={launch}>Launch</button>
+    <button className="bg-blue-900 px-5 py-1" onClick={launch}>Launch</button>
+    <button className="bg-red-900 px-5 py-1 ml-5" onClick={execute}>Stop Rental</button>
   </div>;
 };
 

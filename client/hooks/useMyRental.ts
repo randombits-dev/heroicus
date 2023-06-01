@@ -14,6 +14,8 @@ export const useMyRental = ({token}) => {
   });
   const userStruct = data?.[0] as any;
 
+  console.log('unix: ' + userStruct?.expires);
+
   const formatted = data && {
     token: Number(token),
     user: userStruct.user,

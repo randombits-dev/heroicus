@@ -1,6 +1,7 @@
 /** @type import('hardhat/config').HardhatUserConfig */
 
 import '@nomicfoundation/hardhat-toolbox';
+import '@nomicfoundation/hardhat-chai-matchers';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 

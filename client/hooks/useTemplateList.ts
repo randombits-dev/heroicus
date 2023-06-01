@@ -6,13 +6,12 @@ import {formatEther} from 'viem';
 import {TEMPLATE_LIST, TemplateInfo} from '../utils/templates';
 
 export const useTemplateList = (): TemplateInfo[] => {
-  const readParams = TEMPLATE_LIST.map(name => ({
+  const readParams = TEMPLATE_LIST.map(({id}) => ({
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'templateInfo',
-    args: [formatBytes32String(name)]
+    args: [formatBytes32String(id)]
   }));
-  console.log(readParams);
   const {data} = useContractReads({
     contracts: readParams
   });
@@ -20,8 +19,8 @@ export const useTemplateList = (): TemplateInfo[] => {
   if (data) {
     return data.map((item: any) => ({
       name: parseBytes32String(item.result[0]),
-      price: Number(formatEther(item.result[1])),
-      max: item.result[2]
+      serverId: item.result[1],
+      price: Number(formatEther(item.result[2]))
     }));
   } else {
     return [];

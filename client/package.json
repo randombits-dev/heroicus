@@ -21,12 +21,17 @@
     "wagmi": "^1.0.5"
   },
   "devDependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.18",
     "@types/node": "^17.0.31",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "@wagmi/cli": "^1.0.1",
+    "autoprefixer": "^10.4.14",
     "eslint": "^8.15.0",
     "eslint-config-next": "^12.1.6",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4"
   }
 }

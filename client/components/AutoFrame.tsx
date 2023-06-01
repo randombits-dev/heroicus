@@ -1,16 +1,35 @@
 import {styled} from "goober";
+import {useWaitForAuto} from "../hooks/useWaitForAuto";
+import {useLoginToServer} from "../hooks/useLoginToServer";
 
 const Frame = styled('iframe')`
   border: none;
+  width: 100vw;
+  height: 100%;
 `;
 
-const AutoFrame = ({url, error, login}) => {
-  if (url) {
-    return <Frame src={url} width="100%" height="500px"></Frame>
+const CenteredContent = styled('div')`
+  text-align: center;
+`;
+
+const AutoFrame = ({token}) => {
+  const {signMessage, url, error} = useLoginToServer({token});
+  const {ready} = useWaitForAuto(url);
+  if (ready) {
+    return <Frame src={url}></Frame>
+  } else if (url) {
+    return <CenteredContent>
+      <div className="spinner"></div>
+      <div>Starting server. This can take several minutes...</div>
+    </CenteredContent>
   } else if (error) {
-    return <div>You are not authorized to use the server.</div>;
+    return <CenteredContent>
+      <div>An error occurred. Please stop server to get a refund.</div>
+    </CenteredContent>;
   } else {
-    return <button onClick={login}>Login to use server</button>
+    return <CenteredContent>
+      <button className="bg-blue-900 px-20 py-5" onClick={() => signMessage()}>Login to use server</button>
+    </CenteredContent>;
   }
 };
 

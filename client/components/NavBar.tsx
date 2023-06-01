@@ -1,7 +1,4 @@
-import Image from "next/image";
-import Link from "next/link";
-import styles from "./Navbar.module.css";
-import {ConnectButton} from "../examples/ConnectButton";
+import {ConnectButton} from "./examples/ConnectButton";
 import {useEffect, useState} from "react";
 
 /**
@@ -18,30 +15,33 @@ export function Navbar() {
   }, []);
 
   return (
-    <div className={styles.navContainer}>
-      <nav className={styles.nav}>
-        <div className={styles.navLeft}>
-          <Link href="/" className={`${styles.homeLink} ${styles.navLeft}`}>
-            <Image
-              src="/logo.png"
-              width={48}
-              height={48}
-              alt="NFT marketplace sample logo"
-            />
-          </Link>
-
-          <div className={styles.navMiddle}>
-            <Link href="/buy" className={styles.link}>
-              Buy
-            </Link>
-            <Link href="/sell" className={styles.link}>
-              Sell
-            </Link>
-          </div>
+    <div className="sticky top-0 z-50 bg-neutral-950 shadow px-10 py-3">
+      <nav className="layout flex">
+        <div className="flex-1">
+          <div className="text-2xl">FTM Rental</div>
         </div>
+        {/*<div className="">*/}
+        {/*<Link href="/" className>*/}
+        {/*  <Image*/}
+        {/*    src="/logo.png"*/}
+        {/*    width={48}*/}
+        {/*    height={48}*/}
+        {/*    alt="NFT marketplace sample logo"*/}
+        {/*  />*/}
+        {/*</Link>*/}
 
-        <div className={styles.navRight}>
-          <div className={styles.navConnect}>
+        {/*  <div className={styles.navMiddle}>*/}
+        {/*    <Link href="/buy" className={styles.link}>*/}
+        {/*      Buy*/}
+        {/*    </Link>*/}
+        {/*    <Link href="/sell" className={styles.link}>*/}
+        {/*      Sell*/}
+        {/*    </Link>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+
+        <div className="">
+          <div className="">
             {/*<ConnectWallet theme="dark" btnTitle="Connect Wallet"/>*/}
             {hasMounted && <ConnectButton/>}
 

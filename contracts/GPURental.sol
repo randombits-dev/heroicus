@@ -19,28 +19,46 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
   // address that receives the payments
   address private devAddress;
   uint256 public minRentalTime = 1800; // seconds
+  uint256 public maxRentalTime = 2592000; // seconds
+  uint256 public pricePerGBPerMonth = 1 * 10 ^ 18;
+  //  uint8 public maxRentalCount;
+
+  struct ServerInfo {
+    uint256 pricePerHour;
+    uint8 cpus;
+  }
+
+  mapping(uint8 => uint32) private _gLimits; // us-west-1 => 4
+  mapping(uint8 => uint32) private _tLimits; // us-west-1 => 4
+  mapping(uint8 => uint32) private _gUsage;
+  mapping(uint8 => uint32) private _tUsage;
+  mapping(bytes32 => ServerInfo) public serverConfigs;
+
 
   struct TemplateInfo {
-    bytes32 id;
+    bytes32 serverId;
     uint256 pricePerHour;
-    uint8 maxCount;
   }
 
   struct UserInfo
   {
-    address user;   // address of user role
-    uint64 expires; // unix timestamp, user expires
+    address user;
+    uint64 expires;
     bytes32 templateId;
+    bytes32 serverId;
+    uint8 region;
+    uint32 diskSize;
   }
 
-  mapping(address => uint256) public credits;
+  //  mapping(bytes32 => uint256) public templatePrices;
+  //  mapping(address => uint256) public credits;
   mapping(uint256 => UserInfo) private _userInfo;
   //  mapping(address => uint256[]) public listOfRentals;
 
   mapping(bytes32 => TemplateInfo) public templateInfo;
   //  bytes32[] public templateList;
 
-  event SetTemplatePrice(bytes32 id, uint256 pricePerHour);
+  event SetTemplate(bytes32 id, uint256 pricePerHour, uint8 cpus);
   event Rent(uint256 tokenId);
 
   constructor(address _paymentCoin, address _devAddress) ERC721("GPU Rental", "GPU") {
@@ -52,59 +70,103 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     return (_userInfo[tokenId], userOf(tokenId) == address(0));
   }
 
-  function setTemplate(bytes32 id, uint256 pricePerHour, uint8 maxCount) public onlyOwner {
-    TemplateInfo memory info = TemplateInfo(id, pricePerHour, maxCount);
+  function setTemplate(bytes32 id, bytes32 serverId, uint256 pricePerHour) public onlyOwner {
+    ServerInfo memory server = serverConfigs[serverId];
+    require(server.pricePerHour > 0, "server not found");
+    TemplateInfo memory info = TemplateInfo(serverId, pricePerHour);
     templateInfo[id] = info;
-    console.log("setting template");
-    console.logBytes32(id);
-    console.log(pricePerHour);
-    console.log(maxCount);
-    emit SetTemplatePrice(id, pricePerHour);
+    //    emit SetTemplate(id, pricePerHour, serverType);
   }
 
-  function rent(bytes32 templateId, uint256 amount, uint256 creditsToUse) public {
+  function setServer(bytes32 id, uint256 pricePerHour, uint8 cpus) public onlyOwner {
+    ServerInfo memory info = ServerInfo(pricePerHour, cpus);
+    serverConfigs[id] = info;
+    //    emit SetTemplate(id, pricePerHour, serverType, cpus);
+  }
+
+  function removeServer(bytes32 id) public onlyOwner {
+    delete serverConfigs[id];
+  }
+
+  function setGLimit(uint8 region, uint32 cpuLimit) public onlyOwner {
+    _gLimits[region] = cpuLimit;
+  }
+
+  function setTLimit(uint8 region, uint32 cpuLimit) public onlyOwner {
+    _tLimits[region] = cpuLimit;
+  }
+
+  function setDiskPrice(uint256 _pricePerGBPerMonth) public onlyOwner {
+    pricePerGBPerMonth = _pricePerGBPerMonth;
+  }
+
+  function rent(bytes32 templateId, uint8 region, uint256 amount) public {
+    _cleanUpOldRentals();
     TemplateInfo memory template = templateInfo[templateId];
-    require(template.maxCount > 0, "not available to rent");
-    uint256 timeRequested = amount.add(creditsToUse).div(template.pricePerHour.div(3600));
+    ServerInfo memory server = serverConfigs[template.serverId];
+    require(server.pricePerHour > 0, "template not found");
+    _adjustCPULimit(template.serverId, region);
+    uint256 timeRequested = amount.div(template.pricePerHour.div(3600));
     require(timeRequested >= minRentalTime, "minimum rental time not met");
-    if (amount > 0) {
-      IERC20 tk = IERC20(paymentCoin);
-      tk.transferFrom(msg.sender, devAddress, amount.sub(creditsToUse));
-    }
+    IERC20 tk = IERC20(paymentCoin);
+    tk.transferFrom(msg.sender, address(this), amount);
     _mint(msg.sender, nftId);
     emit Rent(nftId);
     UserInfo storage info = _userInfo[nftId];
     info.user = msg.sender;
     info.expires = uint64(block.timestamp + timeRequested);
     info.templateId = templateId;
+    info.region = region;
     nftId++;
   }
 
-  function verifyRental(uint256 tokenId) public view {
-
+  function rentCustom(bytes32 serverId, uint8 region, uint32 diskSize, uint256 amount) public {
+    _cleanUpOldRentals();
+    ServerInfo memory server = serverConfigs[serverId];
+    require(server.pricePerHour > 0, "template not found");
+    _adjustCPULimit(serverId, region);
+    uint256 timeRequested = amount.div(server.pricePerHour.div(3600) + diskSize * pricePerGBPerMonth.div(2592000));
+    require(timeRequested >= minRentalTime, "minimum rental time not met");
+    require(timeRequested <= maxRentalTime, "max rental time");
+    IERC20 tk = IERC20(paymentCoin);
+    tk.transferFrom(msg.sender, address(this), amount);
+    _mint(msg.sender, nftId);
+    emit Rent(nftId);
+    UserInfo storage info = _userInfo[nftId];
+    info.user = msg.sender;
+    info.expires = uint64(block.timestamp + timeRequested);
+    info.region = region;
+    info.diskSize = diskSize;
+    nftId++;
   }
+
 
   function extendRental(uint256 tokenId, uint256 amount) public {
     require(userOf(tokenId) == msg.sender, "caller is not owner");
     UserInfo storage user = _userInfo[tokenId];
     TemplateInfo memory template = templateInfo[user.templateId];
+    //    ServerInfo memory server = _serverConfigs[template.serverId];
     uint256 timeRequested = amount.div(template.pricePerHour.mul(3600));
+    require(user.expires + timeRequested < block.timestamp + maxRentalTime, "cannot rent longer than 30 days");
+
     IERC20 tk = IERC20(paymentCoin);
-    tk.transferFrom(msg.sender, devAddress, amount);
+    tk.transferFrom(msg.sender, address(this), amount);
     user.expires = uint64(user.expires + timeRequested);
   }
 
-  function pauseRental(uint256 tokenId) public {
+  function stopRental(uint256 tokenId) public {
     require(userOf(tokenId) == msg.sender, "caller is not owner");
     UserInfo storage user = _userInfo[tokenId];
     TemplateInfo memory template = templateInfo[user.templateId];
-    uint256 secondsLeft = uint256(user.expires - block.timestamp);
-    uint256 creditsToGive = secondsLeft.div(3600).mul(template.pricePerHour);
-    credits[user.user] = credits[user.user].add(creditsToGive);
+    //    ServerInfo memory server = _serverConfigs[template.serverId];
+    uint256 secondsLeft = uint256(user.expires - block.timestamp).sub(60);
+    if (secondsLeft > 0) {
+      uint256 creditsToGive = secondsLeft.div(3600).mul(template.pricePerHour);
+      IERC20 tk = IERC20(paymentCoin);
+      tk.transfer(msg.sender, creditsToGive);
+    }
     _burn(tokenId);
-    delete _userInfo[tokenId];
   }
-
 
   function setGPUUser(uint256 tokenId, address user, uint64 expires, bytes32 templateId) internal {
     UserInfo storage info = _userInfo[tokenId];
@@ -121,10 +183,6 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     emit UpdateUser(tokenId, user, expires);
   }
 
-  /// @notice Get the user address of an NFT
-  /// @dev The zero address indicates that there is no user or the user is expired
-  /// @param tokenId The NFT to get the user address for
-  /// @return The user address for this NFT
   function userOf(uint256 tokenId) public view virtual returns (address){
     if (uint256(_userInfo[tokenId].expires) >= block.timestamp) {
       return _userInfo[tokenId].user;
@@ -134,30 +192,65 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     }
   }
 
-  /// @notice Get the user expires of an NFT
-  /// @dev The zero value indicates that there is no user
-  /// @param tokenId The NFT to get the user expires for
-  /// @return The user expires for this NFT
   function userExpires(uint256 tokenId) public view virtual returns (uint256){
     return _userInfo[tokenId].expires;
   }
 
-  /// @dev See {IERC165-supportsInterface}.
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return interfaceId == type(IERC4907).interfaceId || super.supportsInterface(interfaceId);
   }
 
-  //  function _beforeTokenTransfer(
-  //    address from,
-  //    address to,
-  //    uint256 tokenId
-  //  ) internal virtual override {
-  //    super._beforeTokenTransfer(from, to, tokenId);
-  //
-  //    if (from != to) {
-  //      userInfo[tokenId].user = address(0);
-  //      userInfo[tokenId].expires = 0;
-  //      emit UpdateUser(tokenId, address(0), 0);
-  //    }
-  //  }
+  function _cleanUpOldRentals() private {
+    uint256 len = totalSupply();
+    for (uint256 i; i < len; i++) {
+      uint256 tokenId = tokenByIndex(i);
+      if (uint256(_userInfo[tokenId].expires) >= block.timestamp) {
+        _burn(tokenId);
+      }
+    }
+  }
+
+  function _adjustCPULimit(bytes32 serverId, uint8 region) private {
+    ServerInfo memory server = serverConfigs[serverId];
+    if (serverId[0] == 'g') {
+      uint32 limit = _gLimits[region];
+      uint32 usage = _gUsage[region];
+      require(server.cpus <= limit - usage, "No resources available for GPU servers");
+      _gUsage[region] += server.cpus;
+    } else {
+      uint32 limit = _tLimits[region];
+      uint32 usage = _tUsage[region];
+      console.log("cpu limit");
+      console.log(limit);
+      require(server.cpus <= limit - usage, "No resources available for CPU servers");
+      _tUsage[region] += server.cpus;
+    }
+  }
+
+  function _resetCPULimit(bytes32 serverId, uint8 region) private {
+    ServerInfo memory server = serverConfigs[serverId];
+    if (serverId[0] == 'g') {
+      _gUsage[region] -= server.cpus;
+    } else {
+      _tUsage[region] -= server.cpus;
+    }
+  }
+
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 tokenId,
+    uint256 batchSize
+  ) internal virtual override {
+    super._beforeTokenTransfer(from, to, tokenId, batchSize);
+
+    if (from == address(0)) {
+      // nothing
+    } else if (to == address(0)) {
+      UserInfo memory user = _userInfo[tokenId];
+      TemplateInfo memory template = templateInfo[user.templateId];
+      _resetCPULimit(template.serverId, user.region);
+      delete _userInfo[tokenId];
+    }
+  }
 }

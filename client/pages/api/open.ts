@@ -5,6 +5,8 @@ import {hardhat} from 'viem/chains';
 import {GPURentalAddress} from '../../utils/addresses';
 import {gpuRentalABI} from '../../generated';
 import {UserInfo} from '../../utils/templates';
+import {withErrorHandler} from '../../errorHandler';
+import {getClientToken} from '../../utils/aws';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -37,33 +39,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     signature: s
   });
   if (!signatureValid) {
-    res.status(401).json({error: 'Not owner of NFT'});
+    throw 'Not owner';
   }
 
   if (expired) {
-    res.status(401).json({error: 'Expired rental'});
-    return;
+    throw 'Expired rental';
   }
 
-  try {
-    const ec2 = new EC2Client({region: 'us-east-2'});
-    const command = new DescribeInstancesCommand({
-      Filters: [{Name: 'client-token', Values: [token as string]}]
-    });
-    const {Reservations} = await ec2.send(command);
-    if (Reservations.length !== 1) {
-      throw 'Instance not found: ' + token;
-    }
-    const ip = Reservations[0].Instances[0].PublicIpAddress;
-    res.json({
-      ip: `http://${ip}:7860/`
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(401).json({
-      error: 'Nope!'
-    });
+  const ec2 = new EC2Client({region: 'us-east-2'});
+  const command = new DescribeInstancesCommand({
+    Filters: [{Name: 'client-token', Values: [getClientToken(token)]}]
+  });
+  const {Reservations} = await ec2.send(command);
+  if (Reservations.length !== 1) {
+    throw 'Instance not found: ' + token;
   }
+  const Instance = Reservations[0].Instances[0];
+  // if (Instance.State.Name !== InstanceStateName.) {
+  //   throw 'Instance not running: ' + token;
+  // }
+  const ip = Reservations[0].Instances[0].PublicIpAddress;
+  res.json({
+    ip: `http://${ip}:7860`
+  });
+
 };
 
-export default handler;
+export default withErrorHandler(handler);

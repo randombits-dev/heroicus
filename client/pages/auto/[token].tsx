@@ -1,64 +1,54 @@
-import {useState} from "react";
 import AutoFrame from "../../components/AutoFrame";
-import {useSignMessage} from "wagmi";
-import {hashMessage} from "viem";
 import {useRouter} from "next/router";
 import {useMyRental} from "../../hooks/useMyRental";
 import {styled} from "goober";
-import Timer from "../../components/Timer";
+import {useAccount} from "wagmi";
+import AutoHeader from "../../components/AutoHeader";
 
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
+  height: 100vh;
 `;
 const Header = styled('div')`
   flex: 0 0 auto;
+  padding: 40px 20px;
+  border-bottom: 1px solid black;
 `;
 const Content = styled('div')`
   flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
 `;
 
 export function Auto() {
+  const {address} = useAccount();
   const router = useRouter();
   const token = router.query.token as string;
-  const hash = hashMessage(token);
-  const [autoUrl, setAutoUrl] = useState('');
-  const [error, setError] = useState(false);
 
   const {myRental} = useMyRental({token});
-  const timeLeft = myRental && (myRental.expires.getTime() - new Date().getTime()) / 1000 / 60;
 
-  const {signMessage, data} = useSignMessage({
-    message: 'Sign in with ID: ' + hash,
-    onSuccess: (data) => {
-      fetch(`/api/opentest`, {
-        method: 'POST',
-        body: JSON.stringify({
-          token,
-          s: data
-        })
-      }).then(res => res.json()).then(data => {
-        if (data.ip) {
-          setAutoUrl(data.ip);
-        }
-      }).catch(() => {
-        setError(true);
-      });
-    }
-  });
+  if (!myRental) {
+    return <div>Loading rental...</div>;
+  }
+
+  if (myRental.user !== address) {
+    return <div>You do not own this rental</div>;
+  }
+
+  if (myRental.expired) {
+    return <div>Rental is expired</div>;
+  }
+
+  console.log(myRental.expires.getTime());
 
   return (
     <Container>
       <Header>
-        <div>Expires {myRental?.expires.toISOString()}</div>
-        <Timer end={myRental?.expires.getTime()}/>
-        {
-          timeLeft < 0 ? <div>Expired</div> : <div>Running</div>
-        }
-
-        {/*<button onClick={execute}>Pause Rental</button>*/}
+        <AutoHeader rental={myRental}/>
       </Header>
-      <Content> <AutoFrame url={autoUrl} error={error} login={() => signMessage()}/>
+      <Content> <AutoFrame token={token}/>
       </Content>
     </Container>
   );
