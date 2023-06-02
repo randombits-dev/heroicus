@@ -31,7 +31,9 @@
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@types/chai": "^4.3.5",
     "@types/node": "^17.0.31",
     "chai": "^4.3.7",
     "ethers": "^5.7.2",

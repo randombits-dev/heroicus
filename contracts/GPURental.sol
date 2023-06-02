@@ -11,29 +11,10 @@ import "hardhat/console.sol";
 contract GPURental is IERC4907, ERC721Enumerable, Ownable {
   using SafeMath for uint256;
 
-  uint256 private nftId = 1;
-
-  // USDC
-  address private paymentCoin;
-
-  // address that receives the payments
-  address private devAddress;
-  uint256 public minRentalTime = 1800; // seconds
-  uint256 public maxRentalTime = 2592000; // seconds
-  uint256 public pricePerGBPerMonth = 1 * 10 ^ 18;
-  //  uint8 public maxRentalCount;
-
   struct ServerInfo {
     uint256 pricePerHour;
     uint8 cpus;
   }
-
-  mapping(uint8 => uint32) private _gLimits; // us-west-1 => 4
-  mapping(uint8 => uint32) private _tLimits; // us-west-1 => 4
-  mapping(uint8 => uint32) private _gUsage;
-  mapping(uint8 => uint32) private _tUsage;
-  mapping(bytes32 => ServerInfo) public serverConfigs;
-
 
   struct TemplateInfo {
     bytes32 serverId;
@@ -48,17 +29,25 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     bytes32 serverId;
     uint8 region;
     uint32 diskSize;
+    uint256 payment;
   }
 
-  //  mapping(bytes32 => uint256) public templatePrices;
-  //  mapping(address => uint256) public credits;
+  uint256 private nftId = 1;
+  address private paymentCoin;
+
+  address private devAddress;
+  uint256 public minRentalTime = 1800; // 30 min
+  uint256 public maxRentalTime = 2592000; // 30 days
+  uint256 public pricePerGBPerMonth = 1 * 10 ^ 18;
+
+  mapping(uint8 => uint32) public gLimits; // us-west-1 => 4
+  mapping(uint8 => uint32) public tLimits; // us-west-1 => 4
+  mapping(uint8 => uint32) public gUsage;
+  mapping(uint8 => uint32) public tUsage;
+  mapping(bytes32 => ServerInfo) public serverConfigs;
   mapping(uint256 => UserInfo) private _userInfo;
-  //  mapping(address => uint256[]) public listOfRentals;
-
   mapping(bytes32 => TemplateInfo) public templateInfo;
-  //  bytes32[] public templateList;
 
-  event SetTemplate(bytes32 id, uint256 pricePerHour, uint8 cpus);
   event Rent(uint256 tokenId);
 
   constructor(address _paymentCoin, address _devAddress) ERC721("GPU Rental", "GPU") {
@@ -75,13 +64,12 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     require(server.pricePerHour > 0, "server not found");
     TemplateInfo memory info = TemplateInfo(serverId, pricePerHour);
     templateInfo[id] = info;
-    //    emit SetTemplate(id, pricePerHour, serverType);
   }
 
   function setServer(bytes32 id, uint256 pricePerHour, uint8 cpus) public onlyOwner {
+    require(id[0] == "g" || id[0] == "t", "GPU: Only g or t servers are allowed");
     ServerInfo memory info = ServerInfo(pricePerHour, cpus);
     serverConfigs[id] = info;
-    //    emit SetTemplate(id, pricePerHour, serverType, cpus);
   }
 
   function removeServer(bytes32 id) public onlyOwner {
@@ -89,11 +77,19 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
   }
 
   function setGLimit(uint8 region, uint32 cpuLimit) public onlyOwner {
-    _gLimits[region] = cpuLimit;
+    gLimits[region] = cpuLimit;
   }
 
   function setTLimit(uint8 region, uint32 cpuLimit) public onlyOwner {
-    _tLimits[region] = cpuLimit;
+    tLimits[region] = cpuLimit;
+  }
+
+  function setMinRentalTime(uint256 time) public onlyOwner {
+    minRentalTime = time;
+  }
+
+  function setMaxRentalTime(uint256 time) public onlyOwner {
+    maxRentalTime = time;
   }
 
   function setDiskPrice(uint256 _pricePerGBPerMonth) public onlyOwner {
@@ -108,6 +104,7 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     _adjustCPULimit(template.serverId, region);
     uint256 timeRequested = amount.div(template.pricePerHour.div(3600));
     require(timeRequested >= minRentalTime, "minimum rental time not met");
+    require(timeRequested <= maxRentalTime, "max rental time");
     IERC20 tk = IERC20(paymentCoin);
     tk.transferFrom(msg.sender, address(this), amount);
     _mint(msg.sender, nftId);
@@ -117,6 +114,7 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     info.expires = uint64(block.timestamp + timeRequested);
     info.templateId = templateId;
     info.region = region;
+    info.payment = amount;
     nftId++;
   }
 
@@ -145,34 +143,27 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     require(userOf(tokenId) == msg.sender, "caller is not owner");
     UserInfo storage user = _userInfo[tokenId];
     TemplateInfo memory template = templateInfo[user.templateId];
-    //    ServerInfo memory server = _serverConfigs[template.serverId];
     uint256 timeRequested = amount.div(template.pricePerHour.mul(3600));
     require(user.expires + timeRequested < block.timestamp + maxRentalTime, "cannot rent longer than 30 days");
 
     IERC20 tk = IERC20(paymentCoin);
     tk.transferFrom(msg.sender, address(this), amount);
     user.expires = uint64(user.expires + timeRequested);
+    user.payment += amount;
   }
 
   function stopRental(uint256 tokenId) public {
-    require(userOf(tokenId) == msg.sender, "caller is not owner");
+    require(userOf(tokenId) == msg.sender, "GPU: no rental found");
     UserInfo storage user = _userInfo[tokenId];
     TemplateInfo memory template = templateInfo[user.templateId];
-    //    ServerInfo memory server = _serverConfigs[template.serverId];
     uint256 secondsLeft = uint256(user.expires - block.timestamp).sub(60);
     if (secondsLeft > 0) {
-      uint256 creditsToGive = secondsLeft.div(3600).mul(template.pricePerHour);
+      uint256 creditsToGive = secondsLeft.mul(template.pricePerHour).div(3600);
       IERC20 tk = IERC20(paymentCoin);
       tk.transfer(msg.sender, creditsToGive);
+      user.payment -= creditsToGive;
     }
     _burn(tokenId);
-  }
-
-  function setGPUUser(uint256 tokenId, address user, uint64 expires, bytes32 templateId) internal {
-    UserInfo storage info = _userInfo[tokenId];
-    info.user = user;
-    info.expires = expires;
-    info.templateId = templateId;
   }
 
   function setUser(uint256 tokenId, address user, uint64 expires) external {
@@ -200,11 +191,15 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     return interfaceId == type(IERC4907).interfaceId || super.supportsInterface(interfaceId);
   }
 
+  function cleanUpOldRentals() public onlyOwner {
+    _cleanUpOldRentals();
+  }
+
   function _cleanUpOldRentals() private {
     uint256 len = totalSupply();
     for (uint256 i; i < len; i++) {
       uint256 tokenId = tokenByIndex(i);
-      if (uint256(_userInfo[tokenId].expires) >= block.timestamp) {
+      if (uint256(_userInfo[tokenId].expires) < block.timestamp) {
         _burn(tokenId);
       }
     }
@@ -213,26 +208,24 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
   function _adjustCPULimit(bytes32 serverId, uint8 region) private {
     ServerInfo memory server = serverConfigs[serverId];
     if (serverId[0] == 'g') {
-      uint32 limit = _gLimits[region];
-      uint32 usage = _gUsage[region];
+      uint32 limit = gLimits[region];
+      uint32 usage = gUsage[region];
       require(server.cpus <= limit - usage, "No resources available for GPU servers");
-      _gUsage[region] += server.cpus;
+      gUsage[region] = usage + server.cpus;
     } else {
-      uint32 limit = _tLimits[region];
-      uint32 usage = _tUsage[region];
-      console.log("cpu limit");
-      console.log(limit);
+      uint32 limit = tLimits[region];
+      uint32 usage = tUsage[region];
       require(server.cpus <= limit - usage, "No resources available for CPU servers");
-      _tUsage[region] += server.cpus;
+      tUsage[region] = usage + server.cpus;
     }
   }
 
   function _resetCPULimit(bytes32 serverId, uint8 region) private {
     ServerInfo memory server = serverConfigs[serverId];
     if (serverId[0] == 'g') {
-      _gUsage[region] -= server.cpus;
+      gUsage[region] -= server.cpus;
     } else {
-      _tUsage[region] -= server.cpus;
+      tUsage[region] -= server.cpus;
     }
   }
 
@@ -250,6 +243,8 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
       UserInfo memory user = _userInfo[tokenId];
       TemplateInfo memory template = templateInfo[user.templateId];
       _resetCPULimit(template.serverId, user.region);
+      IERC20 tk = IERC20(paymentCoin);
+      tk.transfer(devAddress, user.payment);
       delete _userInfo[tokenId];
     }
   }

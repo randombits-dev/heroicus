@@ -18,6 +18,15 @@ module.exports = {
   namedAccounts: {
     deployer: 0,
     dev: 1,
-    user1: 2
+    user1: 2,
+    user2: 3
+  },
+  networks: {
+    hardhat: {
+      mining: {
+        auto: true,
+        interval: 1000
+      }
+    }
   }
 };

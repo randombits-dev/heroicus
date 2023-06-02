@@ -1,16 +1,15 @@
-import {useState} from "react";
-import {useEstimatePrice} from "../hooks/useEstimatePrice";
-import {useRent} from "../hooks/useRent";
 import {TEMPLATE_LIST} from "../utils/templates";
+import {useRouter} from "next/router";
 
 const TemplateCard = ({templateInfo}: any) => {
+  const {push} = useRouter();
   // const {address} = useAccount();
-  const [hours, setHours] = useState(2);
-  const {price} = useEstimatePrice(templateInfo, hours);
-  const {execute, receipt, status} = useRent(templateInfo.name, String(hours));
+  // const [hours, setHours] = useState(2);
+  // const {price} = useEstimatePrice(templateInfo, hours);
+  // const {execute, receipt, status} = useRent(templateInfo.name, String(hours));
 
   const details = () => {
-    window.location.href = '/template/' + templateInfo.name;
+    void push('/template/' + templateInfo.name);
   };
 
   const writeContents = () => {
@@ -29,15 +28,15 @@ const TemplateCard = ({templateInfo}: any) => {
         <div className="text-md">{templateDetails.gpu}</div>
         <div>{templateDetails.notes}</div>
         <div>{templateInfo.price} USDC / hr</div>
-        <input className="bg-neutral-900 w-20 px-1 outline-0"
-               onChange={(e) => setHours(e.target.value)}
-               type="number"
-               value={hours}
-        /> hours
-        <div>Total Price: {price}</div>
+        {/*<input className="bg-neutral-900 w-20 px-1 outline-0"*/}
+        {/*       onChange={(e) => setHours(e.target.value)}*/}
+        {/*       type="number"*/}
+        {/*       value={hours}*/}
+        {/*/> hours*/}
+        {/*<div>Total Price: {price}</div>*/}
 
-        <button className="bg-blue-900 px-10 py-3" onClick={execute}>Rent this server</button>
-        <button className="bg-blue-900 px-10 py-3" onClick={details}>Details</button>
+        {/*<button className="bg-blue-900 px-10 py-3" onClick={execute}>Rent this server</button>*/}
+        <button className="bg-blue-900 px-10 py-3" onClick={details}>Rent</button>
       </div>
     }
   };

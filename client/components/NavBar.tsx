@@ -1,5 +1,6 @@
 import {ConnectButton} from "./examples/ConnectButton";
 import {useEffect, useState} from "react";
+import Link from "next/link";
 
 /**
  * Navigation bar that shows up on all pages.
@@ -18,8 +19,10 @@ export function Navbar() {
     <div className="sticky top-0 z-50 bg-neutral-950 shadow px-10 py-3">
       <nav className="layout flex">
         <div className="flex-1">
-          <div className="text-2xl">FTM Rental</div>
+          <Link className="text-2xl" href="/">FTM Rental</Link>
+          <Link href="/my">My Rentals</Link>
         </div>
+
         {/*<div className="">*/}
         {/*<Link href="/" className>*/}
         {/*  <Image*/}

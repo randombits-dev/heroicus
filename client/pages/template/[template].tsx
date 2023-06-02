@@ -1,4 +1,3 @@
-import {useAccount} from "wagmi";
 import {useRouter} from "next/router";
 import {useRent} from "../../hooks/useRent";
 import {useState} from "react";
@@ -7,10 +6,8 @@ import {useTemplateInfo} from "../../hooks/useTemplateInfo";
 import {TEMPLATE_LIST} from "../../utils/templates";
 
 export function Template() {
-  const {address} = useAccount();
   const router = useRouter();
   const templateId = router.query.template as string;
-  console.log(templateId);
   const [hours, setHours] = useState(2);
   const templateInfo = useTemplateInfo({templateId});
   const {price} = useEstimatePrice(templateInfo, hours);
@@ -39,13 +36,18 @@ export function Template() {
         /> hours
         <div>Total Price: {price}</div>
 
-        <button className="bg-blue-900 px-10 py-3" onClick={execute}>Rent this server</button>
+        <div className="text-center mt-10">
+          <button className="bg-blue-900 px-10 py-3" onClick={execute}>Submit</button>
+        </div>
+
       </div>
     }
   };
 
-  return <div className="bg-zinc-950 rounded-lg m-10 px-10 py-5 w-96">
-    {writeContents()}
+  return <div className="flex justify-center">
+    <div className="bg-zinc-950 rounded-lg m-10 px-10 py-5 w-96">
+      {writeContents()}
+    </div>
   </div>;
 }
 
