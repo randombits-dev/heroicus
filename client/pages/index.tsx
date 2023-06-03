@@ -1,7 +1,6 @@
-import {Connected} from "../components/examples/Connected";
 import {useEffect, useState} from "react";
-import {GPURent} from "../components/GPURent";
-import MyRentals from "../components/MyRentals";
+import {AvailableRentals} from "../components/AvailableRentals";
+import MyRentals from "../components/rentals/MyRentals";
 
 export function Index() {
   const [hasMounted, setHasMounted] = useState(false);
@@ -9,16 +8,13 @@ export function Index() {
   useEffect(() => {
     setHasMounted(true);
   }, []);
-  return (
-    <div>
-      {hasMounted &&
-        <Connected>
-          <MyRentals/>
-          <GPURent/>
 
-        </Connected>}
-    </div>
-  )
+  if (hasMounted) {
+    return <div>
+      <MyRentals/>
+      <AvailableRentals/>
+    </div>;
+  }
 }
 
 export default Index

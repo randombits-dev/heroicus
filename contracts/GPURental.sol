@@ -143,7 +143,7 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     require(userOf(tokenId) == msg.sender, "caller is not owner");
     UserInfo storage user = _userInfo[tokenId];
     TemplateInfo memory template = templateInfo[user.templateId];
-    uint256 timeRequested = amount.div(template.pricePerHour.mul(3600));
+    uint256 timeRequested = amount.div(template.pricePerHour.div(3600));
     require(user.expires + timeRequested < block.timestamp + maxRentalTime, "cannot rent longer than 30 days");
 
     IERC20 tk = IERC20(paymentCoin);

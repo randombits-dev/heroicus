@@ -13,11 +13,6 @@ export const getBlockTime = async () => {
 };
 
 export const fromEther = (value: String | Number) => {
-  // if (typeof value == 'number') {
-  //   return ethers.utils.parseEther(value.toFixed(18));
-  // } else {
-  //   return ethers.utils.parseEther(value as string);
-  // }
   return ethers.utils.parseEther(String(value));
 };
 

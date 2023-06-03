@@ -1,10 +1,14 @@
-import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
-import {decodeEventLog, parseEther} from 'viem';
+import {usePrepareContractWrite} from 'wagmi';
+import {decodeEventLog} from 'viem';
 import {GPURentalAddress} from '../utils/addresses';
 import {gpuRentalABI} from '../generated';
 import {formatBytes32String} from 'ethers/lib/utils';
+import {useRouter} from 'next/router';
+import {useContractWriteStatus} from './useContractWriteStatus';
+import {useEffect} from 'react';
 
-export const useRent = (template: string, amount: string) => {
+export const useRent = (template: string, amount: bigint) => {
+  const {push} = useRouter();
   // useContractEvent({
   //   address: GPURentalAddress,
   //   abi: gpuRentalABI,
@@ -20,37 +24,43 @@ export const useRent = (template: string, amount: string) => {
       address: GPURentalAddress,
       abi: gpuRentalABI,
       functionName: 'rent',
-      args: [formatBytes32String(template), 1, parseEther(amount)]
+      args: [formatBytes32String(template), 1, amount]
     };
   }
 
   const {config} = usePrepareContractWrite(contractDetails);
-  const {data, write} = useContractWrite(config);
 
-  const {
-    data: receipt,
-    status,
+  const {execute, receipt, status, statusMsg} = useContractWriteStatus(config);
 
-  } = useWaitForTransaction({
-    hash: data?.hash
-  });
+  useEffect(() => {
+    if (status === 'success') {
+      const lastLog = receipt.logs.pop();
+      const rentEvent = decodeEventLog({
+        abi: gpuRentalABI,
+        data: lastLog.data,
+        topics: lastLog.topics
+      });
+      const tokenId = Number(rentEvent.args.tokenId);
+      fetch('/api/create', {
+        method: 'POST',
+        body: JSON.stringify({token: tokenId})
+      }).then(() => {
+        void push('/auto/' + tokenId);
+      });
+    }
+  }, [status]);
 
-  if (receipt) {
-    const lastLog = receipt.logs.pop();
-    const rentEvent = decodeEventLog({
-      abi: gpuRentalABI,
-      data: lastLog.data,
-      topics: lastLog.topics
-    });
-    const tokenId = Number(rentEvent.args.tokenId);
-    fetch('/api/create', {
-      method: 'POST',
-      body: JSON.stringify({token: tokenId})
-    }).then(() => {
-      window.location.href = '/auto/' + tokenId;
-    });
-    console.log('New tokenId: ' + tokenId);
-  }
+  // const {data, write, isLoading} = useContractWrite(config);
+  //
+  // const {
+  //   data: receipt,
+  //   status,
+  //   isSuccess,
+  //   isFetching,
+  //   error
+  // } = useWaitForTransaction({
+  //   hash: data?.hash
+  // });
 
-  return {execute: write, status, receipt};
+  return {execute, status, statusMsg};
 };

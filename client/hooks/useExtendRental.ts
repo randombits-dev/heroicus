@@ -1,14 +1,13 @@
 import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 import {GPURentalAddress} from '../utils/addresses';
 import {gpuRentalABI} from '../generated';
-import {parseEther} from 'viem';
 
-export const useExtendRental = (tokenId: number, amount: number) => {
+export const useExtendRental = (tokenId: number, amount: bigint) => {
   const {config} = usePrepareContractWrite({
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'extendRental',
-    args: [BigInt(tokenId), parseEther(amount)]
+    args: [BigInt(tokenId), amount]
   });
   const {data, write} = useContractWrite(config);
   const {status} = useWaitForTransaction({

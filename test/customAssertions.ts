@@ -1,5 +1,13 @@
 import {BigNumber} from 'ethers';
 
+declare global {
+  export namespace Chai {
+    interface Assertion {
+      approx(other: BigNumber): void;
+    }
+  }
+}
+
 export const customMatchers = (chai: Chai.ChaiStatic) => {
   approx(chai.Assertion);
 };

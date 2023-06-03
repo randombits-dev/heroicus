@@ -3,6 +3,14 @@ import {configureChains, createConfig} from 'wagmi';
 import {publicProvider} from 'wagmi/providers/public';
 import {hardhat} from '@wagmi/chains';
 
+// export const getBlockTimestamp = async () => {
+//   const client = createPublicClient({
+//     chain: hardhat,
+//     transport: http(),
+//   });
+//   console.log(await client.getBlock());
+// };
+
 const {chains, publicClient, webSocketPublicClient} = configureChains(
   [hardhat],
   [

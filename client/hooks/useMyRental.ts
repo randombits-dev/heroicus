@@ -10,11 +10,11 @@ export const useMyRental = ({token}) => {
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'userInfo',
-    args: [token]
+    args: [token],
+    enabled: !!token
   });
-  const userStruct = data?.[0] as any;
 
-  console.log('unix: ' + userStruct?.expires);
+  const userStruct = data?.[0] as any;
 
   const formatted = data && {
     token: Number(token),

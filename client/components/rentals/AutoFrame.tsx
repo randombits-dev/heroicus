@@ -1,6 +1,6 @@
 import {styled} from "goober";
-import {useWaitForAuto} from "../hooks/useWaitForAuto";
-import {useLoginToServer} from "../hooks/useLoginToServer";
+import {useWaitForAuto} from "../../hooks/useWaitForAuto";
+import {useLoginToServer} from "../../hooks/useLoginToServer";
 
 const Frame = styled('iframe')`
   border: none;

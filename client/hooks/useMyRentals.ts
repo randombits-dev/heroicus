@@ -5,6 +5,7 @@ import {parseBytes32String} from 'ethers/lib/utils';
 
 export const useMyRentals = () => {
   const {address} = useAccount();
+
   // const {data: rentalBalance} = useBalance(GPURentalAddress);
   const {data: rentalBalance} = useContractRead({
     address: GPURentalAddress,
@@ -46,15 +47,5 @@ export const useMyRentals = () => {
     expired: item.result[1]
   }));
 
-  // const myRentalsFormatted = myRentals?.map((item: any, i) => ({
-  //   token: Number(results[i].result),
-  //   user: item.result[0],
-  //   expires: new Date(Number(item.result[1]) * 1000),
-  //   template: parseBytes32String(item.result[2]),
-  //   expired: false
-  // }));
-
-  const tokenIds = (results || []).map(id => Number(id.result));
-
-  return {rentalBalance: Number(rentalBalance), tokenIds, myRentals: myRentalsFormatted};
+  return {myRentals: myRentalsFormatted};
 };

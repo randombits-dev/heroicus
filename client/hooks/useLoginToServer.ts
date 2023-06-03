@@ -16,9 +16,14 @@ export const useLoginToServer = ({token}) => {
   });
 
   useEffect(() => {
-    const savedSignature = sessionStorage.getItem('s.' + hash);
-    if (savedSignature) {
-      fetchIP(savedSignature);
+    const savedIp = sessionStorage.getItem('ip.' + hash);
+    if (savedIp) {
+      setAutoUrl(savedIp);
+    } else {
+      const savedSignature = sessionStorage.getItem('s.' + hash);
+      if (savedSignature) {
+        fetchIP(savedSignature);
+      }
     }
   }, []);
 
@@ -34,6 +39,7 @@ export const useLoginToServer = ({token}) => {
         setError(true);
       } else if (data.ip) {
         setAutoUrl(data.ip);
+        sessionStorage.setItem('ip.' + hash, data.ip);
       }
     }).catch(() => {
       setError(true);

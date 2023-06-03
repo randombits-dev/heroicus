@@ -1,4 +1,4 @@
-import {useMyRentals} from "../hooks/useMyRentals";
+import {useMyRentals} from "../../hooks/useMyRentals";
 import RentalCard from "./RentalCard";
 
 const MyRentals = () => {
@@ -25,25 +25,3 @@ const MyRentals = () => {
 };
 
 export default MyRentals;
-
-{/*<div>Name: {templateInfo.name}</div>*/
-}
-{/*<div>Price per hour: {templateInfo.price} USDC</div>*/
-}
-{/*<div>{templateInfo.max}</div>*/
-}
-{/*Hours to rent: <input*/
-}
-{/*onChange={(e) => setHours(e.target.value)}*/
-}
-{/*type="number"*/
-}
-{/*value={hours}*/
-}
-{/*/>*/
-}
-{/*  <div>Total Price: {price}</div>*/
-}
-
-{/*  <button onClick={execute}>Rent this server</button>*/
-}

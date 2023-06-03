@@ -1,4 +1,4 @@
-import {ConnectButton} from "./examples/ConnectButton";
+import {ConnectButton} from "../examples/ConnectButton";
 import {useEffect, useState} from "react";
 import Link from "next/link";
 

@@ -1,18 +1,32 @@
-import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
+import {usePrepareContractWrite} from 'wagmi';
 import {GPURentalAddress} from '../utils/addresses';
 import {gpuRentalABI} from '../generated';
+import {useRouter} from 'next/router';
+import {useEffect} from 'react';
+import {useContractWriteStatus} from './useContractWriteStatus';
 
 export const usePauseRental = (tokenId: number) => {
+  // const [executing, setExecuting] = useState(false);
+  const {push} = useRouter();
   const {config} = usePrepareContractWrite({
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'stopRental',
     args: [BigInt(tokenId)]
   });
-  const {data, write} = useContractWrite(config);
-  const {status} = useWaitForTransaction({
-    hash: data?.hash
-  });
 
-  return {execute: write};
+  const {execute, status, statusMsg} = useContractWriteStatus(config);
+
+  useEffect(() => {
+    if (status === 'success') {
+      fetch('/api/stop', {
+        method: 'POST',
+        body: JSON.stringify({token: tokenId})
+      }).then(() => {
+        void push('/');
+      });
+    }
+  }, [status]);
+
+  return {execute, status, statusMsg};
 };

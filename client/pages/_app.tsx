@@ -4,7 +4,7 @@ import {chains, config} from "../utils/wagmi";
 import {darkTheme, RainbowKitProvider} from "@rainbow-me/rainbowkit";
 import {WagmiConfig} from "wagmi";
 import * as React from "react";
-import {Navbar} from "../components/NavBar";
+import {Navbar} from "../components/layout/NavBar";
 import '../styles/index.css';
 import '../styles/globals.css';
 import {setup} from "goober";

@@ -54,7 +54,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (Reservations.length !== 1) {
     throw 'Instance not found: ' + token;
   }
-  const Instance = Reservations[0].Instances[0];
+  // const Instance = Reservations[0].Instances[0];
   // if (Instance.State.Name !== InstanceStateName.) {
   //   throw 'Instance not running: ' + token;
   // }

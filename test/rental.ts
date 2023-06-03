@@ -60,9 +60,9 @@ describe('GPURental', () => {
     expect(userInfo.expires).to.equal(BigInt(blockTimestamp + 3600));
     expect(userInfo.templateId).to.equal(formatBytes32String('template1'));
     expect(userInfo.region).to.equal(1);
+    expect(userInfo.payment).to.equal(fromEther('0.2'));
     expect(expired).to.equal(false);
-    const usage = await GPU_user1.tUsage(1);
-    expect(usage).to.equal(2);
+    expect(await GPU_user1.tUsage(1)).to.equal(2);
     expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(fromEther(0.2));
     expect(await USDC_user1.balanceOf(user1)).to.equal(fromEther(100 - 0.2));
   });
@@ -75,13 +75,37 @@ describe('GPURental', () => {
     await GPU_user1.rent(formatBytes32String('template1'), 1, fromEther('0.2'));
     const currentBlockTime = await getBlockTime();
     await time.setNextBlockTimestamp(currentBlockTime + 1800); // half hour
-    const stopTx = await GPU_user1.stopRental(1);
+    await GPU_user1.stopRental(1);
 
     const expectedSpend = fromEther('0.2').mul(31).div(60);
     const balance = fromEther('100').sub(expectedSpend);
     expect(await USDC_user1.balanceOf(user1)).to.be.approx(balance);
     expect(await USDC_user1.balanceOf(dev)).to.be.approx(expectedSpend);
-    // await expect(stopTx).to.changeTokenBalances(USDC_user1, [user1, dev], [expectedCredits, expectedSpend]);
+    expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(0);
+    expect(await GPU_user1.tUsage(1)).to.equal(0);
+    const [userInfo, expired] = await GPU_user1.userInfo(BigInt(1));
+    expect(expired).to.equal(true);
+  });
+
+  it('should allow extending rental', async () => {
+    const {deployer, dev, user1} = await getNamedAccounts();
+    const {GPU_deployer, GPU_user1, USDC_user1} = await deploy();
+    await giveUSDC();
+    await createTemplate1();
+    await GPU_user1.rent(formatBytes32String('template1'), 1, fromEther('0.2'));
+    const blockTimestamp = await getBlockTime();
+
+    await GPU_user1.extendRental(1, fromEther('0.2'));
+    const [userInfo, expired] = await GPU_user1.userInfo(BigInt(1));
+    expect(userInfo.user).to.equal(user1);
+    expect(userInfo.expires).to.equal(BigInt(blockTimestamp + 7200), 'expires');
+    expect(userInfo.templateId).to.equal(formatBytes32String('template1'));
+    expect(userInfo.region).to.equal(1);
+    expect(userInfo.payment).to.equal(fromEther('0.4'));
+    expect(expired).to.equal(false);
+    expect(await GPU_user1.tUsage(1)).to.equal(2);
+    expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(fromEther(0.4));
+    expect(await USDC_user1.balanceOf(user1)).to.equal(fromEther(100 - 0.4));
   });
 
   it('should not allow renting if no allowance', async () => {

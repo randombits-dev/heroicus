@@ -1,9 +1,9 @@
-import AutoFrame from "../../components/AutoFrame";
+import AutoFrame from "../../components/rentals/AutoFrame";
 import {useRouter} from "next/router";
 import {useMyRental} from "../../hooks/useMyRental";
 import {styled} from "goober";
 import {useAccount} from "wagmi";
-import AutoHeader from "../../components/AutoHeader";
+import AutoHeader from "../../components/rentals/AutoHeader";
 
 const Container = styled('div')`
   display: flex;
@@ -40,8 +40,6 @@ export function Auto() {
   if (myRental.expired) {
     return <div>Rental is expired</div>;
   }
-
-  console.log(myRental.expires.getTime());
 
   return (
     <Container>
