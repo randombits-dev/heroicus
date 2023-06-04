@@ -1,10 +1,10 @@
-import {TemplateInfo} from '../utils/templates';
-import {parseEther} from 'viem';
+import {formatEther} from 'viem';
+import {TemplateInfo} from '../utils/definitions';
 
 export const useEstimatePrice = (template: TemplateInfo, hours: number) => {
   if (template) {
-    const price = (template.price * hours).toFixed(2) + ' USDC';
-    const amount = parseEther(String(template.price)) * BigInt(hours);
+    const amount = template.price * BigInt(hours);
+    const price = formatEther(amount);
     return {price, amount};
   }
   return {};

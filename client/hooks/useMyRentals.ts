@@ -14,6 +14,8 @@ export const useMyRentals = () => {
     args: [address]
   });
 
+  console.log('rentalBalance', rentalBalance);
+
   const indexRequests = [];
   for (let i = 0; i < Number(rentalBalance); i++) {
     indexRequests.push({
@@ -28,24 +30,29 @@ export const useMyRentals = () => {
     contracts: indexRequests
   });
 
-  const userInfoRequest = results?.map(result => ({
+  console.log('results', results);
+
+  const userInfoRequest = results?.filter(result => !result.error).map(result => ({
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'userInfo',
     args: [result.result]
   }));
 
-  const {data: myRentals} = useContractReads({
+  const {data: myRentals, isSuccess} = useContractReads({
     contracts: userInfoRequest
   });
 
-  const myRentalsFormatted = myRentals?.map((item: any, i) => ({
-    token: Number(results[i].result),
-    user: item.result[0].user,
-    expires: new Date(Number(item.result[0].expires) * 1000),
-    template: parseBytes32String(item.result[0].templateId),
-    expired: item.result[1]
-  }));
-
-  return {myRentals: myRentalsFormatted};
+  if (isSuccess) {
+    const myRentalsFormatted = myRentals.map((item: any, i) => ({
+      token: Number(results[i].result),
+      user: item.result[0].user,
+      expires: new Date(Number(item.result[0].expires) * 1000),
+      template: parseBytes32String(item.result[0].templateId),
+      expired: item.result[1]
+    })).filter(item => !item.expired);
+    return {myRentals: myRentalsFormatted};
+  } else {
+    return {myRentals: []};
+  }
 };

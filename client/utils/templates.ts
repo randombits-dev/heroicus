@@ -1,5 +1,3 @@
-import {Address} from 'wagmi';
-
 export const TEMPLATE_LIST = [
   {
     id: 'diffusion1',
@@ -18,14 +16,15 @@ export const TEMPLATE_LIST = [
   }
 ];
 
-export interface TemplateInfo {
-  name: string;
-  serverId: string;
-  price: number;
-}
+export const SERVER_LIST = [{
+  id: 'g4dn.xlarge',
+}, {
+  id: 't2.micro'
+}];
 
-export interface UserInfo {
-  template: string;
-  user: Address;
-  expires: number;
-}
+export const REGIONS = {
+  1: 'US-East',
+  2: 'US-West',
+  3: 'Europe',
+  4: 'Asia'
+};

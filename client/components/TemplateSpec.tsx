@@ -1,15 +1,14 @@
-import React from 'react';
+import React, {PropsWithChildren} from 'react';
 
 interface Props {
   name: string;
-  value: string;
 }
 
-const TemplateSpec = ({name, value}: Props) => {
+const TemplateSpec = ({name, children}: PropsWithChildren<Props>) => {
   return (
-    <div className="py-1 grid grid-cols-5 gap-3 items-center">
+    <div className="py-1 grid grid-cols-3 gap-5 items-center">
       <div className="ml-auto text-right text-xs font-bold">{name}</div>
-      <div className="mr-auto text-left text-md col-span-4">{value || 'None'}</div>
+      <div className="mr-auto text-left text-md col-span-2">{children || 'None'}</div>
     </div>
   );
 }

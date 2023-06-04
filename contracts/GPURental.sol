@@ -11,6 +11,9 @@ import "hardhat/console.sol";
 contract GPURental is IERC4907, ERC721Enumerable, Ownable {
   using SafeMath for uint256;
 
+  error NoCPUAvailable();
+
+
   struct ServerInfo {
     uint256 pricePerHour;
     uint8 cpus;
@@ -210,12 +213,18 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     if (serverId[0] == 'g') {
       uint32 limit = gLimits[region];
       uint32 usage = gUsage[region];
-      require(server.cpus <= limit - usage, "No resources available for GPU servers");
+      if (server.cpus > limit - usage) {
+        revert NoCPUAvailable();
+      }
+      //      require(server.cpus <= limit - usage, "No resources available for GPU servers");
       gUsage[region] = usage + server.cpus;
     } else {
       uint32 limit = tLimits[region];
       uint32 usage = tUsage[region];
-      require(server.cpus <= limit - usage, "No resources available for CPU servers");
+      if (server.cpus > limit - usage) {
+        revert NoCPUAvailable();
+      }
+      //      require(server.cpus <= limit - usage, "No resources available for CPU servers");
       tUsage[region] = usage + server.cpus;
     }
   }

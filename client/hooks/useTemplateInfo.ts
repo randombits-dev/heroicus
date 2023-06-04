@@ -1,28 +1,11 @@
-import {useContractRead} from 'wagmi';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
-import {formatBytes32String} from 'ethers/lib/utils';
-import {formatEther} from 'viem';
-import {TemplateInfo} from '../utils/templates';
+import {TemplateInfo} from '../utils/definitions';
+import {useTemplateList} from './useTemplateList';
 
 export const useTemplateInfo = ({templateId}): TemplateInfo => {
-  let contractData = {};
-  if (templateId) {
-    contractData = {
-      address: GPURentalAddress,
-      abi: gpuRentalABI,
-      functionName: 'templateInfo',
-      args: [formatBytes32String(templateId)]
-    };
-  }
-  const {data} = useContractRead(contractData);
+  const templateList = useTemplateList();
 
-  if (data) {
-    return {
-      name: templateId,
-      serverId: data[0],
-      price: Number(formatEther(data[1]))
-    };
+  if (templateList.length > 0) {
+    return templateList.find(t => t.name === templateId);
   }
   return null;
 };

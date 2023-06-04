@@ -2,14 +2,11 @@ import Timer from "../common/Timer";
 import {styled} from "goober";
 import ExtendButton from "../modals/ExtendButton";
 import StopButton from "../modals/StopButton";
+import {formatExpires} from "../../utils/dates";
 
 const Container = styled('div')`
   display: flex;
 `;
-
-const formatExpires = (expires: Date) => {
-  return Intl.DateTimeFormat(undefined, {dateStyle: 'short', timeStyle: 'short'}).format(expires);
-}
 
 export function AutoHeader({rental}) {
   // const {execute: stopRental} = usePauseRental(rental.token);

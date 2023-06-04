@@ -1,7 +1,8 @@
 import {useContractReads} from 'wagmi';
 import {GPURentalAddress} from '../utils/addresses';
 import {gpuRentalABI} from '../generated';
-import {UserInfo} from '../utils/templates';
+
+import {UserInfo} from '../utils/definitions';
 
 export const useNftList = (): UserInfo[] => {
   const readParams = [];

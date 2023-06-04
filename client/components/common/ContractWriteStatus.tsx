@@ -1,10 +1,12 @@
 import React from 'react';
+import {ContractWriteStatus} from "../../utils/definitions";
 
 interface Props {
-  key: string;
+  status: ContractWriteStatus;
+  statusMsg: string;
 }
 
-const ContractWriteStatus = ({status, statusMsg}) => {
+const ContractWriteStatus = ({status, statusMsg}: Props) => {
   if (status) {
     return <div className="text-center">
       <div className="spinner"></div>

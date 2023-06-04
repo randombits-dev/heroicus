@@ -1,28 +1,26 @@
-import {Address, erc20ABI, useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
-import {formatEther, parseEther} from 'viem';
+import {Address, erc20ABI, useAccount, useContractRead, usePrepareContractWrite} from 'wagmi';
+import {useContractWriteStatus} from './useContractWriteStatus';
+import {GPURentalAddress, USDCAddress} from '../utils/addresses';
 
-export const useAllowance = (coin: Address, spender: Address, amount: string) => {
+export const useAllowance = (amount: bigint) => {
   const {address} = useAccount();
-  const {data} = useContractRead({
-    address: coin,
+  const {data, isFetched, refetch} = useContractRead({
+    address: USDCAddress,
     abi: erc20ABI,
     functionName: 'allowance',
-    args: [address as Address, spender]
+    args: [address as Address, GPURentalAddress]
   });
+  const enough = data >= amount;
 
   const {config} = usePrepareContractWrite({
-    address: coin,
+    address: USDCAddress,
     abi: erc20ABI,
     functionName: 'approve',
-    args: [spender, parseEther(amount)]
+    args: [GPURentalAddress, amount],
+    enabled: !enough
   });
 
-  const {write, data: writeData} = useContractWrite(config);
+  const {execute, status, statusMsg} = useContractWriteStatus(config);
 
-  const {
-    data: receipt,
-    status
-  } = useWaitForTransaction({hash: writeData?.hash});
-
-  return {allowance: data ? formatEther(data) : '', execute: write, approveStatus: status};
+  return {allowance: data, enough, refetch, execute, status, statusMsg};
 };

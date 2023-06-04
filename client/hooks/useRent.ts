@@ -6,20 +6,21 @@ import {formatBytes32String} from 'ethers/lib/utils';
 import {useRouter} from 'next/router';
 import {useContractWriteStatus} from './useContractWriteStatus';
 import {useEffect} from 'react';
+import {useAllowance} from './useAllowance';
 
 export const useRent = (template: string, amount: bigint) => {
   const {push} = useRouter();
-  // useContractEvent({
-  //   address: GPURentalAddress,
-  //   abi: gpuRentalABI,
-  //   eventName: 'Rent',
-  //   listener(log) {
-  //     console.log(log);
-  //   }
-  // });
+
+  const {enough, execute: executeAllowance, status: statusAllowance, statusMsg: statusMsgAllowance, refetch} = useAllowance(amount);
+
+  useEffect(() => {
+    if (statusAllowance === 'success') {
+      refetch();
+    }
+  }, [statusAllowance]);
 
   let contractDetails = {};
-  if (template) {
+  if (template && enough) {
     contractDetails = {
       address: GPURentalAddress,
       abi: gpuRentalABI,
@@ -28,7 +29,7 @@ export const useRent = (template: string, amount: bigint) => {
     };
   }
 
-  const {config} = usePrepareContractWrite(contractDetails);
+  const {config, error} = usePrepareContractWrite(contractDetails);
 
   const {execute, receipt, status, statusMsg} = useContractWriteStatus(config);
 
@@ -62,5 +63,5 @@ export const useRent = (template: string, amount: bigint) => {
   //   hash: data?.hash
   // });
 
-  return {execute, status, statusMsg};
+  return {execute, executeAllowance, enough, status, statusMsg, statusAllowance, statusMsgAllowance, prepareError: error};
 };

@@ -1,6 +1,7 @@
 import {useContractWrite, useWaitForTransaction} from 'wagmi';
+import {ContractWriteStatus} from '../utils/definitions';
 
-const getStatus = ({isLoading, isSuccess, isFetching, isError, error}) => {
+const getStatus = ({isLoading, isSuccess, isFetching, isError, error}): [ContractWriteStatus, string] => {
   if (isError) {
     return ['error', 'Error: ' + error.message];
   } else if (isSuccess) {
@@ -10,7 +11,7 @@ const getStatus = ({isLoading, isSuccess, isFetching, isError, error}) => {
   } else if (isLoading) {
     return ['loading', 'Confirm transaction in wallet'];
   } else {
-    return [];
+    return [undefined, ''];
   }
 };
 

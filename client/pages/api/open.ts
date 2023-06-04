@@ -4,9 +4,9 @@ import {createPublicClient, hashMessage, http, verifyMessage} from 'viem';
 import {hardhat} from 'viem/chains';
 import {GPURentalAddress} from '../../utils/addresses';
 import {gpuRentalABI} from '../../generated';
-import {UserInfo} from '../../utils/templates';
 import {withErrorHandler} from '../../errorHandler';
 import {getClientToken} from '../../utils/aws';
+import {UserInfo} from '../../utils/definitions';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -15,6 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {token, s} = JSON.parse(req.body);
   const tokenId = Number(token);
   const hash = hashMessage(token as string);
+
   // verifyMessage()
   // const address = await recoverMessageAddress({
   //   message: 'Sign in with ID: ' + hash,

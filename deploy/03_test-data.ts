@@ -11,7 +11,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const gpuRental = await get('GPURental');
 
   await execute('USDC', {from: user1}, 'giveMe', ethers.utils.parseEther('100'));
-  await execute('USDC', {from: user1}, 'approve', gpuRental.address, ethers.utils.parseEther('100'));
+  // await execute('USDC', {from: user1}, 'approve', gpuRental.address, ethers.utils.parseEther('100'));
 
   await execute('GPURental', {from: deployer}, 'setTLimit', 1, 2);
 

@@ -5,7 +5,7 @@ interface Props {
 }
 
 const ActionButton = ({handleClick, children}: PropsWithChildren<Props>) => {
-  return <button className="bg-blue-900 px-10 py-3" onClick={handleClick}>{children}</button>
+  return <button className="w-full bg-blue-900 px-10 py-3" onClick={handleClick}>{children}</button>
     ;
 }
 
