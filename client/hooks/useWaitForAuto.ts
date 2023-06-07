@@ -15,13 +15,17 @@ export const useWaitForAuto = (url) => {
     });
   };
 
-  useEffect(() => {
+  const retry = () => {
     if (!url) {
       return;
     }
     const interval = setInterval(() => runTest(interval), 5000);
     runTest(interval);
+  };
+
+  useEffect(() => {
+    retry();
   }, [url]);
 
-  return {ready};
+  return {ready, retry};
 };

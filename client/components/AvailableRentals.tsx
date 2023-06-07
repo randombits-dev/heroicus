@@ -8,8 +8,8 @@ export function AvailableRentals() {
 
   return (
     <div className="text-center m-10">
-      <div className="text-3xl">Available Rentals</div>
-      <div className="flex justify-center">
+      <div className="text-3xl mb-5">Available Rentals</div>
+      <div className="flex flex-wrap justify-center">
         {
           templateInfo.map(template => {
             return <TemplateCard key={template.name} templateInfo={template}/>;

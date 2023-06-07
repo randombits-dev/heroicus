@@ -5,11 +5,12 @@ import {gpuRentalABI} from '../generated';
 import {formatBytes32String} from 'ethers/lib/utils';
 import {useRouter} from 'next/router';
 import {useContractWriteStatus} from './useContractWriteStatus';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useAllowance} from './useAllowance';
 
-export const useRent = (template: string, amount: bigint) => {
+export const useRent = (template: string, region: number, amount: bigint) => {
   const {push} = useRouter();
+  const [awsError, setAwsError] = useState(false);
 
   const {enough, execute: executeAllowance, status: statusAllowance, statusMsg: statusMsgAllowance, refetch} = useAllowance(amount);
 
@@ -25,13 +26,13 @@ export const useRent = (template: string, amount: bigint) => {
       address: GPURentalAddress,
       abi: gpuRentalABI,
       functionName: 'rent',
-      args: [formatBytes32String(template), 1, amount]
+      args: [formatBytes32String(template), region, amount]
     };
   }
 
   const {config, error} = usePrepareContractWrite(contractDetails);
 
-  const {execute, receipt, status, statusMsg} = useContractWriteStatus(config);
+  const {execute, receipt, status, statusMsg} = useContractWriteStatus(config, {success: 'Reserving Server'});
 
   useEffect(() => {
     if (status === 'success') {
@@ -45,8 +46,16 @@ export const useRent = (template: string, amount: bigint) => {
       fetch('/api/create', {
         method: 'POST',
         body: JSON.stringify({token: tokenId})
-      }).then(() => {
-        void push('/auto/' + tokenId);
+      }).then((res) => {
+        if (res.ok) {
+          res.json().then(data => {
+            if (data.success) {
+              void push('/auto/' + tokenId);
+            } else {
+              setAwsError(true);
+            }
+          });
+        }
       });
     }
   }, [status]);
@@ -63,5 +72,5 @@ export const useRent = (template: string, amount: bigint) => {
   //   hash: data?.hash
   // });
 
-  return {execute, executeAllowance, enough, status, statusMsg, statusAllowance, statusMsgAllowance, prepareError: error};
+  return {execute, executeAllowance, enough, status, statusMsg, statusAllowance, statusMsgAllowance, prepareError: error, awsError};
 };

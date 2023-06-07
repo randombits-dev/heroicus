@@ -11,7 +11,7 @@ const StopButton = ({rental}) => {
   return (
     <>
       <button onClick={() => setShowModal(true)}
-              className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="bg-red-900 px-3 py-1 lg:px-5 lg:py-2 lg:ml-5 hover:bg-red-800 whitespace-nowrap"
       >
         Stop Rental
       </button>

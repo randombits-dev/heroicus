@@ -11,13 +11,13 @@ const MyRentals = () => {
         return <RentalCard key={rental.token} rental={rental}/>
       })
     } else {
-      return <div>None</div>;
+      return <div>-- None --</div>;
     }
   };
 
   return <div className="m-10 text-center">
-    <div className="text-3xl">My Rentals</div>
-    <div className="flex justify-center">
+    <div className="text-3xl mb-5">My Rentals</div>
+    <div className="flex justify-center flex-wrap">
       {renderRentals()}
     </div>
 

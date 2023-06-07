@@ -11,9 +11,9 @@ const RegionSelect = ({regionChanged}: Props) => {
   };
 
   return (
-    <select className="bg-neutral-950" onChange={onChange}>
+    <select className="bg-neutral-900 px-3 py-2" onChange={onChange}>
       {
-        Object.entries(REGIONS).map(([id, name]) => <option key={id} value={id}>{name}</option>)
+        Object.entries(REGIONS).map(([id, name]) => <option key={id} value={id}>{name[1]}</option>)
       }
     </select>
   );

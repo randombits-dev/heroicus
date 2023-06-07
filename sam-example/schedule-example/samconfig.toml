@@ -4,7 +4,7 @@ version = 0.1
 
 [default]
 [default.global.parameters]
-stack_name = "schedule-example"
+stack_name = "server-manager"
 
 [default.build.parameters]
 cached = true

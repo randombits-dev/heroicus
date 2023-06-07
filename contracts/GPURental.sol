@@ -169,6 +169,14 @@ contract GPURental is IERC4907, ERC721Enumerable, Ownable {
     _burn(tokenId);
   }
 
+  function provideRefund(uint256 tokenId) public onlyOwner {
+    UserInfo storage user = _userInfo[tokenId];
+    IERC20 tk = IERC20(paymentCoin);
+    tk.transfer(user.user, user.payment);
+    user.payment = 0;
+    _burn(tokenId);
+  }
+
   function setUser(uint256 tokenId, address user, uint64 expires) external {
     require(_isApprovedOrOwner(msg.sender, tokenId), "ERC721: transfer caller is not owner nor approved");
     UserInfo storage info = _userInfo[tokenId];

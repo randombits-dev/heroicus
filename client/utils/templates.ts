@@ -13,6 +13,20 @@ export const TEMPLATE_LIST = [
     cpu: 1,
     ram: 1,
     notes: 'Mock Automatic1111 API'
+  },
+  {
+    id: 'small',
+    name: 'Siny',
+    cpu: 1,
+    ram: 1,
+    notes: 'Mock Automatic1111 API'
+  },
+  {
+    id: 'Medium',
+    name: 'Medium',
+    cpu: 1,
+    ram: 1,
+    notes: 'Mock Automatic1111 API'
   }
 ];
 
@@ -23,8 +37,8 @@ export const SERVER_LIST = [{
 }];
 
 export const REGIONS = {
-  1: 'US-East',
-  2: 'US-West',
-  3: 'Europe',
-  4: 'Asia'
+  1: ['us-east-2', 'US East'],
+  2: ['us-west-2', 'US West'],
+  3: ['Europe', 'Europe'],
+  4: ['Asia', 'Asia']
 };

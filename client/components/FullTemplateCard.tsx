@@ -8,6 +8,8 @@ import TemplateSpec from "./TemplateSpec";
 import {formatEther} from "viem";
 import RegionSelect from "./RegionSelect";
 import {useCPUUsage} from "../hooks/useCPUUsage";
+import {useRouter} from "next/router";
+import ActionButton from "./common/ActionButton";
 
 interface Props {
   templateId: string;
@@ -16,6 +18,7 @@ interface Props {
 const THIRTY_DAYS = 30 * 24;
 
 const FullTemplateCard = ({templateId}: Props) => {
+  const {reload} = useRouter();
   const [hours, setHours] = useState(2);
   const [region, setRegion] = useState(1);
   const [error, setError] = useState('');
@@ -29,8 +32,9 @@ const FullTemplateCard = ({templateId}: Props) => {
     statusMsgAllowance,
     status,
     statusMsg,
-    prepareError
-  } = useRent(templateInfo?.name, amount);
+    prepareError,
+    awsError
+  } = useRent(templateInfo?.name, region, amount);
   const {data: cpuUsage} = useCPUUsage({template: templateInfo, regionId: region})
 
   const writeButton = () => {
@@ -74,7 +78,17 @@ const FullTemplateCard = ({templateId}: Props) => {
   };
 
   const writeContents = () => {
-    if (status) {
+    if (awsError) {
+      return <div>
+        <div>Insufficient resources available to create server. A full refund was issued.</div>
+        <br/>
+        <div>You can try a different region, or wait a few hours and try again.</div>
+        <br/>
+        <TemplateSpec name="REFUND">{price} USDC</TemplateSpec>
+        <br/>
+        <ActionButton handleClick={() => reload()}>Retry</ActionButton>
+      </div>
+    } else if (status) {
       return <ContractWriteStatus status={status} statusMsg={statusMsg}/>
     } else if (!enough && statusAllowance) {
       return <ContractWriteStatus status={statusAllowance} statusMsg={statusMsgAllowance}/>

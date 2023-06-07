@@ -1,12 +1,17 @@
 import React, {useEffect, useState} from 'react';
 
-const Timer = ({end}) => {
+interface Props {
+  end: number;
+  expired?: () => void;
+}
+
+const Timer = ({end, expired}: Props) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   // const [seconds, setSeconds] = useState(0);
 
-  const calc = () => {
+  const calc = (initial = false) => {
     const now = new Date().getTime();
     const timeRemaining = end - now;
 
@@ -18,11 +23,15 @@ const Timer = ({end}) => {
       setTimeout(() => {
         calc();
       }, 5000);
+    } else if (!initial) {
+      if (expired) {
+        expired();
+      }
     }
   }
 
   useEffect(() => {
-    calc();
+    calc(true);
   }, []);
 
   return (

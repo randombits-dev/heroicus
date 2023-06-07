@@ -14,8 +14,6 @@ export const useMyRentals = () => {
     args: [address]
   });
 
-  console.log('rentalBalance', rentalBalance);
-
   const indexRequests = [];
   for (let i = 0; i < Number(rentalBalance); i++) {
     indexRequests.push({
@@ -29,8 +27,6 @@ export const useMyRentals = () => {
   const {data: results, status} = useContractReads({
     contracts: indexRequests
   });
-
-  console.log('results', results);
 
   const userInfoRequest = results?.filter(result => !result.error).map(result => ({
     address: GPURentalAddress,

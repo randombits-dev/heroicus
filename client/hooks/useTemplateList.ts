@@ -24,9 +24,16 @@ export const useTemplateList = (): TemplateInfo[] => {
     contracts: readParams
   });
 
+  let isAllSuccess = false;
+  if (isSuccess) {
+    if (!data.find(item => item.status === 'failure')) {
+      isAllSuccess = true;
+    }
+  }
+
   if (cache) {
     return cache;
-  } else if (isSuccess && serverData.length > 0) {
+  } else if (isAllSuccess && serverData.length > 0) {
     cache = data.map((item: any, i) => {
       const serverId = parseBytes32String(item.result[0]);
       const server = serverData.find(s => s.id === serverId);

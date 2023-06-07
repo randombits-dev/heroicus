@@ -16,11 +16,11 @@ export function Navbar() {
   }, []);
 
   return (
-    <div className="sticky top-0 z-50 bg-neutral-950 shadow px-10 py-3">
-      <nav className="layout flex">
+    <div className="z-50 px-10 py-3">
+      <nav className="layout flex container mx-auto">
         <div className="flex-1">
-          <Link className="text-2xl" href="/">FTM Rental</Link>
-          <Link href="/my">My Rentals</Link>
+          <Link className="text-4xl" href="/">hērōicus</Link>
+          {/*<Link href="/portal">Portal</Link>*/}
         </div>
 
         {/*<div className="">*/}
@@ -44,7 +44,7 @@ export function Navbar() {
         {/*</div>*/}
 
         <div className="">
-          <div className="">
+          <div className="border-4 p-1 bg-neutral-900 connect-btn-container hover:border-amber-200">
             {/*<ConnectWallet theme="dark" btnTitle="Connect Wallet"/>*/}
             {hasMounted && <ConnectButton/>}
 
