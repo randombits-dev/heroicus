@@ -5,7 +5,8 @@ export const TEMPLATE_LIST = [
     cpu: 4,
     ram: 16,
     gpu: 'Tesla T4 12GB',
-    notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.'
+    notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
+    url: (ip) => `http://${ip}:7860`
   },
   {
     id: 'tiny',
@@ -24,9 +25,10 @@ export const TEMPLATE_LIST = [
   {
     id: 'Medium',
     name: 'Medium',
-    cpu: 1,
-    ram: 1,
-    notes: 'Mock Automatic1111 API'
+    cpu: 2,
+    ram: 4,
+    notes: 'Docker',
+    url: (ip) => `http://${ip}:9000`
   }
 ];
 

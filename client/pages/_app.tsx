@@ -13,7 +13,7 @@ setup(React.createElement);
 
 export default function RootLayout({Component, pageProps}: AppProps) {
   return (
-    <div className={inter.className + ' bg-neutral-900 main-container'}>
+    <div className={inter.className}>
       <Component {...pageProps} />
 
     </div>

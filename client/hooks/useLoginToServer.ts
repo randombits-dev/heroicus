@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 
 export const useLoginToServer = ({token}) => {
   const hash = hashMessage(token);
-  const [autoUrl, setAutoUrl] = useState('');
+  const [ip, setIp] = useState('');
   const [error, setError] = useState(false);
 
   const {signMessage} = useSignMessage({
@@ -18,7 +18,7 @@ export const useLoginToServer = ({token}) => {
   useEffect(() => {
     const savedIp = sessionStorage.getItem('ip.' + hash);
     if (savedIp) {
-      setAutoUrl(savedIp);
+      setIp(savedIp);
     } else {
       const savedSignature = sessionStorage.getItem('s.' + hash);
       if (savedSignature) {
@@ -38,7 +38,7 @@ export const useLoginToServer = ({token}) => {
       if (data.error) {
         setError(true);
       } else if (data.ip) {
-        setAutoUrl(data.ip);
+        setIp(data.ip);
         sessionStorage.setItem('ip.' + hash, data.ip);
       }
     }).catch(() => {
@@ -46,5 +46,5 @@ export const useLoginToServer = ({token}) => {
     });
   };
 
-  return {signMessage, url: autoUrl, error};
+  return {signMessage, ip, error};
 };

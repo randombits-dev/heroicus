@@ -86,7 +86,7 @@ const FullTemplateCard = ({templateId}: Props) => {
         <br/>
         <TemplateSpec name="REFUND">{price} USDC</TemplateSpec>
         <br/>
-        <ActionButton handleClick={() => reload()}>Retry</ActionButton>
+        <ActionButton handleClick={() => reload()}>Go Back</ActionButton>
       </div>
     } else if (status) {
       return <ContractWriteStatus status={status} statusMsg={statusMsg}/>

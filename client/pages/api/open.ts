@@ -16,11 +16,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const tokenId = Number(token);
   const hash = hashMessage(token as string);
 
-  // verifyMessage()
-  // const address = await recoverMessageAddress({
-  //   message: 'Sign in with ID: ' + hash,
-  //   signature: s
-  // });
   const client = createPublicClient({
     chain: hardhat,
     transport: http(),
@@ -55,15 +50,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (Reservations.length !== 1) {
     throw 'Instance not found: ' + token;
   }
-  // const Instance = Reservations[0].Instances[0];
-  // if (Instance.State.Name !== InstanceStateName.) {
-  //   throw 'Instance not running: ' + token;
-  // }
   const ip = Reservations[0].Instances[0].PublicIpAddress;
-  res.json({
-    ip: `http://${ip}:7860`
-  });
-
+  res.json({ip});
 };
 
 export default withErrorHandler(handler);

@@ -1,6 +1,4 @@
 import {styled} from "goober";
-import {useWaitForAuto} from "../../hooks/useWaitForAuto";
-import {useLoginToServer} from "../../hooks/useLoginToServer";
 
 const Frame = styled('iframe')`
   border: none;
@@ -12,9 +10,7 @@ const CenteredContent = styled('div')`
   text-align: center;
 `;
 
-const AutoFrame = ({token}) => {
-  const {signMessage, url, error} = useLoginToServer({token});
-  const {ready} = useWaitForAuto(url);
+const AutoFrame = ({ready, url, error, signMessage}) => {
   if (ready) {
     return <Frame src={url}></Frame>
   } else if (url) {

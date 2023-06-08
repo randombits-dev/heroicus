@@ -12,7 +12,7 @@ export default function WalletLayout({children}: PropsWithChildren<{}>) {
     <WagmiConfig config={config}>
       <RainbowKitProvider chains={chains} modalSize="compact" theme={customRainbowTheme}>
         <div
-          className="flex flex-col h-screen text-neutral-300">
+          className="flex flex-col h-screen bg-neutral-900 main-container text-neutral-300">
           <Navbar/>
           <div className="flex-1 overflow-auto">
             {children}

@@ -3,7 +3,6 @@ import {useRouter} from "next/router";
 import TemplateSpec from "./TemplateSpec";
 import React from "react";
 import {formatEther} from "viem";
-import ActionButton from "./common/ActionButton";
 
 const TemplateCard = ({templateInfo}: any) => {
   const {push} = useRouter();
@@ -31,7 +30,7 @@ const TemplateCard = ({templateInfo}: any) => {
       <span className="text-xl font-bold mr-2">{formatEther(templateInfo.price)}</span>
       <span className="text-sm">USDC per hour</span>
     </div>
-    <ActionButton handleClick={details}>Choose</ActionButton>
+    <button onClick={details} className="btn">Choose</button>
   </div>;
 
 };

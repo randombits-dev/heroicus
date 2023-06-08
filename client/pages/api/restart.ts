@@ -55,7 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const rebootCommand = new RebootInstancesCommand({
     InstanceIds: [Reservations[0].Instances[0].InstanceId]
   });
-  await ec2.send(command);
+  await ec2.send(rebootCommand);
   res.json({success: true});
 
 };

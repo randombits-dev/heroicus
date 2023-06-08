@@ -2,9 +2,16 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@layer components {
+  .btn {
+    @apply bg-blue-900 px-10 py-3 hover:bg-blue-800;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 .main-container {
