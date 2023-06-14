@@ -1,7 +1,7 @@
 import {useContractWrite, useWaitForTransaction} from 'wagmi';
 import {ContractWriteStatus} from '../utils/definitions';
 
-const getStatus = ({isLoading, isSuccess, isFetching, isError, error, statusOverrides}): [ContractWriteStatus, string] => {
+const getStatus = ({isLoading, isSuccess, isFetching, isError, error, statusOverrides}: any): [ContractWriteStatus, string] => {
   if (isError) {
     return ['error', statusOverrides.error || 'Error: ' + error.message];
   } else if (isSuccess) {
@@ -15,7 +15,7 @@ const getStatus = ({isLoading, isSuccess, isFetching, isError, error, statusOver
   }
 };
 
-export const useContractWriteStatus = (config, statusOverrides = {}) => {
+export const useContractWriteStatus = (config: any, statusOverrides = {}) => {
   const {data, write, isLoading} = useContractWrite(config);
   const {data: receipt, isSuccess, error, isError, isFetching} = useWaitForTransaction({
     hash: data?.hash

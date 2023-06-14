@@ -14,9 +14,20 @@ export interface ServerInfo {
 }
 
 export interface UserInfo {
-  template: string;
+  token: number;
   user: Address;
   expires: number;
+  expired: boolean;
+  templateId: string;
+  region: number;
+
+  // address user;
+  // uint64 expires;
+  // bytes32 templateId;
+  // bytes32 serverId;
+  // uint8 region;
+  // uint32 diskSize;
+  // uint256 payment;
 }
 
 export type ContractWriteStatus = undefined | 'loading' | 'pending' | 'success' | 'error';

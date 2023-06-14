@@ -3,8 +3,14 @@ import Modal from "../common/Modal";
 import {useServerSignature} from "../../hooks/useServerSignature";
 import {useRouter} from "next/router";
 import ConfirmModal from "./ConfirmModal";
+import {UserInfo} from "../../utils/definitions";
 
-const RestartModal = ({rental, onClose}) => {
+interface Props {
+  rental: UserInfo;
+  onClose: () => void;
+}
+
+const RestartModal = ({rental, onClose}: Props) => {
   const [restarting, setRestarting] = useState(false);
   const {signature} = useServerSignature({token: rental.token});
   const {reload} = useRouter();

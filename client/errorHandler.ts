@@ -1,4 +1,6 @@
-export const withErrorHandler = (handler) => async (req, res) => {
+import {NextApiRequest, NextApiResponse} from 'next';
+
+export const withErrorHandler = (handler: any) => async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await handler(req, res);
   } catch (error) {

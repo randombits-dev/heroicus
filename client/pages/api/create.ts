@@ -25,7 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     args: [BigInt(token)]
   });
   const templateId = parseBytes32String((userInfo[0] as any).templateId);
-  const region = userInfo[0].region;
+  const region = (userInfo[0] as any).region;
   const expired = userInfo[1];
 
   if (expired) {

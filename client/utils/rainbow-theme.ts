@@ -3,8 +3,8 @@ import {darkTheme} from '@rainbow-me/rainbowkit';
 export const customRainbowTheme = darkTheme({
   accentColor: 'rgb(23,23,23)',
   accentColorForeground: '#ccc',
-  connectButtonInnerBackground: 'rgb(23,23,23)',
-  profileActionHover: 'none',
+  // connectButtonInnerBackground: 'rgb(23,23,23)',
+  // profileActionHover: 'none',
   fontStack: 'system',
   borderRadius: 'none',
   overlayBlur: 'small'

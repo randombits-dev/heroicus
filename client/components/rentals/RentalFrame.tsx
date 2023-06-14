@@ -6,7 +6,14 @@ const Frame = styled('iframe')`
   height: 100%;
 `;
 
-const RentalFrame = ({ready, url, error, signMessage}) => {
+interface Props {
+  ready: boolean;
+  url: string;
+  error: boolean;
+  signMessage: () => void;
+}
+
+const RentalFrame = ({ready, url, error, signMessage}: Props) => {
   if (ready) {
     return <Frame src={url}></Frame>
   } else if (url) {

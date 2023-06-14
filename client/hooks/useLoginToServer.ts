@@ -2,8 +2,8 @@ import {hashMessage} from 'viem';
 import {useEffect, useState} from 'react';
 import {useServerSignature} from './useServerSignature';
 
-export const useLoginToServer = ({token}) => {
-  const hash = hashMessage(token);
+export const useLoginToServer = ({token}: { token: number }) => {
+  const hash = hashMessage(String(token));
   const [ip, setIp] = useState('');
   const [error, setError] = useState(false);
   const {signMessage, signature, hasSigned} = useServerSignature({token});
@@ -17,7 +17,7 @@ export const useLoginToServer = ({token}) => {
     }
   }, [hasSigned]);
 
-  const fetchIP = (s) => {
+  const fetchIP = (s: string) => {
     fetch(`/api/open`, {
       method: 'POST',
       body: JSON.stringify({

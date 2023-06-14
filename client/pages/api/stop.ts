@@ -35,13 +35,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     Filters: [{Name: 'client-token', Values: [getClientToken(token)]}]
   });
   const {Reservations} = await ec2.send(command);
-  if (Reservations.length === 0 || Reservations[0].Instances.length === 0) {
+  if (Reservations?.length !== 1 || Reservations[0].Instances?.length !== 1) {
     throw 'Server does not exist';
   }
   const Instance = Reservations[0].Instances[0];
 
   const cmd = new TerminateInstancesCommand({
-    InstanceIds: [Instance.InstanceId]
+    InstanceIds: [Instance.InstanceId!]
   });
   await ec2.send(cmd);
   res.json({success: true});

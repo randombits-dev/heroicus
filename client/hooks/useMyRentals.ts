@@ -2,8 +2,9 @@ import {useAccount, useContractRead, useContractReads} from 'wagmi';
 import {GPURentalAddress} from '../utils/addresses';
 import {gpuRentalABI} from '../generated';
 import {parseBytes32String} from 'ethers/lib/utils';
+import {UserInfo} from '../utils/definitions';
 
-export const useMyRentals = () => {
+export const useMyRentals = (): { myRentals: UserInfo[] } => {
   const {address} = useAccount();
 
   // const {data: rentalBalance} = useBalance(GPURentalAddress);
@@ -11,40 +12,34 @@ export const useMyRentals = () => {
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'balanceOf',
-    args: [address]
+    args: [address!]
   });
 
-  const indexRequests = [];
-  for (let i = 0; i < Number(rentalBalance); i++) {
-    indexRequests.push({
+  const {data: results, status} = useContractReads({
+    contracts: [...Array(Number(rentalBalance))].map(i => ({
       address: GPURentalAddress,
       abi: gpuRentalABI,
       functionName: 'tokenOfOwnerByIndex',
-      args: [address, BigInt(i)]
-    });
-  }
-
-  const {data: results, status} = useContractReads({
-    contracts: indexRequests
+      args: [address!, BigInt(i)]
+    }))
   });
 
-  const userInfoRequest = results?.filter(result => !result.error).map(result => ({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
-    functionName: 'userInfo',
-    args: [result.result]
-  }));
-
   const {data: myRentals, isSuccess} = useContractReads({
-    contracts: userInfoRequest
+    contracts: results?.filter(result => !result.error).map(result => ({
+      address: GPURentalAddress,
+      abi: gpuRentalABI,
+      functionName: 'userInfo',
+      args: [result.result as unknown as bigint]
+    }))
   });
 
   if (isSuccess) {
-    const myRentalsFormatted = myRentals.map((item: any, i) => ({
-      token: Number(results[i].result),
+    const myRentalsFormatted = myRentals!.map((item: any, i) => ({
+      token: Number(results![i].result),
       user: item.result[0].user,
-      expires: new Date(Number(item.result[0].expires) * 1000),
-      template: parseBytes32String(item.result[0].templateId),
+      expires: Number(item.result[0].expires) * 1000,
+      templateId: parseBytes32String(item.result[0].templateId),
+      region: item.result[0].region,
       expired: item.result[1]
     })).filter(item => !item.expired);
     return {myRentals: myRentalsFormatted};

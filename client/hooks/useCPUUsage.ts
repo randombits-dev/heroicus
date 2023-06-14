@@ -1,8 +1,9 @@
 import {useContractRead} from 'wagmi';
 import {GPURentalAddress} from '../utils/addresses';
 import {gpuRentalABI} from '../generated';
+import {TemplateInfo} from '../utils/definitions';
 
-export const useCPUUsage = ({template, regionId}) => {
+export const useCPUUsage = ({template, regionId}: { template: TemplateInfo | undefined, regionId: number }) => {
 
   let config = {};
   if (template) {

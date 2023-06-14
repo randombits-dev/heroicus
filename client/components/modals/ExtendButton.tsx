@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import ExtendModal from "./ExtendModal";
+import {UserInfo} from "../../utils/definitions";
 
 interface Props {
-  tokenId: string;
+  rental: UserInfo;
 }
 
-const ExtendButton = ({rental}) => {
+const ExtendButton = ({rental}: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

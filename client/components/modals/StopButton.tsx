@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import StopModal from "./StopModal";
+import {UserInfo} from "../../utils/definitions";
 
 interface Props {
-  tokenId: string;
+  rental: UserInfo;
 }
 
-const StopButton = ({rental}) => {
+const StopButton = ({rental}: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

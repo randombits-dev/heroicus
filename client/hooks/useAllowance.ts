@@ -10,7 +10,7 @@ export const useAllowance = (amount: bigint) => {
     functionName: 'allowance',
     args: [address as Address, GPURentalAddress]
   });
-  const enough = data >= amount;
+  const enough = (data || 0) >= amount;
 
   const {config} = usePrepareContractWrite({
     address: USDCAddress,

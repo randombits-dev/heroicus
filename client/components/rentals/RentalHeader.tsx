@@ -6,30 +6,25 @@ import {formatExpires} from "../../utils/dates";
 import TemplateSpec from "../TemplateSpec";
 import {useRouter} from "next/router";
 import RestartButton from "../modals/RestartButton";
+import {UserInfo} from "../../utils/definitions";
 
 const Container = styled('div')`
   display: flex;
   align-items: center;
 `;
 
-export function RentalHeader({rental, ready, handleRestart, hasSigned}) {
-  const {reload} = useRouter();
+interface Props {
+  rental: UserInfo;
+  hasSigned: boolean;
+}
 
-  const restart = () => {
-    fetch('/api/restart', {
-      method: 'POST',
-      body: JSON.stringify({token: rental.token, s: signature})
-    }).then(() => {
-      setTimeout(() => {
-        handleRestart();
-      }, 5000);
-    });
-  };
+export function RentalHeader({rental, hasSigned}: Props) {
+  const {reload} = useRouter();
 
   return (
     <Container>
-      <TemplateSpec name="EXPIRE DATE">{formatExpires(rental.expires)}</TemplateSpec>
-      <TemplateSpec name="EXPIRE TIME"><Timer end={rental.expires.getTime()} expired={reload}/></TemplateSpec>
+      <TemplateSpec name="EXPIRE DATE">{formatExpires(new Date(rental.expires))}</TemplateSpec>
+      <TemplateSpec name="EXPIRE TIME"><Timer end={rental.expires} expired={reload}/></TemplateSpec>
       {hasSigned && <div className="ml-5">
         <ExtendButton rental={rental}/>
         <StopButton rental={rental}/>

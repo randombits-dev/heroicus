@@ -2,7 +2,14 @@ import React from 'react';
 import ActionButton from "../common/ActionButton";
 import Modal from "../common/Modal";
 
-const ConfirmModal = ({title, text, yes, no}) => {
+interface Props {
+  title: string;
+  text: string;
+  yes: () => void;
+  no: () => void;
+}
+
+const ConfirmModal = ({title, text, yes, no}: Props) => {
   return (
     <Modal title={title} onClose={no}>
       <div>

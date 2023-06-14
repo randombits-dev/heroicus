@@ -6,7 +6,7 @@ import {GPURentalAddress} from '../../utils/addresses';
 import {gpuRentalABI} from '../../generated';
 import {withErrorHandler} from '../../errorHandler';
 import {getClientToken} from '../../utils/aws';
-import {UserInfo} from '../../utils/definitions';
+import {Address} from 'wagmi';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -28,7 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     args: [BigInt(tokenId)]
   });
   const expired = userInfo[1];
-  const userStruct = userInfo[0] as UserInfo;
+  const userStruct = userInfo[0] as { user: Address };
   const signatureValid = await verifyMessage({
     address: userStruct.user,
     message: 'Sign in with ID: ' + hash,
@@ -48,12 +48,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     Filters: [{Name: 'client-token', Values: [getClientToken(token)]}]
   });
   const {Reservations} = await ec2.send(command);
-  if (Reservations.length !== 1) {
+  if (Reservations?.length !== 1 || Reservations[0].Instances?.length !== 1) {
     throw 'Instance not found: ' + token;
   }
 
   const rebootCommand = new RebootInstancesCommand({
-    InstanceIds: [Reservations[0].Instances[0].InstanceId]
+    InstanceIds: [Reservations[0].Instances[0].InstanceId!]
   });
   await ec2.send(rebootCommand);
   res.json({success: true});

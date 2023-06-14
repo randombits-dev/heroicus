@@ -6,12 +6,18 @@ import {useTemplateInfo} from "../../hooks/useTemplateInfo";
 import TemplateSpec from "../TemplateSpec";
 import ContractWriteStatus from "../common/ContractWriteStatus";
 import ActionButton from "../common/ActionButton";
+import {UserInfo} from "../../utils/definitions";
 
-const ExtendModal = ({rental, onClose}) => {
+interface Props {
+  rental: UserInfo;
+  onClose: () => void;
+}
+
+const ExtendModal = ({rental, onClose}: Props) => {
   const [hours, setHours] = useState(2);
   const [error, setError] = useState('');
 
-  const templateInfo = useTemplateInfo({templateId: rental.template});
+  const templateInfo = useTemplateInfo({templateId: rental.templateId});
   const {price, amount} = useEstimatePrice(templateInfo, hours);
   const {
     execute,
@@ -22,13 +28,13 @@ const ExtendModal = ({rental, onClose}) => {
     statusAllowance,
     statusMsgAllowance,
     prepareError
-  } = useExtendRental(rental.token, amount);
+  } = useExtendRental(rental.token, amount || BigInt(0));
 
-  const updateHours = (e) => {
+  const updateHours = (e: any) => {
     const value = e.target.value;
     if (/^[0-9]*$/.test(value)) {
       setHours(value);
-      const timeRemaining = rental.expires.getTime() - new Date().getTime();
+      const timeRemaining = rental.expires - new Date().getTime();
       const hoursRemaining = timeRemaining / (1000 * 60 * 60);
       const newExpires = Number(value) + hoursRemaining;
       if (!value || value == 0) {
@@ -47,9 +53,9 @@ const ExtendModal = ({rental, onClose}) => {
     } else if (prepareError) {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">Hours are invalid</button>;
     } else if (enough) {
-      return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={execute}>Pay {price} USDC</button>;
+      return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => execute()}>Pay {price} USDC</button>;
     } else {
-      return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={executeAllowance}>Approve {price} USDC</button>;
+      return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => executeAllowance()}>Approve {price} USDC</button>;
     }
   };
 

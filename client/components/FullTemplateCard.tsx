@@ -35,7 +35,7 @@ const FullTemplateCard = ({templateId}: Props) => {
     prepareError,
     awsError,
     unknownError
-  } = useRent(templateInfo?.name, region, amount);
+  } = useRent(templateInfo?.name, region, amount || BigInt(0));
   const {data: cpuUsage} = useCPUUsage({template: templateInfo, regionId: region})
 
   const writeButton = () => {
@@ -43,23 +43,20 @@ const FullTemplateCard = ({templateId}: Props) => {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">Not enough resources available to rent this server</button>;
     } else if (hours > 0 && !error) {
       if (enough) {
-        return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={execute}>Pay {price} USDC</button>;
+        return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => execute()}>Pay {price} USDC</button>;
       } else {
-        return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={executeAllowance}>Approve {price} USDC</button>;
+        return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => executeAllowance()}>Approve {price} USDC</button>;
       }
     } else {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">{error}</button>;
     }
   };
 
-  const onRegionChange = (id) => {
+  const onRegionChange = (id: number) => {
     setRegion(id);
   };
 
-  const updateHours = (e) => {
-    // if (e.charCode >= 48 && e.charCode <= 57) {
-    //   setHours(e.target.value);
-    // }
+  const updateHours = (e: any) => {
     const value = e.target.value;
     if (/^[0-9]*$/.test(value)) {
       setHours(value);
@@ -96,19 +93,19 @@ const FullTemplateCard = ({templateId}: Props) => {
 
       return <>
         <div className="flex-1">
-          <div className="text-2xl mb-4">{templateDetails.name}</div>
-          <div className="text-sm mb-5">{templateDetails.notes}</div>
+          <div className="text-2xl mb-4">{templateDetails?.name}</div>
+          <div className="text-sm mb-5">{templateDetails?.notes}</div>
           <div>
-            <TemplateSpec name="CPU">{templateDetails.cpu + 'x CPUS'}</TemplateSpec>
-            <TemplateSpec name="RAM">{templateDetails.ram + ' GB RAM'}</TemplateSpec>
-            <TemplateSpec name="GPU">{templateDetails.gpu}</TemplateSpec>
+            <TemplateSpec name="CPU">{templateDetails?.cpu + 'x CPUS'}</TemplateSpec>
+            <TemplateSpec name="RAM">{templateDetails?.ram + ' GB RAM'}</TemplateSpec>
+            <TemplateSpec name="GPU">{templateDetails?.gpu}</TemplateSpec>
 
             <br/>
 
             <TemplateSpec name="REGION">
               <RegionSelect regionChanged={onRegionChange}/>
             </TemplateSpec>
-            <TemplateSpec name="CPU USAGE">{cpuUsage}</TemplateSpec>
+            {/*<TemplateSpec name="CPU USAGE">{cpuUsage}</TemplateSpec>*/}
             <br/>
 
             <TemplateSpec name="PRICE"><span className="text-xl font-bold mr-2">{formatEther(templateInfo.price)}</span>
@@ -125,25 +122,6 @@ const FullTemplateCard = ({templateId}: Props) => {
           </div>
 
         </div>
-
-        {/*<div>*/}
-        {/*  {error}*/}
-        {/*</div>*/}
-
-        {/*<div className="pt-5">*/}
-        {/*  <span className="text-xl font-bold mr-2">{templateInfo.price}</span>*/}
-        {/*  <span className="text-sm">USDC per hour</span>*/}
-        {/*</div>*/}
-        {/*<div>x</div>*/}
-        {/*<div>*/}
-        {/*  <input className="bg-neutral-900 w-20 px-5 py-1 outline-0"*/}
-        {/*         onChange={(e) => setHours(e.target.value)}*/}
-        {/*         type="number"*/}
-        {/*         value={hours}*/}
-        {/*  /> hours*/}
-        {/*</div>*/}
-        {/*<div>=</div>*/}
-        {/*<div>{price} TOTAL</div>*/}
 
         {
           writeButton()

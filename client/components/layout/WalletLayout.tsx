@@ -7,7 +7,7 @@ import {PropsWithChildren} from "react";
 import {Navbar} from "./NavBar";
 import {customRainbowTheme} from "../../utils/rainbow-theme";
 
-export default function WalletLayout({flex, children}: PropsWithChildren<{ flex: boolean }>) {
+export default function WalletLayout({flex, children}: PropsWithChildren<{ flex?: boolean }>) {
   const extraClasses = flex ? ' flex flex-col' : '';
   return (
     <WagmiConfig config={config}>

@@ -2,7 +2,11 @@ import {useMyRental} from "../../hooks/useMyRental";
 import {useAccount} from "wagmi";
 import RentalContainer from "./RentalContainer";
 
-export function RentalPage({token}) {
+interface Props {
+  token: number;
+}
+
+export function RentalPage({token}: Props) {
   const {address} = useAccount();
 
   const {myRental} = useMyRental({token});

@@ -13,6 +13,7 @@ const ContractWriteStatus = ({status, statusMsg}: Props) => {
       <div>{statusMsg}</div>
     </div>;
   }
+  return <div></div>;
 }
 
 export default ContractWriteStatus

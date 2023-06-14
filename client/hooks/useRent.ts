@@ -8,7 +8,7 @@ import {useContractWriteStatus} from './useContractWriteStatus';
 import {useEffect, useState} from 'react';
 import {useAllowance} from './useAllowance';
 
-export const useRent = (template: string, region: number, amount: bigint) => {
+export const useRent = (template: string | undefined, region: number, amount: bigint) => {
   const {push} = useRouter();
   const [awsError, setAwsError] = useState(false);
   const [unknownError, setUnknownError] = useState(false);
@@ -37,13 +37,13 @@ export const useRent = (template: string, region: number, amount: bigint) => {
 
   useEffect(() => {
     if (status === 'success') {
-      const lastLog = receipt.logs.pop();
+      const lastLog = receipt!.logs.pop();
       const rentEvent = decodeEventLog({
         abi: gpuRentalABI,
-        data: lastLog.data,
-        topics: lastLog.topics
+        data: lastLog!.data,
+        topics: lastLog!.topics
       });
-      const tokenId = Number(rentEvent.args.tokenId);
+      const tokenId = Number((rentEvent.args as any).tokenId);
       fetch('/api/create', {
         method: 'POST',
         body: JSON.stringify({token: tokenId})

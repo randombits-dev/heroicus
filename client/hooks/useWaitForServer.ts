@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
 
-export const useWaitForServer = (url) => {
+export const useWaitForServer = (url: string) => {
   const [ready, setReady] = useState(false);
 
-  const runTest = (interval) => {
+  const runTest = (interval: any) => {
     fetch(url).then((res) => {
       if (res.status === 200) {
         setReady(true);
@@ -18,7 +18,7 @@ export const useWaitForServer = (url) => {
     if (!url) {
       return;
     }
-    const interval = setInterval(() => runTest(interval), 5000);
+    const interval: any = setInterval(() => runTest(interval), 5000);
     runTest(interval);
   };
 

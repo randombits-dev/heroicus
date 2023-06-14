@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
 import RestartModal from "./RestartModal";
+import {UserInfo} from "../../utils/definitions";
 
-const RestartButton = ({rental}) => {
+interface Props {
+  rental: UserInfo;
+}
+
+const RestartButton = ({rental}: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   return (

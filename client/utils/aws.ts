@@ -6,7 +6,7 @@ import {createPublicClient, createWalletClient, http} from 'viem';
 import {hardhat} from 'viem/chains';
 import {gpuRentalABI} from '../generated';
 
-export const getClientToken = (tokenId): string => {
+export const getClientToken = (tokenId: number): string => {
   // return GPURentalAddress + '_5_' + tokenId;
   return 'test';
 };
@@ -18,7 +18,7 @@ export const startServer = async (templateId: string, token: number, region: num
     Filters: [{Name: 'client-token', Values: [getClientToken(token)]}]
   });
   const {Reservations} = await ec2.send(command);
-  if (Reservations.length > 0) {
+  if (Reservations!.length > 0) {
     throw 'Server already exists';
   }
 
@@ -60,8 +60,10 @@ const refundServer = async (token: number) => {
     chain: hardhat,
     transport: http(),
   });
+
+  // @ts-ignore
   const {request} = await client.simulateContract({
-    account,
+    // account,
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'provideRefund',

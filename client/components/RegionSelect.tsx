@@ -2,11 +2,11 @@ import React from 'react';
 import {REGIONS} from "../utils/templates";
 
 interface Props {
-  regionChanged: (id) => void;
+  regionChanged: (id: number) => void;
 }
 
 const RegionSelect = ({regionChanged}: Props) => {
-  const onChange = (e) => {
+  const onChange = (e: any) => {
     regionChanged(e.target.value);
   };
 

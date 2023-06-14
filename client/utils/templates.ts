@@ -6,7 +6,7 @@ export const TEMPLATE_LIST = [
     ram: 16,
     gpu: 'Tesla T4 12GB',
     notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
-    url: (ip) => `http://${ip}:7860`
+    url: (ip: string) => `http://${ip}:7860`
   },
   {
     id: 'tiny',
@@ -14,7 +14,7 @@ export const TEMPLATE_LIST = [
     cpu: 2,
     ram: 4,
     notes: 'Docker and Portainer preinstalled.',
-    url: (ip) => `http://${ip}:9000`
+    url: (ip: string) => `http://${ip}:9000`
   },
   {
     id: 'diffusion2',
@@ -23,6 +23,7 @@ export const TEMPLATE_LIST = [
     ram: 32,
     gpu: 'Tesla A100 32GB',
     notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
+    url: (ip: string) => `http://${ip}:9000`
   },
   {
     id: 'large',
@@ -30,7 +31,7 @@ export const TEMPLATE_LIST = [
     cpu: 2,
     ram: 8,
     notes: 'Docker',
-    url: (ip) => `http://${ip}:9000`
+    url: (ip: string) => `http://${ip}:9000`
   }
 ];
 
@@ -40,7 +41,7 @@ export const SERVER_LIST = [{
   id: 't2.micro'
 }];
 
-export const REGIONS = {
+export const REGIONS: { [key: number]: [string, string] } = {
   1: ['us-east-2', 'US East'],
   2: ['us-west-2', 'US West'],
   3: ['Europe', 'Europe'],

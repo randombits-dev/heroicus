@@ -2,8 +2,8 @@ import {useSignMessage} from 'wagmi';
 import {hashMessage} from 'viem';
 import {useEffect, useState} from 'react';
 
-export const useServerSignature = ({token}) => {
-  const hash = hashMessage(token);
+export const useServerSignature = ({token}: { token: number }) => {
+  const hash = hashMessage(String(token));
   const [signature, setSignature] = useState('');
 
   const {signMessage} = useSignMessage({
