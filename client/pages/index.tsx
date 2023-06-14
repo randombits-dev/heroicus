@@ -8,6 +8,7 @@ import image2 from '../public/images/tmpbw4bcxkf.png';
 import discord from '../public/images/discord.svg';
 import github from '../public/images/github.svg';
 import heroicus1 from '../public/images/heroicus1.png';
+import Link from "next/link";
 
 
 export function Index() {
@@ -21,9 +22,11 @@ export function Index() {
           {/*      className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">*/}
           {/*  Start Here*/}
           {/*</Link>*/}
-          {/*<Link href="/DocsPage" className="ml-10 text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10">*/}
-          {/*  Docs*/}
-          {/*</Link>*/}
+          <div className="inline-block text-xl">Coming Soon</div>
+          <Link href="https://docs.heroicus.xyz"
+                className="ml-10 text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10">
+            Docs
+          </Link>
 
         </div>
         <div className="ml-20 hidden md:block overflow-hidden rounded-l-xl">
