@@ -14,9 +14,9 @@ export const useMyRentals = (): { myRentals: UserInfo[] } => {
     functionName: 'balanceOf',
     args: [address!]
   });
-
+  
   const {data: results, status} = useContractReads({
-    contracts: [...Array(Number(rentalBalance))].map(i => ({
+    contracts: [...Array(Number(rentalBalance || 0))].map((_, i) => ({
       address: GPURentalAddress,
       abi: gpuRentalABI,
       functionName: 'tokenOfOwnerByIndex',

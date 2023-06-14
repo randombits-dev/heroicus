@@ -16,23 +16,23 @@ export const TEMPLATE_LIST = [
     notes: 'Docker and Portainer preinstalled.',
     url: (ip: string) => `http://${ip}:9000`
   },
-  {
-    id: 'diffusion2',
-    name: 'Stable Diffusion A100',
-    cpu: 8,
-    ram: 32,
-    gpu: 'Tesla A100 32GB',
-    notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
-    url: (ip: string) => `http://${ip}:9000`
-  },
-  {
-    id: 'large',
-    name: 'Docker Large',
-    cpu: 2,
-    ram: 8,
-    notes: 'Docker',
-    url: (ip: string) => `http://${ip}:9000`
-  }
+  // {
+  //   id: 'diffusion2',
+  //   name: 'Stable Diffusion A100',
+  //   cpu: 8,
+  //   ram: 32,
+  //   gpu: 'Tesla A100 32GB',
+  //   notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
+  //   url: (ip: string) => `http://${ip}:9000`
+  // },
+  // {
+  //   id: 'large',
+  //   name: 'Docker Large',
+  //   cpu: 2,
+  //   ram: 8,
+  //   notes: 'Docker',
+  //   url: (ip: string) => `http://${ip}:9000`
+  // }
 ];
 
 export const SERVER_LIST = [{

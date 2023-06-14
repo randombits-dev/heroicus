@@ -4,10 +4,16 @@ import {UserInfo} from "../../utils/definitions";
 
 interface Props {
   rental: UserInfo;
+  onExtended: () => void;
 }
 
-const ExtendButton = ({rental}: Props) => {
+const ExtendButton = ({rental, onExtended}: Props) => {
   const [showModal, setShowModal] = useState(false);
+
+  const onClose = () => {
+    setShowModal(false);
+    onExtended();
+  };
 
   return (
     <>
@@ -17,7 +23,7 @@ const ExtendButton = ({rental}: Props) => {
         Extend Server
       </button>
 
-      {showModal && <ExtendModal rental={rental} onClose={() => setShowModal(false)}/>}
+      {showModal && <ExtendModal rental={rental} onClose={onClose}/>}
     </>
   );
 }

@@ -8,8 +8,8 @@ interface Props {
   token: number;
 }
 
-export const useMyRental = ({token}: Props): { myRental: UserInfo | undefined } => {
-  const {data} = useContractRead({
+export const useMyRental = ({token}: Props): { myRental: UserInfo | undefined, refetch: () => void } => {
+  const {data, refetch} = useContractRead({
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'userInfo',
@@ -27,5 +27,5 @@ export const useMyRental = ({token}: Props): { myRental: UserInfo | undefined } 
     expired: data[1],
     region: userStruct.region
   };
-  return {myRental: formatted};
+  return {myRental: formatted, refetch};
 };
