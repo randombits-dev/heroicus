@@ -1,6 +1,6 @@
-import AutoFrame from "../../components/rentals/AutoFrame";
+import RentalFrame from "./RentalFrame";
 import {styled} from "goober";
-import AutoHeader from "../../components/rentals/AutoHeader";
+import RentalHeader from "./RentalHeader";
 import {useLoginToServer} from "../../hooks/useLoginToServer";
 import {TEMPLATE_LIST} from "../../utils/templates";
 import {useWaitForServer} from "../../hooks/useWaitForServer";
@@ -23,17 +23,17 @@ const Content = styled('div')`
 `;
 
 export function RentalContainer({rental}) {
-  const {signMessage, ip, error} = useLoginToServer({token: rental.token});
+  const {signMessage, ip, error, hasSigned} = useLoginToServer({token: rental.token});
   const template = TEMPLATE_LIST.find(t => t.id === rental.template);
-  const url = template.url(ip);
+  const url = ip ? template.url(ip) : '';
   const {ready, retry} = useWaitForServer(url);
   return (
     <Container>
       <Header>
-        <AutoHeader rental={rental} ready={ready} handleRestart={retry}/>
+        <RentalHeader rental={rental} ready={ready} handleRestart={retry} hasSigned={hasSigned}/>
       </Header>
       <Content>
-        <AutoFrame ready={ready} url={url} error={error} signMessage={signMessage}/>
+        <RentalFrame ready={ready} url={url} error={error} signMessage={signMessage}/>
       </Content>
     </Container>
   );

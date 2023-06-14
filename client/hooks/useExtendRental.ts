@@ -1,18 +1,27 @@
-import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
+import {usePrepareContractWrite} from 'wagmi';
 import {GPURentalAddress} from '../utils/addresses';
 import {gpuRentalABI} from '../generated';
+import {useAllowance} from './useAllowance';
+import {useEffect} from 'react';
+import {useContractWriteStatus} from './useContractWriteStatus';
 
 export const useExtendRental = (tokenId: number, amount: bigint) => {
-  const {config} = usePrepareContractWrite({
+  const {enough, execute: executeAllowance, status: statusAllowance, statusMsg: statusMsgAllowance, refetch} = useAllowance(amount);
+
+  useEffect(() => {
+    if (statusAllowance === 'success') {
+      void refetch();
+    }
+  }, [statusAllowance]);
+
+  const {config, error: prepareError} = usePrepareContractWrite({
     address: GPURentalAddress,
     abi: gpuRentalABI,
     functionName: 'extendRental',
-    args: [BigInt(tokenId), amount]
+    args: [BigInt(tokenId), amount],
+    enabled: enough
   });
-  const {data, write} = useContractWrite(config);
-  const {status} = useWaitForTransaction({
-    hash: data?.hash
-  });
+  const {execute, receipt, status, statusMsg} = useContractWriteStatus(config);
 
-  return {execute: write};
+  return {execute, status, statusMsg, enough, statusAllowance, statusMsgAllowance, executeAllowance, prepareError};
 };

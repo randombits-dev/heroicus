@@ -1,3 +1,6 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -6,7 +9,11 @@ module.exports = {
     "./styles/**/*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
-    extend: {},
+    screens: {
+      ...defaultTheme.screens,
+      'xl': '5000px',
+      '2xl': '5000px'
+    }
   },
   plugins: [
     require('@tailwindcss/typography'),

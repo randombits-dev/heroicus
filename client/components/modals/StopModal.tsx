@@ -19,7 +19,7 @@ const StopModal = ({rental, onClose}) => {
     </Modal>
   } else {
     return (
-      <Modal title="Terminate Rental" onClose={onClose}>
+      <Modal title="Terminate Server" onClose={onClose}>
         <TemplateSpec name="TIME LEFT"><Timer end={rental.expires.getTime()}/></TemplateSpec>
         <TemplateSpec name="ESTIMATED REFUND">{price}</TemplateSpec>
         <div>

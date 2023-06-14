@@ -10,7 +10,7 @@ import {UserInfo} from '../../utils/definitions';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
-    res.status(401).end();
+    throw 'Not POST';
   }
   const {token, s} = JSON.parse(req.body);
   const tokenId = Number(token);

@@ -23,7 +23,7 @@ export const usePauseRental = (tokenId: number) => {
         method: 'POST',
         body: JSON.stringify({token: tokenId})
       }).then(() => {
-        void push('/');
+        void push('/portal');
       });
     }
   }, [status]);

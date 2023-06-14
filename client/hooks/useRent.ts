@@ -11,12 +11,13 @@ import {useAllowance} from './useAllowance';
 export const useRent = (template: string, region: number, amount: bigint) => {
   const {push} = useRouter();
   const [awsError, setAwsError] = useState(false);
+  const [unknownError, setUnknownError] = useState(false);
 
   const {enough, execute: executeAllowance, status: statusAllowance, statusMsg: statusMsgAllowance, refetch} = useAllowance(amount);
 
   useEffect(() => {
     if (statusAllowance === 'success') {
-      refetch();
+      void refetch();
     }
   }, [statusAllowance]);
 
@@ -50,27 +51,28 @@ export const useRent = (template: string, region: number, amount: bigint) => {
         if (res.ok) {
           res.json().then(data => {
             if (data.success) {
-              void push('/auto/' + tokenId);
+              void push('/rental/' + tokenId);
             } else {
               setAwsError(true);
             }
           });
+        } else {
+          setUnknownError(true);
         }
       });
     }
   }, [status]);
 
-  // const {data, write, isLoading} = useContractWrite(config);
-  //
-  // const {
-  //   data: receipt,
-  //   status,
-  //   isSuccess,
-  //   isFetching,
-  //   error
-  // } = useWaitForTransaction({
-  //   hash: data?.hash
-  // });
-
-  return {execute, executeAllowance, enough, status, statusMsg, statusAllowance, statusMsgAllowance, prepareError: error, awsError};
+  return {
+    execute,
+    executeAllowance,
+    enough,
+    status,
+    statusMsg,
+    statusAllowance,
+    statusMsgAllowance,
+    prepareError: error,
+    awsError,
+    unknownError
+  };
 };

@@ -13,7 +13,7 @@ const RentalCard = ({rental}) => {
   // const hash = hashMessage(rental.token as string);
 
   const launch = () => {
-    void push(`/auto/${rental.token}`);
+    void push(`/rental/${rental.token}`);
   };
 
   return <div className="bg-neutral-950 rounded-lg m-1 lg:m-10 px-10 py-5 w-96">

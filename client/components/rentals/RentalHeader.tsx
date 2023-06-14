@@ -12,13 +12,13 @@ const Container = styled('div')`
   align-items: center;
 `;
 
-export function AutoHeader({rental, ready, handleRestart}) {
+export function RentalHeader({rental, ready, handleRestart, hasSigned}) {
   const {reload} = useRouter();
 
   const restart = () => {
     fetch('/api/restart', {
       method: 'POST',
-      body: JSON.stringify({token: rental.token})
+      body: JSON.stringify({token: rental.token, s: signature})
     }).then(() => {
       setTimeout(() => {
         handleRestart();
@@ -30,13 +30,13 @@ export function AutoHeader({rental, ready, handleRestart}) {
     <Container>
       <TemplateSpec name="EXPIRE DATE">{formatExpires(rental.expires)}</TemplateSpec>
       <TemplateSpec name="EXPIRE TIME"><Timer end={rental.expires.getTime()} expired={reload}/></TemplateSpec>
-      <div>
+      {hasSigned && <div className="ml-5">
         <ExtendButton rental={rental}/>
         <StopButton rental={rental}/>
-        <RestartButton onConfirm={restart}/>
-      </div>
+        <RestartButton rental={rental}/>
+      </div>}
     </Container>
   );
 }
 
-export default AutoHeader
+export default RentalHeader

@@ -1,6 +1,8 @@
 import {ConnectButton} from "../examples/ConnectButton";
 import {useEffect, useState} from "react";
 import Link from "next/link";
+import Image from "next/image";
+import heroicus from '../../public/images/heroicus.png'
 
 /**
  * Navigation bar that shows up on all pages.
@@ -19,8 +21,10 @@ export function Navbar() {
     <div className="z-50 px-10 py-3">
       <nav className="layout flex container mx-auto">
         <div className="flex-1">
-          <Link className="text-4xl" href="/">hērōicus</Link>
-          {/*<Link href="/portal">Portal</Link>*/}
+          {/*<Link className="text-2xl" href="/portal">hērōicus</Link>*/}
+          <Link className="text-2xl" href="/portal"><Image src={heroicus} width="50" height="50" alt="home link"
+                                                           className="inline-block"/></Link>
+          <Link className="ml-10" target="_blank" href="http://localhost:3001">Docs</Link>
         </div>
 
         {/*<div className="">*/}
@@ -44,11 +48,11 @@ export function Navbar() {
         {/*</div>*/}
 
         <div className="">
-          <div className="border-4 p-1 bg-neutral-900 connect-btn-container hover:border-amber-200">
-            {/*<ConnectWallet theme="dark" btnTitle="Connect Wallet"/>*/}
-            {hasMounted && <ConnectButton/>}
+          {/*<div className="border-4 p-1 bg-neutral-900 connect-btn-container hover:border-amber-200">*/}
+          {/*<ConnectWallet theme="dark" btnTitle="Connect Wallet"/>*/}
+          {hasMounted && <ConnectButton/>}
 
-          </div>
+          {/*</div>*/}
           {/*{address && (*/}
           {/*  <Link className={styles.link} href={`/profile/${address}`}>*/}
           {/*    <Image*/}

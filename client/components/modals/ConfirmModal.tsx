@@ -8,7 +8,7 @@ const ConfirmModal = ({title, text, yes, no}) => {
       <div>
         {text}
       </div>
-      <div className="">
+      <div className="flex gap-5">
         <ActionButton handleClick={() => yes()}>Yes</ActionButton>
         <ActionButton handleClick={() => no()}>No</ActionButton>
       </div>

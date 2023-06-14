@@ -1,7 +1,7 @@
 export const TEMPLATE_LIST = [
   {
     id: 'diffusion1',
-    name: 'Stable Diffusion',
+    name: 'Stable Diffusion T4',
     cpu: 4,
     ram: 16,
     gpu: 'Tesla T4 12GB',
@@ -10,23 +10,25 @@ export const TEMPLATE_LIST = [
   },
   {
     id: 'tiny',
-    name: 'Tiny',
-    cpu: 1,
-    ram: 1,
-    notes: 'Mock Automatic1111 API'
-  },
-  {
-    id: 'small',
-    name: 'Siny',
-    cpu: 1,
-    ram: 1,
-    notes: 'Mock Automatic1111 API'
-  },
-  {
-    id: 'Medium',
-    name: 'Medium',
+    name: 'Docker Small',
     cpu: 2,
     ram: 4,
+    notes: 'Docker and Portainer preinstalled.',
+    url: (ip) => `http://${ip}:9000`
+  },
+  {
+    id: 'diffusion2',
+    name: 'Stable Diffusion A100',
+    cpu: 8,
+    ram: 32,
+    gpu: 'Tesla A100 32GB',
+    notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
+  },
+  {
+    id: 'large',
+    name: 'Docker Large',
+    cpu: 2,
+    ram: 8,
     notes: 'Docker',
     url: (ip) => `http://${ip}:9000`
   }

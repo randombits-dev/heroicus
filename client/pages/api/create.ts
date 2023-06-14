@@ -9,7 +9,7 @@ import {startServer} from '../../utils/aws';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
-    res.status(401).end();
+    throw 'Not POST';
   }
   const {token} = JSON.parse(req.body);
 

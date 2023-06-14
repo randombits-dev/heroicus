@@ -13,7 +13,7 @@ const ExtendButton = ({rental}) => {
       <button onClick={() => setShowModal(true)}
               className="bg-blue-900 px-3 py-1 lg:px-5 lg:py-2 hover:bg-blue-800 whitespace-nowrap"
       >
-        Extend Rental
+        Extend Server
       </button>
 
       {showModal && <ExtendModal rental={rental} onClose={() => setShowModal(false)}/>}

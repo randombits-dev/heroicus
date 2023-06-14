@@ -1,7 +1,7 @@
 import {useRouter} from "next/router";
 import {styled} from "goober";
 import WalletLayout from "../../components/layout/WalletLayout";
-import AutoContainer from "../../components/rentals/AutoContainer";
+import RentalPage from "../../components/rentals/RentalPage";
 
 const Container = styled('div')`
   display: flex;
@@ -25,7 +25,7 @@ export function Auto() {
   const token = router.query.token as string;
   return (
     <WalletLayout>
-      <AutoContainer token={token}/>
+      <RentalPage token={token}/>
     </WalletLayout>
   );
 }

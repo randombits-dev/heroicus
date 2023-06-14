@@ -7,8 +7,8 @@ import {hardhat} from 'viem/chains';
 import {gpuRentalABI} from '../generated';
 
 export const getClientToken = (tokenId): string => {
-  return GPURentalAddress + '_5_' + tokenId;
-  // return 'test';
+  // return GPURentalAddress + '_5_' + tokenId;
+  return 'test';
 };
 
 export const startServer = async (templateId: string, token: number, region: number) => {

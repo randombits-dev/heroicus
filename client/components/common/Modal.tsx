@@ -8,9 +8,9 @@ interface Props {
 
 const Modal = ({title, children, onClose, showClose}: PropsWithChildren<Props>) => {
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 backdrop-blur	">
+    <div className="fixed top-0 left-0 right-0 bottom-0 backdrop-blur	z-40">
       <div className="flex h-screen">
-        <div className="m-auto shadow-lg bg-neutral-950 rounded-lg">
+        <div className="m-auto shadow-lg bg-neutral-950 rounded-lg min-w-[400px]">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               {title}

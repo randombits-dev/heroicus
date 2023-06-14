@@ -1,31 +1,21 @@
-import {useSignMessage} from 'wagmi';
 import {hashMessage} from 'viem';
 import {useEffect, useState} from 'react';
+import {useServerSignature} from './useServerSignature';
 
 export const useLoginToServer = ({token}) => {
   const hash = hashMessage(token);
   const [ip, setIp] = useState('');
   const [error, setError] = useState(false);
-
-  const {signMessage} = useSignMessage({
-    message: 'Sign in with ID: ' + hash,
-    onSuccess: (data) => {
-      sessionStorage.setItem('s.' + hash, data);
-      fetchIP(data);
-    }
-  });
+  const {signMessage, signature, hasSigned} = useServerSignature({token});
 
   useEffect(() => {
     const savedIp = sessionStorage.getItem('ip.' + hash);
     if (savedIp) {
       setIp(savedIp);
-    } else {
-      const savedSignature = sessionStorage.getItem('s.' + hash);
-      if (savedSignature) {
-        fetchIP(savedSignature);
-      }
+    } else if (hasSigned) {
+      fetchIP(signature);
     }
-  }, []);
+  }, [hasSigned]);
 
   const fetchIP = (s) => {
     fetch(`/api/open`, {
@@ -46,5 +36,5 @@ export const useLoginToServer = ({token}) => {
     });
   };
 
-  return {signMessage, ip, error};
+  return {signMessage, ip, error, hasSigned};
 };

@@ -33,7 +33,8 @@ const FullTemplateCard = ({templateId}: Props) => {
     status,
     statusMsg,
     prepareError,
-    awsError
+    awsError,
+    unknownError
   } = useRent(templateInfo?.name, region, amount);
   const {data: cpuUsage} = useCPUUsage({template: templateInfo, regionId: region})
 
@@ -44,11 +45,7 @@ const FullTemplateCard = ({templateId}: Props) => {
       if (enough) {
         return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={execute}>Pay {price} USDC</button>;
       } else {
-        // if (statusAllowance) {
-        //   return <button disabled={true} className="bg-neutral-800 px-10 py-3 w-full">{statusMsgAllowance}</button>;
-        // } else {
         return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={executeAllowance}>Approve {price} USDC</button>;
-        // }
       }
     } else {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">{error}</button>;
@@ -78,7 +75,9 @@ const FullTemplateCard = ({templateId}: Props) => {
   };
 
   const writeContents = () => {
-    if (awsError) {
+    if (unknownError) {
+      return <div>An unknown error has occurred. Please stop your server for a refund.</div>
+    } else if (awsError) {
       return <div>
         <div>Insufficient resources available to create server. A full refund was issued.</div>
         <br/>
