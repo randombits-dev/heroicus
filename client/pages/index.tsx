@@ -3,11 +3,11 @@
 // `;
 
 import Image from "next/image";
-import image0 from '../public/images/4.png';
 import image1 from '../public/images/tmp5szz2naz.png';
 import image2 from '../public/images/tmpbw4bcxkf.png';
 import discord from '../public/images/discord.svg';
 import github from '../public/images/github.svg';
+import heroicus1 from '../public/images/heroicus1.png';
 import Link from "next/link";
 
 
@@ -27,8 +27,8 @@ export function Index() {
           </Link>
         </div>
         <div className="ml-20 hidden md:block overflow-hidden rounded-l-xl">
-          <Image src={image0} alt="Hero Image" width="500" height="400"
-                 style={{height: '400px', 'object-fit': 'cover', 'object-position': '0 0'}}/>
+          <Image src={heroicus1} alt="Hero Image" width="500" height="450"
+                 style={{height: '450px', 'object-fit': 'cover', 'object-position': '0 0'}}/>
         </div>
       </div>
     </div>
@@ -72,12 +72,18 @@ export function Index() {
       </div>
 
       <div className="py-24 mx-auto text-center">
-        <a href="https://discordapp.com/users/1116077220390244394" target="_blank" className="inline-block">
-          <Image src={discord} height="50" width="50" alt="discord logo"/>
+        <a href="https://discordapp.com/users/1116077220390244394" target="_blank" className="mx-10 inline-block">
+          <Image src={discord} height="50" width="50" alt="discord logo" className="inline-block mb-2"/>
+          <div>Discord</div>
         </a>
-        <a href="https://github.com" target="_blank" className="ml-20 inline-block">
-          <Image src={github} height="50" width="50" alt="github logo"/>
+        <a href="https://github.com" target="_blank" className="mx-10 inline-block">
+          <Image src={github} height="50" width="50" alt="github logo" className="inline-block mb-2"/>
+          <div>Github</div>
         </a>
+        <div>
+          <div className="mt-10">Brought to you by <a className="underline" href="https://randombits.dev">Random Bits</a></div>
+
+        </div>
       </div>
     </div>
   </div>

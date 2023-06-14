@@ -15,8 +15,8 @@ body {
 }
 
 .main-container {
-  background-image: url('../public/images/rain.svg');
-  background-size: cover;
+  /*background-image: url('../public/images/rain.svg');*/
+  /*background-size: cover;*/
 }
 
 .connect-btn-container button {

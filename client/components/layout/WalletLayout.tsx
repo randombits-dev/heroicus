@@ -7,16 +7,14 @@ import {PropsWithChildren} from "react";
 import {Navbar} from "./NavBar";
 import {customRainbowTheme} from "../../utils/rainbow-theme";
 
-export default function WalletLayout({children}: PropsWithChildren<{}>) {
+export default function WalletLayout({flex, children}: PropsWithChildren<{ flex: boolean }>) {
+  const extraClasses = flex ? ' flex flex-col' : '';
   return (
     <WagmiConfig config={config}>
       <RainbowKitProvider chains={chains} modalSize="compact" theme={customRainbowTheme}>
-        <div
-          className="flex flex-col h-screen bg-neutral-900 main-container text-neutral-300">
+        <div className={"min-h-screen bg-neutral-900 main-container text-neutral-300" + extraClasses}>
           <Navbar/>
-          <div className="flex-1 overflow-auto">
-            {children}
-          </div>
+          {children}
         </div>
 
       </RainbowKitProvider>
