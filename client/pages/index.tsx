@@ -8,7 +8,6 @@ import image2 from '../public/images/tmpbw4bcxkf.png';
 import discord from '../public/images/discord.svg';
 import github from '../public/images/github.svg';
 import heroicus1 from '../public/images/heroicus1.png';
-import Link from "next/link";
 
 
 export function Index() {
@@ -17,14 +16,15 @@ export function Index() {
       <div className="py-10 flex items-center text-center justify-center">
         <div className="">
           <div className="text-8xl font-bold pb-10">hērōicus</div>
-          <div className="text-6xl font-semibold leading-tight">Cloud computing<br/> utilizing Fantom <br/>and AWS</div>
-          <Link href="/portal"
-                className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">
-            Start Here
-          </Link>
-          <Link href="/DocsPage" className="ml-10 text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10">
-            Docs
-          </Link>
+          <div className="text-5xl font-semibold leading-tight">Cloud computing<br/> utilizing Fantom <br/>and AWS</div>
+          {/*<Link href="/portal"*/}
+          {/*      className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">*/}
+          {/*  Start Here*/}
+          {/*</Link>*/}
+          {/*<Link href="/DocsPage" className="ml-10 text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10">*/}
+          {/*  Docs*/}
+          {/*</Link>*/}
+
         </div>
         <div className="ml-20 hidden md:block overflow-hidden rounded-l-xl">
           <Image src={heroicus1} alt="Hero Image" width="500" height="450"
@@ -44,12 +44,15 @@ export function Index() {
           {/*<div className="text-lg">use case 1:</div>*/}
           <div className="text-5xl font-bold">Stable Diffusion</div>
           <div className="text-3xl mt-5">GPU Servers running Automatic1111 to generate AI Images</div>
-          <div className="text-xl mt-5">ControlNet</div>
-          <div className="text-xl mt-3">Models: StableDiffusionv2.1, Deliberate, InkPunk</div>
-          <Link href="/portal"
-                className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">
-            Run
-          </Link>
+          <div className="text-xl mt-5">Text-to-Image</div>
+          <div className="text-xl mt-3">Image-to-Image</div>
+          <div className="text-xl mt-3">Inpainting</div>
+          <div className="text-xl mt-3">ControlNet</div>
+          <div className="text-xl mt-3">Popular preinstalled models</div>
+          {/*<Link href="/portal"*/}
+          {/*      className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">*/}
+          {/*  Run*/}
+          {/*</Link>*/}
         </div>
       </div>
 
@@ -63,10 +66,10 @@ export function Index() {
           <div className="text-5xl font-bold">Docker</div>
           <div className="text-3xl mt-5">Run burstable CPU servers to host anything using docker containers</div>
           <div className="text-xl mt-5">Portainer for managing docker images/containers</div>
-          <Link href="/portal"
-                className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">
-            Run
-          </Link>
+          {/*<Link href="/portal"*/}
+          {/*      className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">*/}
+          {/*  Run*/}
+          {/*</Link>*/}
         </div>
 
       </div>
