@@ -11,8 +11,6 @@ import "hardhat/console.sol"; // TODO: Remove
 contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
   using SafeMath for uint256;
 
-  error NoCPUAvailable();
-
   struct ServerInfo {
     uint256 pricePerHour;
     uint8 cpus;
@@ -121,7 +119,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
     UserInfo storage user = _userInfo[tokenId];
     TemplateInfo memory template = templateInfo[user.templateId];
     uint256 timeRequested = amount.div(template.pricePerHour.div(3600));
-    require(user.expires + timeRequested < block.timestamp + maxRentalTime, "cannot rent longer than 30 days");
+    require(user.expires + timeRequested < block.timestamp + maxRentalTime, "max rental time");
 
     IERC20 tk = IERC20(paymentCoin);
     tk.transferFrom(msg.sender, address(this), amount);
@@ -173,9 +171,8 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
   }
 
   function cleanUpOldRentals() public {
-    uint256 len = totalSupply();
-    for (uint256 i; i < len; i++) {
-      uint256 tokenId = tokenByIndex(i);
+    for (uint256 i = totalSupply(); i > 0; i--) {
+      uint256 tokenId = tokenByIndex(i - 1);
       if (uint256(_userInfo[tokenId].expires) < block.timestamp) {
         _burn(tokenId);
       }
@@ -188,7 +185,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
       uint32 limit = gLimits[region];
       uint32 usage = gUsage[region];
       if (server.cpus > limit - usage) {
-        revert NoCPUAvailable();
+        revert("No resources available for CPU servers");
       }
       //      require(server.cpus <= limit - usage, "No resources available for GPU servers");
       gUsage[region] = usage + server.cpus;
@@ -196,7 +193,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
       uint32 limit = tLimits[region];
       uint32 usage = tUsage[region];
       if (server.cpus > limit - usage) {
-        revert NoCPUAvailable();
+        revert("No resources available for CPU servers");
       }
       //      require(server.cpus <= limit - usage, "No resources available for CPU servers");
       tUsage[region] = usage + server.cpus;

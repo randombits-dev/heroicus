@@ -6,14 +6,16 @@ import {time} from '@nomicfoundation/hardhat-network-helpers';
 
 const deploy = deployments.createFixture(
   async ({deployments, getNamedAccounts, ethers}, options) => {
-    const {deployer, user1} = await getNamedAccounts();
-    await deployments.fixture(['USDC', 'GPURental']);
+    const {deployer, user1, user2} = await getNamedAccounts();
+    await deployments.fixture(['USDC', 'Heroicus']);
     const USDC_user1 = await ethers.getContract('USDC', user1);
-    const GPU_user1 = await ethers.getContract('GPURental', user1);
-    const GPU_deployer = await ethers.getContract('GPURental', deployer);
+    const GPU_user1 = await ethers.getContract('Heroicus', user1);
+    const GPU_user2 = await ethers.getContract('Heroicus', user2);
+    const GPU_deployer = await ethers.getContract('Heroicus', deployer);
     return {
       USDC_user1,
       GPU_user1,
+      GPU_user2,
       GPU_deployer
     };
   }
@@ -25,13 +27,13 @@ const giveUSDC = deployments.createFixture(
 
     const USDC_user1 = await ethers.getContract('USDC', user1);
     const USDC_user2 = await ethers.getContract('USDC', user2);
-    const gpuRental = await deployments.get('GPURental');
+    const Heroicus = await deployments.get('Heroicus');
 
     await USDC_user1.giveMe(fromEther(100));
-    await USDC_user1.approve(gpuRental.address, fromEther(100));
+    await USDC_user1.approve(Heroicus.address, fromEther(100));
 
     await USDC_user2.giveMe(fromEther(100));
-    await USDC_user2.approve(gpuRental.address, fromEther(100));
+    await USDC_user2.approve(Heroicus.address, fromEther(100));
   }
 );
 
@@ -39,14 +41,14 @@ const createTemplate1 = deployments.createFixture(
   async ({deployments, getNamedAccounts, ethers}, options) => {
     const {deployer} = await getNamedAccounts();
 
-    const GPU_deployer = await ethers.getContract('GPURental', deployer);
+    const GPU_deployer = await ethers.getContract('Heroicus', deployer);
     await GPU_deployer.setServer(formatBytes32String('t2.small'), fromEther(0.1), 2);
     await GPU_deployer.setTemplate(formatBytes32String('template1'), formatBytes32String('t2.small'), fromEther(0.2));
     await GPU_deployer.setTLimit(1, 32);
   }
 );
 
-describe('GPURental', () => {
+describe('Heroicus', () => {
   it('should allow renting 1 hour', async () => {
     const {user1} = await getNamedAccounts();
     const {GPU_user1, USDC_user1} = await deploy();
@@ -175,5 +177,58 @@ describe('GPURental', () => {
     await createTemplate1();
 
     await expect(GPU_user1.rent(formatBytes32String('template1'), 1, fromEther(0.2 * 24 * 31))).to.be.revertedWith('max rental time');
+
+    await GPU_user1.rent(formatBytes32String('template1'), 1, fromEther(0.2 * 24 * 29));
+    await expect(GPU_user1.extendRental(1, fromEther(0.2 * 24 * 2))).to.be.revertedWith('max rental time');
+  });
+
+  it('should provide refund by owner', async () => {
+    const {deployer, dev, user1} = await getNamedAccounts();
+    const {GPU_deployer, GPU_user1, USDC_user1} = await deploy();
+    await giveUSDC();
+    await createTemplate1();
+    await GPU_user1.rent(formatBytes32String('template1'), 1, fromEther('0.2'));
+
+    await GPU_deployer.provideRefund(1);
+    expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(fromEther(0));
+    expect(await USDC_user1.balanceOf(user1)).to.equal(fromEther(100));
+    expect(await USDC_user1.balanceOf(dev)).to.equal(fromEther(0));
+  });
+
+  it('should clean up servers', async () => {
+    const {deployer, dev, user1} = await getNamedAccounts();
+    const {GPU_deployer, GPU_user1, USDC_user1} = await deploy();
+    await giveUSDC();
+    await createTemplate1();
+    await GPU_user1.rent(formatBytes32String('template1'), 1, fromEther('0.2'));
+
+    const currentBlockTime = await getBlockTime();
+    await time.setNextBlockTimestamp(currentBlockTime + 3700); // over 1 hour
+
+    await GPU_user1.cleanUpOldRentals();
+    expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(fromEther(0));
+    expect(await USDC_user1.balanceOf(user1)).to.equal(fromEther(100 - 0.2));
+    expect(await USDC_user1.balanceOf(dev)).to.equal(fromEther(0.2));
+  });
+
+  it('should clean up servers before renting again', async () => {
+    const {deployer, dev, user1} = await getNamedAccounts();
+    const {GPU_deployer, GPU_user1, GPU_user2} = await deploy();
+    await giveUSDC();
+    await createTemplate1();
+    await GPU_deployer.setTLimit(1, 4);
+    await GPU_user1.rent(formatBytes32String('template1'), 1, fromEther('0.2'));
+
+    const currentBlockTime = await getBlockTime();
+    await time.setNextBlockTimestamp(currentBlockTime + 1800); // half hour
+
+    await GPU_user2.rent(formatBytes32String('template1'), 1, fromEther('0.2'));
+
+    await time.setNextBlockTimestamp(currentBlockTime + 3700); // over 1 hour
+
+    await GPU_user1.rent(formatBytes32String('template1'), 1, fromEther('0.2'));
+    await time.setNextBlockTimestamp(currentBlockTime + 3800); // over 1 hour
+    await expect(GPU_user2.rent(formatBytes32String('template1'), 1, fromEther('0.2'))).to.be
+      .revertedWith('No resources available for CPU servers');
   });
 });
