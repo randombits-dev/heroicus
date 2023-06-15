@@ -86,7 +86,7 @@ const FullTemplateCard = ({templateId}: Props) => {
       </div>
     } else if (status) {
       return <ContractWriteStatus status={status} statusMsg={statusMsg}/>
-    } else if (!enough && statusAllowance) {
+    } else if (!enough && statusAllowance && statusAllowance !== 'success') {
       return <ContractWriteStatus status={statusAllowance} statusMsg={statusMsgAllowance}/>
     } else if (templateInfo) {
       const templateDetails = TEMPLATE_LIST.find(t => t.id === templateInfo.name);

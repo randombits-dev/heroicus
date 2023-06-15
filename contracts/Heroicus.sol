@@ -49,7 +49,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
 
   event Rent(uint256 tokenId);
 
-  constructor(address _paymentCoin, address _devAddress) ERC721("GPU Rental", "GPU") {
+  constructor(address _paymentCoin, address _devAddress) ERC721("Heroicus", "Heroicus") {
     paymentCoin = _paymentCoin;
     devAddress = _devAddress;
   }

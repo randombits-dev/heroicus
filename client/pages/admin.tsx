@@ -1,18 +1,10 @@
-import {useEffect, useState} from "react";
 import AdminHome from "../components/admin/AdminHome";
+import WalletLayout from "../components/layout/WalletLayout";
 
 export function Admin() {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  if (hasMounted) {
-    return <div>
-      <AdminHome/>
-    </div>;
-  }
+  return <WalletLayout>
+    <AdminHome/>
+  </WalletLayout>;
 }
 
 export default Admin

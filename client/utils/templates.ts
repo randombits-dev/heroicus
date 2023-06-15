@@ -46,6 +46,6 @@ export const REGIONS: { [key: number]: [string, string] } = {
   2: ['us-east-2', 'US Central'],
   3: ['us-west-1', 'US South West'],
   4: ['us-west-2', 'US North West'],
-  5: ['Europe', 'Europe'],
-  6: ['Asia', 'Asia']
+  5: ['eu-central-1', 'Europe'],
+  6: ['ap-northeast-2', 'Asia']
 };

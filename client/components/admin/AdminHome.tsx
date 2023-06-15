@@ -7,7 +7,7 @@ const AdminHome = () => {
 
   return (
     <div className="text-center m-10">
-      <div className="text-3xl">Available Rentals</div>
+      <div className="text-3xl">Templates</div>
       <div className="flex justify-center">
         {
           templateInfo.map(template => {

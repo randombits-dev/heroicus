@@ -42,7 +42,7 @@ const Timer = ({end, expired}: Props) => {
     <span>
       {days > 0 && <span>{days} days, </span>}
       {hours > 0 && <span>{hours} hours, </span>}
-      {minutes > 0 && <span>{minutes} minutes</span>}
+      <span>{minutes} minutes</span>
     </span>
   );
 }

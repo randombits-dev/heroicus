@@ -14,6 +14,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   await execute('Heroicus', {from: deployer}, 'setTLimit', 1, 2);
   await execute('Heroicus', {from: deployer}, 'setGLimit', 1, 4);
+  await execute('Heroicus', {from: deployer}, 'setTLimit', 2, 2);
+  await execute('Heroicus', {from: deployer}, 'setGLimit', 2, 4);
 
   await execute('Heroicus', {from: deployer}, 'setServer', formatBytes32String('g4dn.xlarge'), ethers.utils.parseEther('1'), 4);
   await execute('Heroicus', {from: deployer}, 'setServer', formatBytes32String('t2.micro'), ethers.utils.parseEther('0.1'), 1);

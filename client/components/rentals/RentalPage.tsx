@@ -12,19 +12,19 @@ export function RentalPage({token}: Props) {
   const {myRental} = useMyRental({token});
 
   if (!myRental) {
-    return <div className="h-full flex">
+    return <div className="flex flex-col h-full flex-1">
       <div className="m-auto text-4xl"></div>
     </div>;
   }
 
   if (myRental.user !== address) {
-    return <div className="h-full flex">
+    return <div className="flex flex-col h-full flex-1">
       <div className="m-auto text-4xl">You do not own this rental</div>
     </div>;
   }
 
   if (myRental.expired) {
-    return <div className="h-full flex">
+    return <div className="flex flex-col h-full flex-1">
       <div className="m-auto text-4xl">Rental is expired</div>
     </div>;
   }

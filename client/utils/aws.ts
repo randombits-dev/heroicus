@@ -2,13 +2,13 @@ import {HeroicusAddress} from './addresses';
 import {DescribeInstancesCommand, EC2Client, RunInstancesCommand} from '@aws-sdk/client-ec2';
 import {REGIONS} from './templates';
 import {privateKeyToAccount} from 'viem/accounts';
-import {createPublicClient, createWalletClient, http} from 'viem';
+import {createPublicClient, createWalletClient, Hex, http} from 'viem';
 import {hardhat} from 'viem/chains';
 import {heroicusABI} from '../generated';
 
 export const getClientToken = (tokenId: number): string => {
-  return HeroicusAddress + '_6_' + tokenId;
-  // return 'test';
+  // return HeroicusAddress + '_8_' + tokenId;
+  return 'test';
 };
 
 export const startServer = async (templateId: string, token: number, region: number) => {
@@ -33,9 +33,6 @@ export const startServer = async (templateId: string, token: number, region: num
     await ec2.send(cmd);
     return {success: true};
   } catch (e) {
-    // if (e.name === 'InsufficientInstanceCapacity') {
-    //
-    // }
     console.error(e);
     try {
       await refundServer(token);
@@ -50,7 +47,7 @@ export const startServer = async (templateId: string, token: number, region: num
 };
 
 const refundServer = async (token: number) => {
-  const account = privateKeyToAccount('0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80');
+  const account = privateKeyToAccount(process.env.OWNER_PRIVATE_KEY as Hex);
   const client = createPublicClient({
     chain: hardhat,
     transport: http(),
