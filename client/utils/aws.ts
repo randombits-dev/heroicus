@@ -1,13 +1,13 @@
-import {GPURentalAddress} from './addresses';
+import {HeroicusAddress} from './addresses';
 import {DescribeInstancesCommand, EC2Client, RunInstancesCommand} from '@aws-sdk/client-ec2';
 import {REGIONS} from './templates';
 import {privateKeyToAccount} from 'viem/accounts';
 import {createPublicClient, createWalletClient, http} from 'viem';
 import {hardhat} from 'viem/chains';
-import {gpuRentalABI} from '../generated';
+import {heroicusABI} from '../generated';
 
 export const getClientToken = (tokenId: number): string => {
-  return GPURentalAddress + '_6_' + tokenId;
+  return HeroicusAddress + '_6_' + tokenId;
   // return 'test';
 };
 
@@ -27,7 +27,7 @@ export const startServer = async (templateId: string, token: number, region: num
     MinCount: 1,
     MaxCount: 1,
     ClientToken: getClientToken(token),
-    TagSpecifications: [{ResourceType: 'instance', Tags: [{Key: GPURentalAddress, Value: String(token)}]}]
+    TagSpecifications: [{ResourceType: 'instance', Tags: [{Key: HeroicusAddress, Value: String(token)}]}]
   });
   try {
     await ec2.send(cmd);
@@ -64,8 +64,8 @@ const refundServer = async (token: number) => {
   // @ts-ignore
   const {request} = await client.simulateContract({
     // account,
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'provideRefund',
     args: [BigInt(token)]
   });

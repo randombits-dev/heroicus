@@ -2,8 +2,8 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {DescribeInstancesCommand, EC2Client} from '@aws-sdk/client-ec2';
 import {createPublicClient, hashMessage, http, verifyMessage} from 'viem';
 import {hardhat} from 'viem/chains';
-import {GPURentalAddress} from '../../utils/addresses';
-import {gpuRentalABI} from '../../generated';
+import {HeroicusAddress} from '../../utils/addresses';
+import {heroicusABI} from '../../generated';
 import {withErrorHandler} from '../../errorHandler';
 import {getClientToken} from '../../utils/aws';
 import {Address} from 'wagmi';
@@ -22,8 +22,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   const userInfo = await client.readContract({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'userInfo',
     args: [BigInt(tokenId)]
   });

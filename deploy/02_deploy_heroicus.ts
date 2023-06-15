@@ -8,8 +8,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const {deployer, dev} = await getNamedAccounts();
   const usdc = await get('USDC');
 
-  await deploy('GPURental', {
-    contract: 'GPURental',
+  await deploy('Heroicus', {
+    contract: 'Heroicus',
     from: deployer,
     args: [usdc.address, dev],
     log: true,
@@ -17,4 +17,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 };
 export default func;
-func.tags = ['GPURental'];
+func.tags = ['Heroicus'];

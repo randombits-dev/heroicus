@@ -15,7 +15,7 @@ import Head from "next/head";
 export function Index() {
   return <>
     <Head>
-      <title>Heroicus - Cloud Server Rental</title>
+      <title>hērōicus - Cloud Server Rental</title>
       <meta property="og:description" name="description"
             content="Cloud computing utilizing the Fantom blockchain and AWS. Rent Stable Diffusion or Docker servers."/>
       <meta name="twitter:card" content="summary"/>

@@ -1,6 +1,6 @@
 import {usePrepareContractWrite} from 'wagmi';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
+import {HeroicusAddress} from '../utils/addresses';
+import {heroicusABI} from '../generated';
 import {useAllowance} from './useAllowance';
 import {useEffect} from 'react';
 import {useContractWriteStatus} from './useContractWriteStatus';
@@ -15,8 +15,8 @@ export const useExtendRental = (tokenId: number, amount: bigint) => {
   }, [statusAllowance]);
 
   const {config, error: prepareError} = usePrepareContractWrite({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'extendRental',
     args: [BigInt(tokenId), amount],
     enabled: enough

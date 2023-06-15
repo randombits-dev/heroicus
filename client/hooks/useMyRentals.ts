@@ -1,6 +1,6 @@
 import {useAccount, useContractRead, useContractReads} from 'wagmi';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
+import {HeroicusAddress} from '../utils/addresses';
+import {heroicusABI} from '../generated';
 import {parseBytes32String} from 'ethers/lib/utils';
 import {UserInfo} from '../utils/definitions';
 
@@ -9,16 +9,16 @@ export const useMyRentals = (): { myRentals: UserInfo[] } => {
 
   // const {data: rentalBalance} = useBalance(GPURentalAddress);
   const {data: rentalBalance} = useContractRead({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'balanceOf',
     args: [address!]
   });
-  
+
   const {data: results, status} = useContractReads({
     contracts: [...Array(Number(rentalBalance || 0))].map((_, i) => ({
-      address: GPURentalAddress,
-      abi: gpuRentalABI,
+      address: HeroicusAddress,
+      abi: heroicusABI,
       functionName: 'tokenOfOwnerByIndex',
       args: [address!, BigInt(i)]
     }))
@@ -26,8 +26,8 @@ export const useMyRentals = (): { myRentals: UserInfo[] } => {
 
   const {data: myRentals, isSuccess} = useContractReads({
     contracts: results?.filter(result => !result.error).map(result => ({
-      address: GPURentalAddress,
-      abi: gpuRentalABI,
+      address: HeroicusAddress,
+      abi: heroicusABI,
       functionName: 'userInfo',
       args: [result.result as unknown as bigint]
     }))

@@ -1,6 +1,6 @@
 import {useContractRead} from 'wagmi';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
+import {HeroicusAddress} from '../utils/addresses';
+import {heroicusABI} from '../generated';
 import {parseBytes32String} from 'ethers/lib/utils';
 import {UserInfo} from '../utils/definitions';
 
@@ -10,8 +10,8 @@ interface Props {
 
 export const useMyRental = ({token}: Props): { myRental: UserInfo | undefined, refetch: () => void } => {
   const {data, refetch} = useContractRead({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'userInfo',
     args: [BigInt(token)],
     enabled: !!token

@@ -1,6 +1,6 @@
 import {Address, erc20ABI, useAccount, useContractRead, usePrepareContractWrite} from 'wagmi';
 import {useContractWriteStatus} from './useContractWriteStatus';
-import {GPURentalAddress, USDCAddress} from '../utils/addresses';
+import {HeroicusAddress, USDCAddress} from '../utils/addresses';
 
 export const useAllowance = (amount: bigint) => {
   const {address} = useAccount();
@@ -8,7 +8,7 @@ export const useAllowance = (amount: bigint) => {
     address: USDCAddress,
     abi: erc20ABI,
     functionName: 'allowance',
-    args: [address as Address, GPURentalAddress]
+    args: [address as Address, HeroicusAddress]
   });
   const enough = (data || 0) >= amount;
 
@@ -16,7 +16,7 @@ export const useAllowance = (amount: bigint) => {
     address: USDCAddress,
     abi: erc20ABI,
     functionName: 'approve',
-    args: [GPURentalAddress, amount],
+    args: [HeroicusAddress, amount],
     enabled: !enough
   });
 

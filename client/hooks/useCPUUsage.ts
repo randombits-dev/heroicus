@@ -1,6 +1,6 @@
 import {useContractRead} from 'wagmi';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
+import {HeroicusAddress} from '../utils/addresses';
+import {heroicusABI} from '../generated';
 import {TemplateInfo} from '../utils/definitions';
 
 export const useCPUUsage = ({template, regionId}: { template: TemplateInfo | undefined, regionId: number }) => {
@@ -9,8 +9,8 @@ export const useCPUUsage = ({template, regionId}: { template: TemplateInfo | und
   if (template) {
     const functionName = template.serverId[0] === 't' ? 'tUsage' : 'gUsage';
     config = {
-      address: GPURentalAddress,
-      abi: gpuRentalABI,
+      address: HeroicusAddress,
+      abi: heroicusABI,
       functionName,
       args: [regionId]
     };

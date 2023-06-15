@@ -1,6 +1,6 @@
 import {useContractReads} from 'wagmi';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
+import {HeroicusAddress} from '../utils/addresses';
+import {heroicusABI} from '../generated';
 import {formatBytes32String} from 'ethers/lib/utils';
 import {SERVER_LIST} from '../utils/templates';
 import {ServerInfo} from '../utils/definitions';
@@ -8,8 +8,8 @@ import {ServerInfo} from '../utils/definitions';
 let cache: ServerInfo[];
 export const useServerList = (): ServerInfo[] => {
   let readParams = SERVER_LIST.map(({id}) => ({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'serverConfigs',
     args: [formatBytes32String(id)],
     enabled: !cache

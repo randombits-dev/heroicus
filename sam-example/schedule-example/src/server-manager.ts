@@ -1,13 +1,13 @@
 import {DescribeInstancesCommand, EC2Client, Instance, TerminateInstancesCommand} from '@aws-sdk/client-ec2';
 import {createPublicClient, http} from 'viem';
-import {GPURentalAddress} from './addresses';
-import {gpuRentalABI} from './generated';
+import {HeroicusAddress} from './addresses';
 import {hardhat} from './utils';
+import {heroicusABI} from './generated';
 
 export const checkRunning = async (): Promise<void> => {
   const ec2 = new EC2Client({region: 'us-east-2'});
   const command = new DescribeInstancesCommand({
-    Filters: [{Name: 'tag-key', Values: [GPURentalAddress]}]
+    Filters: [{Name: 'tag-key', Values: [HeroicusAddress]}]
   });
   const {Reservations} = await ec2.send(command);
 
@@ -32,13 +32,13 @@ const checkServer = async (client, ec2, instance: Instance) => {
   if (instance.State.Name === 'terminated') {
     return;
   }
-  const tokenId = instance.Tags.find(tag => tag.Key === GPURentalAddress)?.Value;
+  const tokenId = instance.Tags.find(tag => tag.Key === HeroicusAddress)?.Value;
   if (!tokenId) {
     throw 'No tokenId found from tag';
   }
   const userInfo = await client.readContract({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'userInfo',
     args: [BigInt(tokenId)]
   });

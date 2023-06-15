@@ -1,7 +1,7 @@
 import {usePrepareContractWrite} from 'wagmi';
 import {decodeEventLog} from 'viem';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
+import {HeroicusAddress} from '../utils/addresses';
+import {heroicusABI} from '../generated';
 import {formatBytes32String} from 'ethers/lib/utils';
 import {useRouter} from 'next/router';
 import {useContractWriteStatus} from './useContractWriteStatus';
@@ -24,8 +24,8 @@ export const useRent = (template: string | undefined, region: number, amount: bi
   let contractDetails = {};
   if (template && enough) {
     contractDetails = {
-      address: GPURentalAddress,
-      abi: gpuRentalABI,
+      address: HeroicusAddress,
+      abi: heroicusABI,
       functionName: 'rent',
       args: [formatBytes32String(template), region, amount]
     };
@@ -39,7 +39,7 @@ export const useRent = (template: string | undefined, region: number, amount: bi
     if (status === 'success') {
       const lastLog = receipt!.logs.pop();
       const rentEvent = decodeEventLog({
-        abi: gpuRentalABI,
+        abi: heroicusABI,
         data: lastLog!.data,
         topics: lastLog!.topics
       });

@@ -2,8 +2,8 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {createPublicClient, http} from 'viem';
 import {hardhat} from 'viem/chains';
 import {parseBytes32String} from 'ethers/lib/utils';
-import {GPURentalAddress} from '../../utils/addresses';
-import {gpuRentalABI} from '../../generated';
+import {HeroicusAddress} from '../../utils/addresses';
+import {heroicusABI} from '../../generated';
 import {withErrorHandler} from '../../errorHandler';
 import {startServer} from '../../utils/aws';
 
@@ -19,8 +19,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   const userInfo = await client.readContract({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'userInfo',
     args: [BigInt(token)]
   });

@@ -1,6 +1,6 @@
 import {useContractReads} from 'wagmi';
-import {GPURentalAddress} from '../utils/addresses';
-import {gpuRentalABI} from '../generated';
+import {HeroicusAddress} from '../utils/addresses';
+import {heroicusABI} from '../generated';
 import {formatBytes32String, parseBytes32String} from 'ethers/lib/utils';
 import {TEMPLATE_LIST} from '../utils/templates';
 import {TemplateInfo} from '../utils/definitions';
@@ -11,8 +11,8 @@ export const useTemplateList = (): TemplateInfo[] => {
   const serverData = useServerList();
 
   const readParams = cache ? [] : TEMPLATE_LIST.map(({id}) => ({
-    address: GPURentalAddress,
-    abi: gpuRentalABI,
+    address: HeroicusAddress,
+    abi: heroicusABI,
     functionName: 'templateInfo',
     args: [formatBytes32String(id)]
   }));
