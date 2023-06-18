@@ -5,7 +5,7 @@
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  schedule-example
+  Server Manager that syncs server status with blockchain
 
 # Transform section specifies one or more macros that AWS CloudFormation uses to process your template
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
@@ -32,9 +32,12 @@ Resources:
         CloudWatchEvent:
           Type: Schedule
           Properties:
-            Schedule: cron(0 * * * ? *)
-      MemorySize: 128
-      Timeout: 100
+            Schedule: rate(1 minutes)
+      MemorySize: 256
+      Timeout: 60
+      Environment:
+        Variables:
+          CHAIN: "fantom"
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
       BuildProperties:

@@ -1,12 +1,13 @@
 import {useContractReads} from 'wagmi';
-import {HeroicusAddress} from '../utils/addresses';
 import {heroicusABI} from '../generated';
 import {formatBytes32String} from 'ethers/lib/utils';
 import {SERVER_LIST} from '../utils/templates';
 import {ServerInfo} from '../utils/definitions';
+import {HeroicusAddress} from '../utils/network';
 
 let cache: ServerInfo[];
 export const useServerList = (): ServerInfo[] => {
+
   let readParams = SERVER_LIST.map(({id}) => ({
     address: HeroicusAddress,
     abi: heroicusABI,

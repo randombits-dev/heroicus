@@ -1,4 +1,5 @@
 .idea/
+.merge-output
 node_modules/
 .env
 artifacts/

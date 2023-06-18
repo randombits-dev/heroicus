@@ -1,6 +1,6 @@
 import {Address, erc20ABI, useAccount, useContractRead, usePrepareContractWrite} from 'wagmi';
 import {useContractWriteStatus} from './useContractWriteStatus';
-import {HeroicusAddress, USDCAddress} from '../utils/addresses';
+import {HeroicusAddress, USDCAddress} from '../utils/network';
 
 export const useAllowance = (amount: bigint) => {
   const {address} = useAccount();

@@ -1,10 +1,10 @@
 import {getDefaultWallets} from '@rainbow-me/rainbowkit';
 import {configureChains, createConfig} from 'wagmi';
 import {publicProvider} from 'wagmi/providers/public';
-import {hardhat} from '@wagmi/chains';
+import {CURRENT_CHAIN} from './network';
 
 const {chains, publicClient, webSocketPublicClient} = configureChains(
-  [hardhat],
+  [CURRENT_CHAIN],
   [
     publicProvider(),
   ],

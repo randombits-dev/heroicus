@@ -1,10 +1,9 @@
 import {useContractRead} from 'wagmi';
-import {HeroicusAddress} from '../utils/addresses';
 import {heroicusABI} from '../generated';
 import {TemplateInfo} from '../utils/definitions';
+import {HeroicusAddress} from '../utils/network';
 
 export const useCPUUsage = ({template, regionId}: { template: TemplateInfo | undefined, regionId: number }) => {
-
   let config = {};
   if (template) {
     const functionName = template.serverId[0] === 't' ? 'tUsage' : 'gUsage';

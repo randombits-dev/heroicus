@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "tsc",
     "build server manager": "sam build",
-    "run server manager": "sam local invoke"
+    "run server manager": "sam local invoke",
+    "deploy server manager": "sam deploy"
   },
   "dependencies": {
     "@aws-sdk/client-ec2": "^3.332.0",

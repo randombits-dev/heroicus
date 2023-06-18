@@ -1,11 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {DescribeInstancesCommand, EC2Client, TerminateInstancesCommand} from '@aws-sdk/client-ec2';
 import {withErrorHandler} from '../../errorHandler';
-import {getClientToken} from '../../utils/aws';
-import {createPublicClient, http} from 'viem';
-import {hardhat} from 'viem/chains';
-import {HeroicusAddress} from '../../utils/addresses';
-import {heroicusABI} from '../../generated';
+import {getClientToken, readUserInfo} from '../../utils/aws';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -13,18 +9,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   const {token} = JSON.parse(req.body);
 
-  const client = createPublicClient({
-    chain: hardhat,
-    transport: http(),
-  });
+  const {expired} = await readUserInfo(token);
 
-  const userInfo = await client.readContract({
-    address: HeroicusAddress,
-    abi: heroicusABI,
-    functionName: 'userInfo',
-    args: [BigInt(token)]
-  });
-  const expired = userInfo[1];
   if (!expired) {
     throw 'Not expired';
   }

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.0;
 
 import "./IERC4907.sol";
@@ -5,8 +7,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "hardhat/console.sol"; // TODO: Remove
-
 
 contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
   using SafeMath for uint256;
@@ -35,7 +35,6 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
   uint256 private nftId = 1;
   address private paymentCoin;
 
-  address private devAddress;
   uint256 public minRentalTime = 1800; // 30 min
   uint256 public maxRentalTime = 2592000; // 30 days
 
@@ -49,9 +48,8 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
 
   event Rent(uint256 tokenId);
 
-  constructor(address _paymentCoin, address _devAddress) ERC721("Heroicus", "Heroicus") {
+  constructor(address _paymentCoin) ERC721("Heroicus", "Heroicus") {
     paymentCoin = _paymentCoin;
-    devAddress = _devAddress;
   }
 
   function userInfo(uint256 tokenId) external view returns (UserInfo memory, bool) {
@@ -69,6 +67,10 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
     require(id[0] == "g" || id[0] == "t", "GPU: Only g or t servers are allowed");
     ServerInfo memory info = ServerInfo(pricePerHour, cpus);
     serverConfigs[id] = info;
+  }
+
+  function removeTemplate(bytes32 id) external onlyOwner {
+    delete templateInfo[id];
   }
 
   function removeServer(bytes32 id) external onlyOwner {
@@ -224,11 +226,15 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
       TemplateInfo memory template = templateInfo[user.templateId];
       _resetCPULimit(template.serverId, user.region);
       IERC20 tk = IERC20(paymentCoin);
-      tk.transfer(devAddress, user.payment);
+      tk.transfer(owner(), user.payment);
       delete _userInfo[tokenId];
     } else {
       UserInfo storage user = _userInfo[tokenId];
       user.user = to;
     }
+  }
+
+  function renounceOwnership() public override onlyOwner {
+    revert("renounceOwnership not allowed");
   }
 }

@@ -1,20 +1,22 @@
 export const TEMPLATE_LIST = [
   {
-    id: 'diffusion1',
+    id: 'diffusion.xlarge',
     name: 'Stable Diffusion T4',
     cpu: 4,
     ram: 16,
     gpu: 'Tesla T4 12GB',
     notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
-    url: (ip: string) => `http://${ip}:7860`
+    url: (ip: string) => `http://${ip}:7860`,
+    status: (ip: string) => `http://${ip}:7860/sdapi/v1/progress`
   },
   {
-    id: 'tiny',
-    name: 'Docker Small',
+    id: 'docker.medium',
+    name: 'Docker Medium',
     cpu: 2,
     ram: 4,
     notes: 'Docker and Portainer preinstalled.',
-    url: (ip: string) => `http://${ip}:9000`
+    url: (ip: string) => `http://${ip}:9000`,
+    status: (ip: string) => `http://${ip}:9000/api/system/status`
   },
   // {
   //   id: 'diffusion2',
@@ -38,7 +40,7 @@ export const TEMPLATE_LIST = [
 export const SERVER_LIST = [{
   id: 'g4dn.xlarge',
 }, {
-  id: 't2.micro'
+  id: 't2.medium'
 }];
 
 export const REGIONS: { [key: number]: [string, string] } = {

@@ -1,14 +1,15 @@
 import {useContractRead} from 'wagmi';
-import {HeroicusAddress} from '../utils/addresses';
 import {heroicusABI} from '../generated';
 import {parseBytes32String} from 'ethers/lib/utils';
 import {UserInfo} from '../utils/definitions';
+import {HeroicusAddress} from '../utils/network';
 
 interface Props {
   token: number;
 }
 
 export const useMyRental = ({token}: Props): { myRental: UserInfo | undefined, refetch: () => void } => {
+
   const {data, refetch} = useContractRead({
     address: HeroicusAddress,
     abi: heroicusABI,

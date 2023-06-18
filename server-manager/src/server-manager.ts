@@ -1,16 +1,12 @@
 import {DescribeInstancesCommand, EC2Client, Instance, TerminateInstancesCommand} from '@aws-sdk/client-ec2';
-import {createPublicClient, http} from 'viem';
-import {HeroicusAddress} from './addresses';
-import {hardhat, REGIONS} from './utils';
+import {REGIONS} from './utils';
 import {heroicusABI} from './generated';
+import {createViemClient, HeroicusAddress} from './network';
 
 const expiresMap = {};
 
 export const checkRunning = async (): Promise<void> => {
-  const client = createPublicClient({
-    chain: hardhat,
-    transport: http(),
-  });
+  const client = createViemClient();
   const promises = [];
   Object.values(REGIONS).forEach(([regionId]) => {
     promises.push(checkRegion(client, regionId));
@@ -43,9 +39,11 @@ const checkRegion = async (client, region) => {
 };
 
 const isExpired = async (client, ec2, instance: Instance) => {
+
   if (instance.State.Name === 'terminated') {
     return false;
   }
+
   const tokenId = instance.Tags.find(tag => tag.Key === HeroicusAddress)?.Value;
   if (!tokenId) {
     throw 'No tokenId found from tag';

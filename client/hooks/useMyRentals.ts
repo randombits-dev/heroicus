@@ -1,8 +1,8 @@
 import {useAccount, useContractRead, useContractReads} from 'wagmi';
-import {HeroicusAddress} from '../utils/addresses';
 import {heroicusABI} from '../generated';
 import {parseBytes32String} from 'ethers/lib/utils';
 import {UserInfo} from '../utils/definitions';
+import {HeroicusAddress} from '../utils/network';
 
 export const useMyRentals = (): { myRentals: UserInfo[] } => {
   const {address} = useAccount();

@@ -1,21 +1,21 @@
 import {useEffect, useState} from 'react';
 
-export const useWaitForServer = (url: string) => {
+export const useWaitForServer = (templateId: string, ip: string) => {
   const [ready, setReady] = useState(false);
 
   const runTest = (interval: any) => {
-    fetch(url).then((res) => {
+    fetch(`/api/status?template=${templateId}&ip=${ip}`).then((res) => {
       if (res.status === 200) {
         setReady(true);
         clearInterval(interval);
       }
-    }).catch(() => {
+    }).catch((e) => {
       // not ready
     });
   };
 
   const retry = () => {
-    if (!url) {
+    if (!ip) {
       return;
     }
     const interval: any = setInterval(() => runTest(interval), 5000);
@@ -24,7 +24,7 @@ export const useWaitForServer = (url: string) => {
 
   useEffect(() => {
     retry();
-  }, [url]);
+  }, [ip]);
 
   return {ready, retry};
 };

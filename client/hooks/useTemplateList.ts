@@ -1,10 +1,10 @@
 import {useContractReads} from 'wagmi';
-import {HeroicusAddress} from '../utils/addresses';
 import {heroicusABI} from '../generated';
 import {formatBytes32String, parseBytes32String} from 'ethers/lib/utils';
 import {TEMPLATE_LIST} from '../utils/templates';
 import {TemplateInfo} from '../utils/definitions';
 import {useServerList} from './useServerList';
+import {HeroicusAddress} from '../utils/network';
 
 let cache: TemplateInfo[];
 export const useTemplateList = (): TemplateInfo[] => {

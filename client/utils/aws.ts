@@ -1,14 +1,33 @@
-import {HeroicusAddress} from './addresses';
 import {DescribeInstancesCommand, EC2Client, RunInstancesCommand} from '@aws-sdk/client-ec2';
 import {REGIONS} from './templates';
-import {privateKeyToAccount} from 'viem/accounts';
-import {createPublicClient, createWalletClient, Hex, http} from 'viem';
-import {hardhat} from 'viem/chains';
 import {heroicusABI} from '../generated';
+import {createViemClient, createViemWallet, getOwnerAccount, HeroicusAddress} from './network';
+import {parseBytes32String} from 'ethers/lib/utils';
 
 export const getClientToken = (tokenId: number): string => {
-  // return HeroicusAddress + '_8_' + tokenId;
-  return 'test';
+  return HeroicusAddress + '_' + tokenId;
+};
+
+export const readUserInfo = async (token: string) => {
+  const client = createViemClient();
+
+  const userInfo = await client.readContract({
+    address: HeroicusAddress,
+    abi: heroicusABI,
+    functionName: 'userInfo',
+    args: [BigInt(token)]
+  });
+
+  const userStruct = userInfo[0] as any;
+
+  return {
+    token: Number(token),
+    user: userStruct.user,
+    expires: Number(userStruct.expires) * 1000,
+    templateId: parseBytes32String(userStruct.templateId),
+    expired: userInfo[1],
+    region: userStruct.region
+  };
 };
 
 export const startServer = async (templateId: string, token: number, region: number) => {
@@ -47,24 +66,16 @@ export const startServer = async (templateId: string, token: number, region: num
 };
 
 const refundServer = async (token: number) => {
-  const account = privateKeyToAccount(process.env.OWNER_PRIVATE_KEY as Hex);
-  const client = createPublicClient({
-    chain: hardhat,
-    transport: http(),
-  });
-  const wallet = createWalletClient({
-    account,
-    chain: hardhat,
-    transport: http(),
-  });
+  const client = createViemClient();
+  const wallet = createViemWallet();
 
   // @ts-ignore
   const {request} = await client.simulateContract({
-    // account,
     address: HeroicusAddress,
     abi: heroicusABI,
     functionName: 'provideRefund',
-    args: [BigInt(token)]
+    args: [BigInt(token)],
+    account: getOwnerAccount()
   });
   await wallet.writeContract(request);
 };

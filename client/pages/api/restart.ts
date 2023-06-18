@@ -1,36 +1,19 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {DescribeInstancesCommand, EC2Client, RebootInstancesCommand} from '@aws-sdk/client-ec2';
-import {createPublicClient, hashMessage, http, verifyMessage} from 'viem';
-import {hardhat} from 'viem/chains';
-import {HeroicusAddress} from '../../utils/addresses';
-import {heroicusABI} from '../../generated';
+import {hashMessage, verifyMessage} from 'viem';
 import {withErrorHandler} from '../../errorHandler';
-import {getClientToken} from '../../utils/aws';
-import {Address} from 'wagmi';
+import {getClientToken, readUserInfo} from '../../utils/aws';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     throw 'Not POST';
   }
   const {token, s} = JSON.parse(req.body);
-  const tokenId = Number(token);
   const hash = hashMessage(token as string);
 
-  const client = createPublicClient({
-    chain: hardhat,
-    transport: http(),
-  });
-
-  const userInfo = await client.readContract({
-    address: HeroicusAddress,
-    abi: heroicusABI,
-    functionName: 'userInfo',
-    args: [BigInt(tokenId)]
-  });
-  const expired = userInfo[1];
-  const userStruct = userInfo[0] as { user: Address };
+  const {expired, user} = await readUserInfo(token);
   const signatureValid = await verifyMessage({
-    address: userStruct.user,
+    address: user,
     message: 'Sign in with ID: ' + hash,
     signature: s
   });

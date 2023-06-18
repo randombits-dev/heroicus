@@ -1,9 +1,9 @@
 import {usePrepareContractWrite} from 'wagmi';
-import {HeroicusAddress} from '../utils/addresses';
 import {heroicusABI} from '../generated';
 import {useAllowance} from './useAllowance';
 import {useEffect} from 'react';
 import {useContractWriteStatus} from './useContractWriteStatus';
+import {HeroicusAddress} from '../utils/network';
 
 export const useExtendRental = (tokenId: number, amount: bigint) => {
   const {enough, execute: executeAllowance, status: statusAllowance, statusMsg: statusMsgAllowance, refetch} = useAllowance(amount);

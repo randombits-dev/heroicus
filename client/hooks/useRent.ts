@@ -1,14 +1,15 @@
 import {usePrepareContractWrite} from 'wagmi';
 import {decodeEventLog} from 'viem';
-import {HeroicusAddress} from '../utils/addresses';
 import {heroicusABI} from '../generated';
 import {formatBytes32String} from 'ethers/lib/utils';
 import {useRouter} from 'next/router';
 import {useContractWriteStatus} from './useContractWriteStatus';
 import {useEffect, useState} from 'react';
 import {useAllowance} from './useAllowance';
+import {HeroicusAddress} from '../utils/network';
 
 export const useRent = (template: string | undefined, region: number, amount: bigint) => {
+
   const {push} = useRouter();
   const [awsError, setAwsError] = useState(false);
   const [unknownError, setUnknownError] = useState(false);
