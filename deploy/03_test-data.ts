@@ -18,11 +18,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await execute('Heroicus', {from: deployer}, 'setGLimit', 2, 4);
 
   await execute('Heroicus', {from: deployer}, 'setServer', formatBytes32String('g4dn.xlarge'), ethers.utils.parseEther('1'), 4);
-  await execute('Heroicus', {from: deployer}, 'setServer', formatBytes32String('t2.micro'), ethers.utils.parseEther('0.1'), 1);
+  await execute('Heroicus', {from: deployer}, 'setServer', formatBytes32String('t2.medium'), ethers.utils.parseEther('0.1'), 2);
 
-  await execute('Heroicus', {from: deployer}, 'setTemplate', formatBytes32String('diffusion1'), formatBytes32String('g4dn.xlarge'),
+  await execute('Heroicus', {from: deployer}, 'setTemplate', formatBytes32String('diffusion.xlarge'), formatBytes32String('g4dn.xlarge'),
     ethers.utils.parseEther('1'));
-  await execute('Heroicus', {from: deployer}, 'setTemplate', formatBytes32String('tiny'), formatBytes32String('t2.micro'),
+  await execute('Heroicus', {from: deployer}, 'setTemplate', formatBytes32String('docker.medium'), formatBytes32String('t2.medium'),
     ethers.utils.parseEther('0.1'));
 };
 export default func;

@@ -26,7 +26,7 @@ const checkStatus = async (url: string) => {
   const id = setTimeout(() => controller.abort(), 3000);
   try {
     const res = await fetch(url, {signal: controller.signal});
-    if (res.status === 200) {
+    if (res.status < 400) {
       return true;
     }
   } finally {

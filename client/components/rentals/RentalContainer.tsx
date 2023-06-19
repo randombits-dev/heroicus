@@ -13,7 +13,6 @@ export function RentalContainer({rental}: Props) {
   const {signMessage, ip, error, hasSigned} = useLoginToServer({token: rental.token});
   const template = TEMPLATE_LIST.find(t => t.id === rental.templateId);
   const url = ip ? template!.url(ip) : '';
-  const statusUrl = ip ? template!.status(ip) : '';
   const {ready} = useWaitForServer(rental.templateId, ip);
   return (
     <div className="flex flex-col h-full flex-1">

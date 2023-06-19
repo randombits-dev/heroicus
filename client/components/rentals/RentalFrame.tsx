@@ -6,11 +6,8 @@ interface Props {
 }
 
 const RentalFrame = ({ready, url, error, signMessage}: Props) => {
-  const iframeLoaded = () => {
-    console.log('frame loaded');
-  };
   if (ready) {
-    return <iframe onLoad={iframeLoaded} className="border-0 w-screen flex-1" src={url}></iframe>
+    return <iframe className="border-0 w-screen flex-1" src={url}></iframe>
   } else if (url) {
     return <div className="text-center mt-10">
       <div className="spinner"></div>

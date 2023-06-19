@@ -23,6 +23,7 @@ const FullTemplateCard = ({templateId}: Props) => {
   const [region, setRegion] = useState(1);
   const [error, setError] = useState('');
   const templateInfo = useTemplateInfo({templateId});
+  const templateDetails = TEMPLATE_LIST.find(t => t.id === templateId);
   const {price, amount} = useEstimatePrice(templateInfo, hours);
   const {
     execute,
@@ -35,7 +36,7 @@ const FullTemplateCard = ({templateId}: Props) => {
     prepareError,
     awsError,
     unknownError
-  } = useRent(templateInfo?.name, region, amount || BigInt(0));
+  } = useRent(templateInfo?.name, templateDetails!.metadata, region, amount || BigInt(0));
   const {data: cpuUsage} = useCPUUsage({template: templateInfo, regionId: region})
 
   const writeButton = () => {
@@ -89,7 +90,6 @@ const FullTemplateCard = ({templateId}: Props) => {
     } else if (!enough && statusAllowance && statusAllowance !== 'success') {
       return <ContractWriteStatus status={statusAllowance} statusMsg={statusMsgAllowance}/>
     } else if (templateInfo) {
-      const templateDetails = TEMPLATE_LIST.find(t => t.id === templateInfo.name);
 
       return <>
         <div className="flex-1">

@@ -3,12 +3,13 @@
 pragma solidity ^0.8.0;
 
 import "./IERC4907.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
+contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
   using SafeMath for uint256;
 
   struct ServerInfo {
@@ -34,6 +35,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
 
   uint256 private nftId = 1;
   address private paymentCoin;
+  address private devAddress;
 
   uint256 public minRentalTime = 1800; // 30 min
   uint256 public maxRentalTime = 2592000; // 30 days
@@ -50,6 +52,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
 
   constructor(address _paymentCoin) ERC721("Heroicus", "Heroicus") {
     paymentCoin = _paymentCoin;
+    devAddress = msg.sender;
   }
 
   function userInfo(uint256 tokenId) external view returns (UserInfo memory, bool) {
@@ -93,7 +96,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
     maxRentalTime = time;
   }
 
-  function rent(bytes32 templateId, uint8 region, uint256 amount) external {
+  function rent(string memory tokenURI, bytes32 templateId, uint8 region, uint256 amount) external {
     cleanUpOldRentals();
     TemplateInfo memory template = templateInfo[templateId];
     ServerInfo memory server = serverConfigs[template.serverId];
@@ -105,6 +108,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
     IERC20 tk = IERC20(paymentCoin);
     tk.transferFrom(msg.sender, address(this), amount);
     _mint(msg.sender, nftId);
+    _setTokenURI(nftId, tokenURI);
     emit Rent(nftId);
     UserInfo storage info = _userInfo[nftId];
     info.user = msg.sender;
@@ -168,7 +172,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
     return _userInfo[tokenId].expires;
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Enumerable, ERC721URIStorage) returns (bool) {
     return interfaceId == type(IERC4907).interfaceId || super.supportsInterface(interfaceId);
   }
 
@@ -216,8 +220,8 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
     address to,
     uint256 tokenId,
     uint256 batchSize
-  ) internal virtual override {
-    super._beforeTokenTransfer(from, to, tokenId, batchSize);
+  ) internal virtual override(ERC721Enumerable, ERC721) {
+    ERC721Enumerable._beforeTokenTransfer(from, to, tokenId, batchSize);
 
     if (from == address(0)) {
       // nothing on create
@@ -226,7 +230,7 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
       TemplateInfo memory template = templateInfo[user.templateId];
       _resetCPULimit(template.serverId, user.region);
       IERC20 tk = IERC20(paymentCoin);
-      tk.transfer(owner(), user.payment);
+      tk.transfer(devAddress, user.payment);
       delete _userInfo[tokenId];
     } else {
       UserInfo storage user = _userInfo[tokenId];
@@ -236,5 +240,17 @@ contract Heroicus is IERC4907, ERC721Enumerable, Ownable {
 
   function renounceOwnership() public override onlyOwner {
     revert("renounceOwnership not allowed");
+  }
+
+  function changeDevAddress(address _devAddress) external onlyOwner {
+    devAddress = _devAddress;
+  }
+
+  function _burn(uint256 tokenId) internal virtual override(ERC721URIStorage, ERC721) {
+    ERC721URIStorage._burn(tokenId);
+  }
+
+  function tokenURI(uint256 tokenId) public view virtual override(ERC721URIStorage, ERC721) returns (string memory) {
+    return ERC721URIStorage.tokenURI(tokenId);
   }
 }

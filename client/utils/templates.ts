@@ -7,7 +7,7 @@ export const TEMPLATE_LIST = [
     gpu: 'Tesla T4 12GB',
     notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
     url: (ip: string) => `http://${ip}:7860`,
-    status: (ip: string) => `http://${ip}:7860/sdapi/v1/progress`
+    metadata: 'ipfs://bafkreibg6lnujfx67jrx6ppka5lt3vzrqug5g4mmfa6jes7szr2tv2oybu'
   },
   {
     id: 'docker.medium',
@@ -16,7 +16,7 @@ export const TEMPLATE_LIST = [
     ram: 4,
     notes: 'Docker and Portainer preinstalled.',
     url: (ip: string) => `http://${ip}:9000`,
-    status: (ip: string) => `http://${ip}:9000/api/system/status`
+    metadata: 'ipfs://bafkreigerughqlsdku4nmaldeugvbty7vgwe5ehc2y2xkrx4ddexvyvrzm'
   },
   // {
   //   id: 'diffusion2',
