@@ -13,7 +13,6 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
   using SafeMath for uint256;
 
   struct ServerInfo {
-    uint256 pricePerHour;
     uint8 cpus;
   }
 
@@ -27,9 +26,7 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
     address user;
     uint64 expires;
     bytes32 templateId;
-    bytes32 serverId;
     uint8 region;
-    uint32 diskSize;
     uint256 payment;
   }
 
@@ -61,14 +58,14 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
 
   function setTemplate(bytes32 id, bytes32 serverId, uint256 pricePerHour) external onlyOwner {
     ServerInfo memory server = serverConfigs[serverId];
-    require(server.pricePerHour > 0, "server not found");
+    require(server.cpus > 0, "server not found");
     TemplateInfo memory info = TemplateInfo(serverId, pricePerHour);
     templateInfo[id] = info;
   }
 
-  function setServer(bytes32 id, uint256 pricePerHour, uint8 cpus) external onlyOwner {
+  function setServer(bytes32 id, uint8 cpus) external onlyOwner {
     require(id[0] == "g" || id[0] == "t", "GPU: Only g or t servers are allowed");
-    ServerInfo memory info = ServerInfo(pricePerHour, cpus);
+    ServerInfo memory info = ServerInfo(cpus);
     serverConfigs[id] = info;
   }
 
@@ -99,8 +96,7 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
   function rent(string memory tokenURI, bytes32 templateId, uint8 region, uint256 amount) external {
     cleanUpOldRentals();
     TemplateInfo memory template = templateInfo[templateId];
-    ServerInfo memory server = serverConfigs[template.serverId];
-    require(server.pricePerHour > 0, "template not found");
+    require(template.pricePerHour > 0, "template not found");
     _adjustCPULimit(template.serverId, region);
     uint256 timeRequested = amount.div(template.pricePerHour.div(3600));
     require(timeRequested >= minRentalTime, "minimum rental time not met");
@@ -155,7 +151,7 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
     _burn(tokenId);
   }
 
-  function setUser(uint256 tokenId, address user, uint64 expires) external {
+  function setUser(uint256 tokenId, address user, uint64 expires) external override {
     revert("cannot change user");
   }
 
@@ -173,7 +169,7 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
   }
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Enumerable, ERC721URIStorage) returns (bool) {
-    return interfaceId == type(IERC4907).interfaceId || super.supportsInterface(interfaceId);
+    return interfaceId == type(IERC4907).interfaceId || ERC721Enumerable.supportsInterface(interfaceId) || ERC721URIStorage.supportsInterface(interfaceId);
   }
 
   function cleanUpOldRentals() public {
@@ -193,7 +189,6 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
       if (server.cpus > limit - usage) {
         revert("No resources available for CPU servers");
       }
-      //      require(server.cpus <= limit - usage, "No resources available for GPU servers");
       gUsage[region] = usage + server.cpus;
     } else {
       uint32 limit = tLimits[region];
@@ -201,7 +196,6 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
       if (server.cpus > limit - usage) {
         revert("No resources available for CPU servers");
       }
-      //      require(server.cpus <= limit - usage, "No resources available for CPU servers");
       tUsage[region] = usage + server.cpus;
     }
   }

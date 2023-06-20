@@ -9,7 +9,6 @@ export interface TemplateInfo {
 
 export interface ServerInfo {
   id: string;
-  price: bigint;
   cpus: number;
 }
 

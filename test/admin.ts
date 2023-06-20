@@ -9,29 +9,24 @@ describe('Heroicus (admin)', () => {
     await deployments.fixture(['USDC', 'Heroicus']);
     const Heroicus = await ethers.getContract('Heroicus', deployer);
 
-    await Heroicus.setServer(formatBytes32String('g4dn.xlarge'), fromEther(1), 4);
-    await Heroicus.setServer(formatBytes32String('t2.small'), fromEther(0.1), 16);
+    await Heroicus.setServer(formatBytes32String('g4dn.xlarge'), 4);
+    await Heroicus.setServer(formatBytes32String('t2.small'), 16);
 
-    let {pricePerHour, cpus} = await Heroicus.serverConfigs(formatBytes32String('incorrect'));
-    expect(pricePerHour).to.equal(0);
+    let cpus = await Heroicus.serverConfigs(formatBytes32String('incorrect'));
     expect(cpus).to.equal(0);
 
-    ({pricePerHour, cpus} = await Heroicus.serverConfigs(formatBytes32String('g4dn.xlarge')));
-    expect(pricePerHour).to.equal(fromEther(1));
+    cpus = await Heroicus.serverConfigs(formatBytes32String('g4dn.xlarge'));
     expect(cpus).to.equal(4);
 
-    ({pricePerHour, cpus} = await Heroicus.serverConfigs(formatBytes32String('t2.small')));
-    expect(pricePerHour).to.equal(fromEther(0.1));
+    cpus = await Heroicus.serverConfigs(formatBytes32String('t2.small'));
     expect(cpus).to.equal(16);
 
-    await Heroicus.setServer(formatBytes32String('t2.small'), fromEther(0.2), 8);
-    ({pricePerHour, cpus} = await Heroicus.serverConfigs(formatBytes32String('t2.small')));
-    expect(pricePerHour).to.equal(fromEther(0.2));
+    await Heroicus.setServer(formatBytes32String('t2.small'), 8);
+    cpus = await Heroicus.serverConfigs(formatBytes32String('t2.small'));
     expect(cpus).to.equal(8);
 
     await Heroicus.removeServer(formatBytes32String('t2.small'));
-    ({pricePerHour, cpus} = await Heroicus.serverConfigs(formatBytes32String('t2.small')));
-    expect(pricePerHour).to.equal(0);
+    cpus = await Heroicus.serverConfigs(formatBytes32String('t2.small'));
     expect(cpus).to.equal(0);
   });
 
@@ -40,7 +35,7 @@ describe('Heroicus (admin)', () => {
     await deployments.fixture(['USDC', 'Heroicus']);
     const Heroicus = await ethers.getContract('Heroicus', deployer);
 
-    await expect(Heroicus.setServer(formatBytes32String('small'), fromEther(0.1), 16)).to.be
+    await expect(Heroicus.setServer(formatBytes32String('small'), 16)).to.be
       .revertedWith('GPU: Only g or t servers are allowed');
   });
 
@@ -49,8 +44,8 @@ describe('Heroicus (admin)', () => {
     await deployments.fixture(['USDC', 'Heroicus']);
     const Heroicus = await ethers.getContract('Heroicus', deployer);
 
-    await Heroicus.setServer(formatBytes32String('g4dn.xlarge'), fromEther(1), 4);
-    await Heroicus.setServer(formatBytes32String('t2.small'), fromEther(0.1), 16);
+    await Heroicus.setServer(formatBytes32String('g4dn.xlarge'), 4);
+    await Heroicus.setServer(formatBytes32String('t2.small'), 16);
     await Heroicus.setTemplate(formatBytes32String('template1'), formatBytes32String('g4dn.xlarge'), fromEther(1));
     await Heroicus.setTemplate(formatBytes32String('template2'), formatBytes32String('g4dn.xlarge'), fromEther(2));
     await Heroicus.setTemplate(formatBytes32String('template3'), formatBytes32String('t2.small'), fromEther(3));
@@ -112,7 +107,7 @@ describe('Heroicus (admin)', () => {
     await deployments.fixture(['USDC', 'Heroicus']);
     const Heroicus = await ethers.getContract('Heroicus', user1);
 
-    await assertOwnable(Heroicus.setServer(formatBytes32String('tiny'), fromEther(1), 4));
+    await assertOwnable(Heroicus.setServer(formatBytes32String('tiny'), 4));
     await assertOwnable(Heroicus.setTemplate(formatBytes32String('template1'), formatBytes32String('small'), fromEther(1)));
     await assertOwnable(Heroicus.removeServer(formatBytes32String('tiny')));
     await assertOwnable(Heroicus.setGLimit(1, 16));

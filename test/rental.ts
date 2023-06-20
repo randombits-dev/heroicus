@@ -42,7 +42,7 @@ const createTemplate1 = deployments.createFixture(
     const {deployer} = await getNamedAccounts();
 
     const GPU_deployer = await ethers.getContract('Heroicus', deployer);
-    await GPU_deployer.setServer(formatBytes32String('t2.small'), fromEther(0.1), 2);
+    await GPU_deployer.setServer(formatBytes32String('t2.small'), 2);
     await GPU_deployer.setTemplate(formatBytes32String('template1'), formatBytes32String('t2.small'), fromEther(0.2));
     await GPU_deployer.setTLimit(1, 32);
   }
@@ -135,7 +135,7 @@ describe('Heroicus', () => {
   it('should not allow renting if no cpus available', async () => {
     const {GPU_user1, GPU_deployer} = await deploy();
     await giveUSDC();
-    await GPU_deployer.setServer(formatBytes32String('t2.small'), fromEther(0.1), 2);
+    await GPU_deployer.setServer(formatBytes32String('t2.small'), 2);
     await GPU_deployer.setTemplate(formatBytes32String('template1'), formatBytes32String('t2.small'), fromEther(0.2));
 
     await expect(GPU_user1.rent('abc', formatBytes32String('template1'), 1, fromEther('0.1'))).to.be
@@ -145,8 +145,8 @@ describe('Heroicus', () => {
   it('should not allow renting if usage is too high', async () => {
     const {GPU_user1, GPU_deployer} = await deploy();
     await giveUSDC();
-    await GPU_deployer.setServer(formatBytes32String('t2.small'), fromEther(0.1), 2);
-    await GPU_deployer.setServer(formatBytes32String('t2.tiny'), fromEther(0.1), 1);
+    await GPU_deployer.setServer(formatBytes32String('t2.small'), 2);
+    await GPU_deployer.setServer(formatBytes32String('t2.tiny'), 1);
     await GPU_deployer.setTemplate(formatBytes32String('template1'), formatBytes32String('t2.small'), fromEther(0.2));
     await GPU_deployer.setTemplate(formatBytes32String('template2'), formatBytes32String('t2.tiny'), fromEther(0.2));
     await GPU_deployer.setTLimit(1, 2);

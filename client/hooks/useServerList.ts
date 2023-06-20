@@ -16,7 +16,7 @@ export const useServerList = (): ServerInfo[] => {
     enabled: !cache
   }));
 
-  const {data, isSuccess, isFetching} = useContractReads({
+  const {data, isSuccess} = useContractReads({
     contracts: readParams
   });
 
@@ -28,8 +28,7 @@ export const useServerList = (): ServerInfo[] => {
     }
     cache = data!.map((item: any, i) => ({
       id: SERVER_LIST[i].id,
-      price: item.result[0],
-      cpus: item.result[1]
+      cpus: item.result[0]
     }));
     return cache;
   } else {

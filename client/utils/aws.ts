@@ -5,7 +5,7 @@ import {createViemClient, createViemWallet, getOwnerAccount, HeroicusAddress} fr
 import {parseBytes32String} from 'ethers/lib/utils';
 
 export const getClientToken = (tokenId: number): string => {
-  return HeroicusAddress + '_' + tokenId;
+  return HeroicusAddress + '_10' + tokenId;
 };
 
 export const readUserInfo = async (token: string) => {

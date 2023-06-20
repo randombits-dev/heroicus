@@ -1,10 +1,10 @@
 export const TEMPLATE_LIST = [
   {
     id: 'diffusion.xlarge',
-    name: 'Stable Diffusion T4',
+    name: 'Stable Diffusion',
     cpu: 4,
     ram: 16,
-    gpu: 'Tesla T4 12GB',
+    gpu: 'Tesla T4 16GB',
     notes: 'Automatic1111 is preinstalled with ControlNet & Dreambooth. Ten different models isntalled.',
     url: (ip: string) => `http://${ip}:7860`,
     metadata: 'ipfs://bafkreibg6lnujfx67jrx6ppka5lt3vzrqug5g4mmfa6jes7szr2tv2oybu'

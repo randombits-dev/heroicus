@@ -7,7 +7,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (ready) {
     res.status(200).end();
   } else {
-    res.status(500).end();
+    res.status(404).end();
   }
 };
 
@@ -29,6 +29,8 @@ const checkStatus = async (url: string) => {
     if (res.status < 400) {
       return true;
     }
+  } catch {
+    // nothing
   } finally {
     clearTimeout(id);
   }

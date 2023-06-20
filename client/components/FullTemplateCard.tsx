@@ -36,18 +36,27 @@ const FullTemplateCard = ({templateId}: Props) => {
     prepareError,
     awsError,
     unknownError
-  } = useRent(templateInfo?.name, templateDetails!.metadata, region, amount || BigInt(0));
+  } = useRent(templateInfo?.name, templateDetails?.metadata, region, amount || BigInt(0));
   const {data: cpuUsage} = useCPUUsage({template: templateInfo, regionId: region})
 
   const writeButton = () => {
     if (prepareError) {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">Not enough resources available to rent this server</button>;
     } else if (hours > 0 && !error) {
-      if (enough) {
-        return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => execute()}>Pay {price} USDC</button>;
-      } else {
-        return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => executeAllowance()}>Approve {price} USDC</button>;
-      }
+
+      const approveText = enough ? 'USDC Approved' : `Allow Heroicus to spend USDC`;
+      return <div className="mt-5">
+        <ActionButton disabled={enough} handleClick={() => executeAllowance()}>{approveText}</ActionButton>
+        <ActionButton additionalClasses="mt-3" disabled={!enough} handleClick={() => execute()}>Pay {price} USDC</ActionButton>
+      </div>;
+      // if (enough) {
+      //   return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => execute()}>Pay {price} USDC</button>;
+      // } else {
+      //   return <div className="mt-5 flex gap-2">
+      //     <ActionButton handleClick={() => executeAllowance()}>Approve {price} USDC</ActionButton>
+      //     <ActionButton handleClick={() => executeAllowance()}>Approve ∞ USDC</ActionButton>
+      //   </div>;
+      // }
     } else {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">{error}</button>;
     }
@@ -103,7 +112,7 @@ const FullTemplateCard = ({templateId}: Props) => {
             <br/>
 
             <TemplateSpec name="REGION">
-              <RegionSelect regionChanged={onRegionChange}/>
+              <RegionSelect selectedRegion={region} regionChanged={onRegionChange}/>
             </TemplateSpec>
             {/*<TemplateSpec name="CPU USAGE">{cpuUsage}</TemplateSpec>*/}
             <br/>
