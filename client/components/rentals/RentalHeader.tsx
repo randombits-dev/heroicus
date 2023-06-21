@@ -19,7 +19,7 @@ interface Props {
   hasSigned: boolean;
 }
 
-export function RentalHeader({rental, hasSigned}: Props) {
+export function RentalHeader({rental, hasSigned, ip}: Props) {
   const {myRental, refetch} = useMyRental({token: rental.token});
   rental = myRental || rental;
 
@@ -29,10 +29,11 @@ export function RentalHeader({rental, hasSigned}: Props) {
     <Container>
       <TemplateSpec name="EXPIRE DATE">{formatExpires(new Date(rental.expires))}</TemplateSpec>
       <TemplateSpec name="EXPIRE TIME"><Timer end={rental.expires} expired={reload}/></TemplateSpec>
-      {hasSigned && <div className="ml-5">
+      <TemplateSpec name="SERVER IP">{ip}</TemplateSpec>
+      {hasSigned && <div className="">
         <ExtendButton rental={rental} onExtended={() => refetch()}/>
-        <StopButton rental={rental}/>
         <RestartButton rental={rental}/>
+        <StopButton rental={rental}/>
       </div>}
     </Container>
   );

@@ -1,16 +1,3 @@
 # Contracts
 
-Heroicus contract:
-
-## Methods
-
-### rent
-
-```solidity
-function rent(
-  string memory tokenURI, // the ipfs location of the metadata (this is simply a title, description, and image for the NFT)
-  bytes32 templateId, // the server template to rent
-  uint8 region, // the region of the server
-  uint256 amount // the amount of USDC you wish to spend, the expiration is calculated from this amount
-) external
-```
+Heroicus contract: [0x188Af4A6Ae75744A06d20eE53F06b4Ae6530AC70](https://ftmscan.com/address/0x188af4a6ae75744a06d20ee53f06b4ae6530ac70#code)

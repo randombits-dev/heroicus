@@ -20,7 +20,7 @@ const TemplateCard = ({templateInfo}: any) => {
         <TemplateSpec name="CPU">{templateDetails?.cpu + 'x CPUS'}</TemplateSpec>
         <TemplateSpec name="RAM">{templateDetails?.ram + ' GB RAM'}</TemplateSpec>
         <TemplateSpec name="GPU">{templateDetails?.gpu}</TemplateSpec>
-        <TemplateSpec name="USAGE">{templateInfo.cpus}</TemplateSpec>
+        {/*<TemplateSpec name="USAGE">{templateInfo.cpus}</TemplateSpec>*/}
         {/*<TemplateSpec name="OTHER" value={templateDetails.notes}/>*/}
         {/*<TemplateSpec name="PRICE" value={templateInfo.price + ' USDC / hr'}/>*/}
       </div>

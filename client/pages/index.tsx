@@ -35,11 +35,11 @@ export function Index() {
             <div className="text-5xl leading-tight">Cloud computing<br/> using NFT Rentals</div>
             <div className="mt-10 text-2xl">Powered by the Fantom Network and AWS</div>
             <Link href="/portal"
-                  className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">
+                  className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:bg-neutral-950">
               Start Here
             </Link>
             <Link href="https://docs.heroicus.xyz"
-                  className="ml-10 text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10">
+                  className="ml-10 text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 hover:bg-neutral-950 mt-10">
               Docs
             </Link>
 
@@ -73,15 +73,16 @@ export function Index() {
         <div className="my-24">
           <div className="mr-20 invisible md:visible absolute overflow-hidden rounded-r-xl right-[60%]">
             <Image src={image1} alt="Hero Image" width="1000" height="400"
-                   style={{height: '500px', 'objectFit': 'cover', 'objectPosition': '0 0'} as any}/>
+                   style={{height: '400px', 'objectFit': 'cover', 'objectPosition': '0 0'} as any}/>
           </div>
           <div className="md:ml-[30%] p-20">
             {/*<div className="text-lg">use case 1:</div>*/}
             <div className="text-5xl font-bold">Stable Diffusion</div>
-            <div className="text-3xl mt-5">GPU Servers running Automatic1111 to generate AI Images</div>
+            <div className="text-3xl mt-5">GPU Servers to generate AI Images</div>
             <div className="text-xl mt-5">Featuring Telsa T4 16GB GPUs</div>
-            <div className="text-xl mt-3">Text-to-Image, Image-to-Image, Inpainting, ControlNet, and more</div>
-            <div className="text-xl mt-3">Popular models preinstalled</div>
+            <div className="text-xl mt-5">Automatic1111 software preinstalled</div>
+            {/*<div className="text-xl mt-3">Text-to-Image, Image-to-Image, Inpainting, ControlNet, and more</div>*/}
+            {/*<div className="text-xl mt-3">Popular models preinstalled</div>*/}
             {/*<Link href="/portal"*/}
             {/*      className="text-4xl inline-block border-amber-50 border-4 px-10 py-3 bg-neutral-900 mt-10 hover:border-amber-200">*/}
             {/*  Run*/}
@@ -92,7 +93,7 @@ export function Index() {
         <div className="flex mb-24">
           <div className="mr-20 invisible md:visible absolute overflow-hidden rounded-r-xl right-[60%]">
             <Image src={image2} alt="Hero Image" width="1000" height="400"
-                   style={{height: '500px', 'objectFit': 'cover', 'objectPosition': '0 0'} as any}/>
+                   style={{height: '400px', 'objectFit': 'cover', 'objectPosition': '0 0'} as any}/>
           </div>
           <div className="md:ml-[30%] p-20">
             {/*<div className="text-lg">use case 1:</div>*/}

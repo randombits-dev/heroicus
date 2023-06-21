@@ -18,7 +18,7 @@ export function Navbar() {
           {/*<Link className="text-2xl" href="/portal">hērōicus</Link>*/}
           <Link className="text-2xl" href="/portal"><Image src={heroicus} width="50" height="50" alt="home link"
                                                            className="inline-block"/></Link>
-          <Link className="ml-10" target="_blank" href="http://localhost:3001">Docs</Link>
+          <Link className="ml-10" target="_blank" href="https://docs.heroicus.xyz">Docs</Link>
         </div>
 
         <div className="">

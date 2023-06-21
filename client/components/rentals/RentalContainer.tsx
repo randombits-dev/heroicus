@@ -17,7 +17,7 @@ export function RentalContainer({rental}: Props) {
   return (
     <div className="flex flex-col h-full flex-1">
       <div className="py-5 px-10 border-b">
-        <RentalHeader rental={rental} hasSigned={hasSigned}/>
+        <RentalHeader rental={rental} hasSigned={hasSigned} ip={ip}/>
       </div>
       <div className="flex-1 flex flex-col items-center mx-auto">
         <RentalFrame ready={ready} url={url} error={error} signMessage={signMessage}/>

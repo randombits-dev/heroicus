@@ -44,7 +44,7 @@ const createTemplate1 = deployments.createFixture(
     const GPU_deployer = await ethers.getContract('Heroicus', deployer);
     await GPU_deployer.setServer(formatBytes32String('t2.small'), 2);
     await GPU_deployer.setTemplate(formatBytes32String('template1'), formatBytes32String('t2.small'), fromEther(0.2));
-    await GPU_deployer.setTLimit(1, 32);
+    await GPU_deployer.setLimits(1, 32, 4);
   }
 );
 
@@ -64,7 +64,7 @@ describe('Heroicus', () => {
     expect(userInfo.region).to.equal(1);
     expect(userInfo.payment).to.equal(fromEther('0.2'));
     expect(expired).to.equal(false);
-    expect(await GPU_user1.tUsage(1)).to.equal(2);
+    expect((await GPU_user1.usage(1)).t).to.equal(2);
     expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(fromEther(0.2));
     expect(await USDC_user1.balanceOf(user1)).to.equal(fromEther(100 - 0.2));
   });
@@ -84,7 +84,7 @@ describe('Heroicus', () => {
     expect(await USDC_user1.balanceOf(user1)).to.be.approx(balance);
     expect(await USDC_user1.balanceOf(dev)).to.be.approx(expectedSpend);
     expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(0);
-    expect(await GPU_user1.tUsage(1)).to.equal(0);
+    expect((await GPU_user1.usage(1)).t).to.equal(0);
     const [userInfo, expired] = await GPU_user1.userInfo(BigInt(1));
     expect(expired).to.equal(true);
   });
@@ -105,7 +105,7 @@ describe('Heroicus', () => {
     expect(userInfo.region).to.equal(1);
     expect(userInfo.payment).to.equal(fromEther('0.4'));
     expect(expired).to.equal(false);
-    expect(await GPU_user1.tUsage(1)).to.equal(2);
+    expect((await GPU_user1.usage(1)).t).to.equal(2);
     expect(await USDC_user1.balanceOf(GPU_user1.address)).to.equal(fromEther(0.4));
     expect(await USDC_user1.balanceOf(user1)).to.equal(fromEther(100 - 0.4));
   });
@@ -149,18 +149,18 @@ describe('Heroicus', () => {
     await GPU_deployer.setServer(formatBytes32String('t2.tiny'), 1);
     await GPU_deployer.setTemplate(formatBytes32String('template1'), formatBytes32String('t2.small'), fromEther(0.2));
     await GPU_deployer.setTemplate(formatBytes32String('template2'), formatBytes32String('t2.tiny'), fromEther(0.2));
-    await GPU_deployer.setTLimit(1, 2);
+    await GPU_deployer.setLimits(1, 2, 0);
 
     await GPU_user1.rent('abc', formatBytes32String('template1'), 1, fromEther('0.1'));
-    expect(await GPU_user1.tUsage(1)).to.equal(2);
+    expect((await GPU_user1.usage(1)).t).to.equal(2);
     await expect(GPU_user1.rent('abc', formatBytes32String('template1'), 1, fromEther('0.2'))).to.be
       .revertedWith('No resources available for CPU servers');
 
-    await GPU_deployer.setTLimit(1, 3);
+    await GPU_deployer.setLimits(1, 3, 0);
     await expect(GPU_user1.rent('abc', formatBytes32String('template1'), 1, fromEther('0.2'))).to.be
       .revertedWith('No resources available for CPU servers');
     await GPU_user1.rent('abc', formatBytes32String('template2'), 1, fromEther('0.1'));
-    expect(await GPU_user1.tUsage(1)).to.equal(3);
+    expect((await GPU_user1.usage(1)).t).to.equal(3);
   });
 
   it('should not allow renting for less than minimum time', async () => {
@@ -219,7 +219,7 @@ describe('Heroicus', () => {
     const {GPU_deployer, GPU_user1, GPU_user2} = await deploy();
     await giveUSDC();
     await createTemplate1();
-    await GPU_deployer.setTLimit(1, 4);
+    await GPU_deployer.setLimits(1, 4, 0);
     await GPU_user1.rent('abc', formatBytes32String('template1'), 1, fromEther('0.2'));
 
     const currentBlockTime = await getBlockTime();
@@ -234,6 +234,4 @@ describe('Heroicus', () => {
     await expect(GPU_user2.rent('abc', formatBytes32String('template1'), 1, fromEther('0.2'))).to.be
       .revertedWith('No resources available for CPU servers');
   });
-
-  // TODO Test metadata
 });

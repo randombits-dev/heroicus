@@ -18,7 +18,7 @@ const ExtendButton = ({rental, onExtended}: Props) => {
   return (
     <>
       <button onClick={() => setShowModal(true)}
-              className="bg-blue-900 px-3 py-1 lg:px-5 lg:py-2 hover:bg-blue-800 whitespace-nowrap"
+              className="bg-blue-900 px-3 py-1 hover:bg-blue-800 whitespace-nowrap"
       >
         Extend Server
       </button>

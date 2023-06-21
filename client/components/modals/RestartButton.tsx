@@ -12,7 +12,7 @@ const RestartButton = ({rental}: Props) => {
   return (
     <>
       <button onClick={() => setShowModal(true)}
-              className="bg-blue-900 px-3 py-1 lg:px-5 lg:py-2 lg:ml-5 hover:bg-blue-800 whitespace-nowrap"
+              className="bg-blue-900 px-3 py-1 lg:ml-3 hover:bg-blue-800 whitespace-nowrap"
       >
         Restart Server
       </button>

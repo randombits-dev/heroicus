@@ -13,7 +13,7 @@ const RentalFrame = ({ready, url, error, signMessage}: Props) => {
       <div className="spinner"></div>
       <div>Starting server...</div>
       <div className="mt-5">Docker servers usually take 45 seconds to start.</div>
-      <div>Stable Diffusion servers usually take around 3 minutes to start.</div>
+      <div>Stable Diffusion servers usually take 6 minutes to start.</div>
     </div>
   } else if (error) {
     return <div className="text-center mt-10">

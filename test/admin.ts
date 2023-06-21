@@ -25,7 +25,7 @@ describe('Heroicus (admin)', () => {
     cpus = await Heroicus.serverConfigs(formatBytes32String('t2.small'));
     expect(cpus).to.equal(8);
 
-    await Heroicus.removeServer(formatBytes32String('t2.small'));
+    await Heroicus.setServer(formatBytes32String('t2.small'), 0);
     cpus = await Heroicus.serverConfigs(formatBytes32String('t2.small'));
     expect(cpus).to.equal(0);
   });
@@ -72,19 +72,21 @@ describe('Heroicus (admin)', () => {
     await deployments.fixture(['USDC', 'Heroicus']);
     const Heroicus = await ethers.getContract('Heroicus', deployer);
 
-    await Heroicus.setGLimit(1, 4);
-    await Heroicus.setGLimit(2, 8);
-    await Heroicus.setTLimit(1, 16);
-    await Heroicus.setTLimit(2, 32);
+    await Heroicus.setLimits(1, 16, 4);
+    await Heroicus.setLimits(2, 32, 8);
 
-    expect(await Heroicus.gLimits(1)).to.equal(4);
-    expect(await Heroicus.gLimits(2)).to.equal(8);
+    const region1Limits = await Heroicus.limits(1);
+    const region2Limits = await Heroicus.limits(2);
 
-    expect(await Heroicus.tLimits(1)).to.equal(16);
-    expect(await Heroicus.tLimits(2)).to.equal(32);
+    expect(region1Limits.g).to.equal(4);
+    expect(region1Limits.t).to.equal(16);
+    expect(region2Limits.g).to.equal(8);
+    expect(region2Limits.t).to.equal(32);
 
-    await Heroicus.setGLimit(1, 2);
-    expect(await Heroicus.gLimits(1)).to.equal(2);
+    await Heroicus.setLimits(1, 2, 1);
+    const newRegion1Limits = await Heroicus.limits(1);
+    expect(newRegion1Limits.g).to.equal(1);
+    expect(newRegion1Limits.t).to.equal(2);
   });
 
   it('should allow setting min/max rental times', async () => {
@@ -109,9 +111,8 @@ describe('Heroicus (admin)', () => {
 
     await assertOwnable(Heroicus.setServer(formatBytes32String('tiny'), 4));
     await assertOwnable(Heroicus.setTemplate(formatBytes32String('template1'), formatBytes32String('small'), fromEther(1)));
-    await assertOwnable(Heroicus.removeServer(formatBytes32String('tiny')));
-    await assertOwnable(Heroicus.setGLimit(1, 16));
-    await assertOwnable(Heroicus.setTLimit(1, 16));
+    await assertOwnable(Heroicus.removeTemplate(formatBytes32String('tiny')));
+    await assertOwnable(Heroicus.setLimits(1, 1, 1));
     await assertOwnable(Heroicus.setMinRentalTime(1));
     await assertOwnable(Heroicus.setMaxRentalTime(100));
     await assertOwnable(Heroicus.provideRefund(1));

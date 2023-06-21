@@ -12,10 +12,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await execute('USDC', {from: user1}, 'giveMe', ethers.utils.parseEther('100'));
   // await execute('USDC', {from: user1}, 'approve', gpuRental.address, ethers.utils.parseEther('100'));
 
-  await execute('Heroicus', {from: deployer}, 'setTLimit', 1, 2);
-  await execute('Heroicus', {from: deployer}, 'setGLimit', 1, 4);
-  await execute('Heroicus', {from: deployer}, 'setTLimit', 2, 2);
-  await execute('Heroicus', {from: deployer}, 'setGLimit', 2, 4);
+  await execute('Heroicus', {from: deployer}, 'setLimits', 1, 2, 4);
+  await execute('Heroicus', {from: deployer}, 'setLimits', 2, 2, 4);
 
   await execute('Heroicus', {from: deployer}, 'setServer', formatBytes32String('g4dn.xlarge'), 4);
   await execute('Heroicus', {from: deployer}, 'setServer', formatBytes32String('t2.medium'), 2);
