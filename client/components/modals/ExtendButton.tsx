@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ExtendModal from "./ExtendModal";
 import {UserInfo} from "../../utils/definitions";
+import ActionButton from "../common/ActionButton";
 
 interface Props {
   rental: UserInfo;
@@ -17,11 +18,10 @@ const ExtendButton = ({rental, onExtended}: Props) => {
 
   return (
     <>
-      <button onClick={() => setShowModal(true)}
-              className="bg-blue-900 px-3 py-1 hover:bg-blue-800 whitespace-nowrap"
+      <ActionButton handleClick={() => setShowModal(true)} additionalClasses="mt-3"
       >
         Extend Server
-      </button>
+      </ActionButton>
 
       {showModal && <ExtendModal rental={rental} onClose={onClose}/>}
     </>

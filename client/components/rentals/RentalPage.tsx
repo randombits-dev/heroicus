@@ -9,7 +9,7 @@ interface Props {
 export function RentalPage({token}: Props) {
   const {address} = useAccount();
 
-  const {myRental} = useMyRental({token});
+  const {myRental, refetch} = useMyRental({token});
 
   if (!myRental) {
     return <div className="flex flex-col h-full flex-1">
@@ -29,7 +29,7 @@ export function RentalPage({token}: Props) {
     </div>;
   }
 
-  return <RentalContainer rental={myRental}/>
+  return <RentalContainer rental={myRental} refetch={refetch}/>
 }
 
 export default RentalPage

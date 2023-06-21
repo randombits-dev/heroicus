@@ -18,7 +18,7 @@ export const useWaitForServer = (templateId: string, ip: string) => {
     if (!ip) {
       return;
     }
-    const interval: any = setInterval(() => runTest(interval), 5000);
+    const interval: any = setInterval(() => runTest(interval), templateId.startsWith('diffusion') ? 20000 : 5000);
     runTest(interval);
   };
 

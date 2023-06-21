@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import StopModal from "./StopModal";
 import {UserInfo} from "../../utils/definitions";
+import ActionButton from "../common/ActionButton";
 
 interface Props {
   rental: UserInfo;
@@ -11,11 +12,10 @@ const StopButton = ({rental}: Props) => {
 
   return (
     <>
-      <button onClick={() => setShowModal(true)}
-              className="bg-red-900 px-3 py-1 lg:ml-3 hover:bg-red-800 whitespace-nowrap"
+      <ActionButton handleClick={() => setShowModal(true)} additionalClasses="bg-red-900 mt-3 hover:bg-red-800"
       >
         Terminate Server
-      </button>
+      </ActionButton>
 
       {showModal && <StopModal rental={rental} onClose={() => setShowModal(false)}/>}
     </>

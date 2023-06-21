@@ -1,7 +1,3 @@
-// const HeroContainer = styled('div')`
-//   background-image: url('../public/rain.svg')
-// `;
-
 import Image from "next/image";
 import image1 from '../public/images/tmp5szz2naz.png';
 import image2 from '../public/images/tmpbw4bcxkf.png';
