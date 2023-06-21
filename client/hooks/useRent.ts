@@ -8,7 +8,7 @@ import {useEffect, useState} from 'react';
 import {useAllowance} from './useAllowance';
 import {HeroicusAddress} from '../utils/network';
 
-export const useRent = (template: string | undefined, metadata: string, region: number, amount: bigint) => {
+export const useRent = (template: string | undefined, metadata: string | undefined, region: number, amount: bigint) => {
 
   const {push} = useRouter();
   const [awsError, setAwsError] = useState(false);

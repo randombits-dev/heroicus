@@ -17,6 +17,7 @@ const Container = styled('div')`
 interface Props {
   rental: UserInfo;
   hasSigned: boolean;
+  ip: string;
 }
 
 export function RentalHeader({rental, hasSigned, ip}: Props) {
