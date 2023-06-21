@@ -1,6 +1,5 @@
 import {ethers} from 'hardhat';
 import {expect, use} from 'chai';
-import {BigNumberish} from 'ethers';
 import {ContractFunction} from '@ethersproject/contracts';
 import {customMatchers} from './customAssertions';
 
@@ -12,12 +11,11 @@ export const getBlockTime = async () => {
   return block.timestamp;
 };
 
-export const fromEther = (value: String | Number) => {
-  return ethers.utils.parseEther(String(value));
-};
-
-export const toEther = (value: BigNumberish) => {
-  return ethers.utils.formatEther(value);
+export const fromUSDC = (value: String | Number) => {
+  if (typeof value === 'number') {
+    value = value.toFixed(6);
+  }
+  return ethers.utils.parseUnits(String(value), 6);
 };
 
 export const assertOwnable = (call: ContractFunction) => {

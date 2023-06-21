@@ -10,6 +10,8 @@ import {HeroicusAddress} from '../utils/network';
 
 export const useRent = (template: string | undefined, metadata: string | undefined, region: number, amount: bigint) => {
 
+  console.log(amount);
+
   const {push} = useRouter();
   const [awsError, setAwsError] = useState(false);
   const [unknownError, setUnknownError] = useState(false);

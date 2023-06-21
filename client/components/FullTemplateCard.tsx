@@ -5,11 +5,10 @@ import {useRent} from "../hooks/useRent";
 import {TEMPLATE_LIST} from "../utils/templates";
 import ContractWriteStatus from "./common/ContractWriteStatus";
 import TemplateSpec from "./TemplateSpec";
-import {formatEther} from "viem";
 import RegionSelect from "./RegionSelect";
-import {useCPUUsage} from "../hooks/useCPUUsage";
 import {useRouter} from "next/router";
 import ActionButton from "./common/ActionButton";
+import {formatUSDC} from "../utils/numberUtils";
 
 interface Props {
   templateId: string;
@@ -37,7 +36,6 @@ const FullTemplateCard = ({templateId}: Props) => {
     awsError,
     unknownError
   } = useRent(templateInfo?.name, templateDetails?.metadata, region, amount || BigInt(0));
-  const {data: cpuUsage} = useCPUUsage({template: templateInfo, regionId: region})
 
   const writeButton = () => {
     if (prepareError) {
@@ -117,7 +115,7 @@ const FullTemplateCard = ({templateId}: Props) => {
             {/*<TemplateSpec name="CPU USAGE">{cpuUsage}</TemplateSpec>*/}
             <br/>
 
-            <TemplateSpec name="PRICE"><span className="text-xl font-bold mr-2">{formatEther(templateInfo.price)}</span>
+            <TemplateSpec name="PRICE"><span className="text-xl font-bold mr-2">{formatUSDC(templateInfo.price)}</span>
               <span className="text-sm">USDC per hour</span></TemplateSpec>
 
             <TemplateSpec name="HOURS"><input className="bg-neutral-900 w-20 px-5 py-1 outline-0"

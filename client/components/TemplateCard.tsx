@@ -2,7 +2,7 @@ import {TEMPLATE_LIST} from "../utils/templates";
 import {useRouter} from "next/router";
 import TemplateSpec from "./TemplateSpec";
 import React from "react";
-import {formatEther} from "viem";
+import {formatUSDC} from "../utils/numberUtils";
 
 const TemplateCard = ({templateInfo}: any) => {
   const {push} = useRouter();
@@ -20,14 +20,11 @@ const TemplateCard = ({templateInfo}: any) => {
         <TemplateSpec name="CPU">{templateDetails?.cpu + 'x CPUS'}</TemplateSpec>
         <TemplateSpec name="RAM">{templateDetails?.ram + ' GB RAM'}</TemplateSpec>
         <TemplateSpec name="GPU">{templateDetails?.gpu}</TemplateSpec>
-        {/*<TemplateSpec name="USAGE">{templateInfo.cpus}</TemplateSpec>*/}
-        {/*<TemplateSpec name="OTHER" value={templateDetails.notes}/>*/}
-        {/*<TemplateSpec name="PRICE" value={templateInfo.price + ' USDC / hr'}/>*/}
       </div>
 
     </div>
     <div className="py-5">
-      <span className="text-xl font-bold mr-2">{formatEther(templateInfo.price)}</span>
+      <span className="text-xl font-bold mr-2">{formatUSDC(templateInfo.price)}</span>
       <span className="text-sm">USDC per hour</span>
     </div>
     <button onClick={details} className="btn">Choose</button>

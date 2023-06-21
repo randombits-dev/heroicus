@@ -85,7 +85,7 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
     TemplateInfo memory template = templateInfo[templateId];
     require(template.pricePerHour > 0, "template not found");
     _adjustCPULimit(template.serverId, region);
-    uint256 timeRequested = amount.div(template.pricePerHour.div(3600));
+    uint256 timeRequested = amount.mul(3600).div(template.pricePerHour);
     require(timeRequested >= minRentalTime, "minimum rental time not met");
     require(timeRequested <= maxRentalTime, "max rental time");
     IERC20 tk = IERC20(paymentCoin);
@@ -107,7 +107,7 @@ contract Heroicus is IERC4907, ERC721URIStorage, ERC721Enumerable, Ownable {
     require(userOf(tokenId) == msg.sender, "caller is not owner");
     UserInfo storage user = _userInfo[tokenId];
     TemplateInfo memory template = templateInfo[user.templateId];
-    uint256 timeRequested = amount.div(template.pricePerHour.div(3600));
+    uint256 timeRequested = amount.mul(3600).div(template.pricePerHour);
     require(user.expires + timeRequested < block.timestamp + maxRentalTime, "max rental time");
 
     IERC20 tk = IERC20(paymentCoin);

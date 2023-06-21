@@ -1,7 +1,7 @@
 import {deployments, ethers, getNamedAccounts} from 'hardhat';
 import {formatBytes32String} from 'ethers/lib/utils';
 import {expect} from 'chai';
-import {assertOwnable, fromEther} from './utils';
+import {assertOwnable, fromUSDC} from './utils';
 
 describe('Heroicus (admin)', () => {
   it('should allow setting server', async () => {
@@ -46,23 +46,23 @@ describe('Heroicus (admin)', () => {
 
     await Heroicus.setServer(formatBytes32String('g4dn.xlarge'), 4);
     await Heroicus.setServer(formatBytes32String('t2.small'), 16);
-    await Heroicus.setTemplate(formatBytes32String('template1'), formatBytes32String('g4dn.xlarge'), fromEther(1));
-    await Heroicus.setTemplate(formatBytes32String('template2'), formatBytes32String('g4dn.xlarge'), fromEther(2));
-    await Heroicus.setTemplate(formatBytes32String('template3'), formatBytes32String('t2.small'), fromEther(3));
+    await Heroicus.setTemplate(formatBytes32String('template1'), formatBytes32String('g4dn.xlarge'), fromUSDC(1));
+    await Heroicus.setTemplate(formatBytes32String('template2'), formatBytes32String('g4dn.xlarge'), fromUSDC(2));
+    await Heroicus.setTemplate(formatBytes32String('template3'), formatBytes32String('t2.small'), fromUSDC(3));
 
     let {pricePerHour, serverId} = await Heroicus.templateInfo(formatBytes32String('incorrect'));
     expect(pricePerHour).to.equal(0);
 
     ({pricePerHour, serverId} = await Heroicus.templateInfo(formatBytes32String('template1')));
-    expect(pricePerHour).to.equal(fromEther(1));
+    expect(pricePerHour).to.equal(fromUSDC(1));
     expect(serverId).to.equal(formatBytes32String('g4dn.xlarge'));
 
     ({pricePerHour, serverId} = await Heroicus.templateInfo(formatBytes32String('template2')));
-    expect(pricePerHour).to.equal(fromEther(2));
+    expect(pricePerHour).to.equal(fromUSDC(2));
     expect(serverId).to.equal(formatBytes32String('g4dn.xlarge'));
 
     ({pricePerHour, serverId} = await Heroicus.templateInfo(formatBytes32String('template3')));
-    expect(pricePerHour).to.equal(fromEther(3));
+    expect(pricePerHour).to.equal(fromUSDC(3));
     expect(serverId).to.equal(formatBytes32String('t2.small'));
 
   });
@@ -110,7 +110,7 @@ describe('Heroicus (admin)', () => {
     const Heroicus = await ethers.getContract('Heroicus', user1);
 
     await assertOwnable(Heroicus.setServer(formatBytes32String('tiny'), 4));
-    await assertOwnable(Heroicus.setTemplate(formatBytes32String('template1'), formatBytes32String('small'), fromEther(1)));
+    await assertOwnable(Heroicus.setTemplate(formatBytes32String('template1'), formatBytes32String('small'), fromUSDC(1)));
     await assertOwnable(Heroicus.removeTemplate(formatBytes32String('tiny')));
     await assertOwnable(Heroicus.setLimits(1, 1, 1));
     await assertOwnable(Heroicus.setMinRentalTime(1));

@@ -73,7 +73,7 @@ export function Index() {
         <div className="my-24">
           <div className="mr-20 invisible md:visible absolute overflow-hidden rounded-r-xl right-[60%]">
             <Image src={image1} alt="Hero Image" width="1000" height="400"
-                   style={{height: '400px', 'objectFit': 'cover', 'objectPosition': '0 0'} as any}/>
+                   style={{height: '400px', 'objectFit': 'cover', 'objectPosition': '50% 50%'} as any}/>
           </div>
           <div className="md:ml-[30%] p-20">
             {/*<div className="text-lg">use case 1:</div>*/}
@@ -93,7 +93,7 @@ export function Index() {
         <div className="flex mb-24">
           <div className="mr-20 invisible md:visible absolute overflow-hidden rounded-r-xl right-[60%]">
             <Image src={image2} alt="Hero Image" width="1000" height="400"
-                   style={{height: '400px', 'objectFit': 'cover', 'objectPosition': '0 0'} as any}/>
+                   style={{height: '400px', 'objectFit': 'cover', 'objectPosition': '50% 50%'} as any}/>
           </div>
           <div className="md:ml-[30%] p-20">
             {/*<div className="text-lg">use case 1:</div>*/}
