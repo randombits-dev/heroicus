@@ -29,6 +29,6 @@ export const SERVER_LIST = [{
 export const REGIONS: { [key: number]: [string, string] } = {
   1: ['us-east-2', 'US East'],
   2: ['us-west-2', 'US West'],
-  3: ['eu-central-1', 'Europe'],
-  4: ['ap-northeast-2', 'Asia']
+  // 3: ['eu-central-1', 'Europe'],
+  // 4: ['ap-northeast-2', 'Asia']
 };
