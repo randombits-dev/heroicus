@@ -21,4 +21,6 @@ Allow users to stop servers without terminating them, persisting the data on a h
 
 ### 5. Security
 
-Install SSL certificates on servers for encrypted connections. Set a more strict network security policy.
+Install SSL certificates on servers for encrypted connections.
+
+Set a more strict network security policy.
