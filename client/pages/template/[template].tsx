@@ -1,6 +1,8 @@
 import {useRouter} from "next/router";
 import FullTemplateCard from "../../components/FullTemplateCard";
 import WalletLayout from "../../components/layout/WalletLayout";
+import dynamic from "next/dynamic";
+
 
 export function Template() {
   const router = useRouter();
@@ -8,4 +10,6 @@ export function Template() {
   return <WalletLayout><FullTemplateCard templateId={templateId}/></WalletLayout>;
 }
 
-export default Template;
+export default dynamic(() => Promise.resolve(Template), {
+  ssr: false,
+});

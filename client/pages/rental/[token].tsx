@@ -6,7 +6,7 @@ const WalletLayout = dynamic(() => import('../../components/layout/WalletLayout'
   ssr: false,
 })
 
-export function Auto() {
+export function Rental() {
   const router = useRouter();
   const token = Number(router.query.token);
   return (
@@ -16,4 +16,6 @@ export function Auto() {
   );
 }
 
-export default Auto
+export default dynamic(() => Promise.resolve(Rental), {
+  ssr: false,
+});

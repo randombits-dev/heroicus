@@ -1,15 +1,9 @@
 import {ConnectButton} from '@rainbow-me/rainbowkit'
-import {useEffect, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import heroicus from '../../public/images/heroicus.png'
 
 export function Navbar() {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   return (
     <div className="z-50 px-10 py-3">
@@ -22,7 +16,7 @@ export function Navbar() {
         </div>
 
         <div className="">
-          {hasMounted && <ConnectButton/>}
+          <ConnectButton/>
         </div>
       </nav>
     </div>

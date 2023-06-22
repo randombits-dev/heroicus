@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     throw 'Not POST';
   }
   const {token, s} = JSON.parse(req.body);
-  const hash = hashMessage(token as string);
+  const hash = hashMessage(String(token));
 
   const {expired, user, region} = await readUserInfo(token);
   const signatureValid = await verifyMessage({

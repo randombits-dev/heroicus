@@ -13,7 +13,7 @@ const {chains, publicClient, webSocketPublicClient} = configureChains(
 const {connectors} = getDefaultWallets({
   appName: 'Heroicus',
   chains,
-  projectId: '',
+  projectId: 'd483f2480147fe9baf775494fee817ce',
 });
 
 export const config = createConfig({
