@@ -3,15 +3,16 @@ import {DescribeInstancesCommand, EC2Client} from '@aws-sdk/client-ec2';
 import {hashMessage, verifyMessage} from 'viem';
 import {withErrorHandler} from '../../errorHandler';
 import {getClientToken, readUserInfo} from '../../utils/aws';
+import {getRegionId} from '../../utils/templates';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     throw 'Not POST';
   }
   const {token, s} = JSON.parse(req.body);
-  const hash = hashMessage(token as string);
+  const hash = hashMessage(String(token));
 
-  const {expired, user} = await readUserInfo(token);
+  const {expired, user, region} = await readUserInfo(token);
   const signatureValid = await verifyMessage({
     address: user,
     message: 'Sign in with ID: ' + hash,
@@ -25,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     throw 'Expired rental';
   }
 
-  const ec2 = new EC2Client({region: 'us-east-2'});
+  const ec2 = new EC2Client({region: getRegionId(region)});
   const command = new DescribeInstancesCommand({
     Filters: [{Name: 'client-token', Values: [getClientToken(token)]}]
   });

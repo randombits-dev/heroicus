@@ -39,7 +39,7 @@ export const useMyRentals = (): { myRentals: UserInfo[] } => {
       user: item.result[0].user,
       expires: Number(item.result[0].expires) * 1000,
       templateId: parseBytes32String(item.result[0].templateId),
-      region: item.result[0].region,
+      region: Number(item.result[0].region),
       expired: item.result[1]
     })).filter(item => !item.expired);
     return {myRentals: myRentalsFormatted};

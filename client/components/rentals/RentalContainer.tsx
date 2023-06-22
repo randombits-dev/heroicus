@@ -1,5 +1,5 @@
 import {useLoginToServer} from "../../hooks/useLoginToServer";
-import {TEMPLATE_LIST} from "../../utils/templates";
+import {REGIONS, TEMPLATE_LIST} from "../../utils/templates";
 import {useWaitForServer} from "../../hooks/useWaitForServer";
 import {UserInfo} from "../../utils/definitions";
 import TemplateSpec from "../TemplateSpec";
@@ -60,6 +60,7 @@ export function RentalContainer({rental, refetch: refetchRental}: Props) {
       <div className="px-5 py-5">
         <TemplateSpec name="ID">{rental.token}</TemplateSpec>
         <TemplateSpec name="TYPE">{template?.name}</TemplateSpec>
+        <TemplateSpec name="REGION">{REGIONS[rental.region][1]}</TemplateSpec>
         <TemplateSpec name="EXPIRES">{formatExpires(new Date(rental.expires))}</TemplateSpec>
         <TemplateSpec name="TIME LEFT"><Timer end={rental.expires}/></TemplateSpec>
         {renderBottom()}

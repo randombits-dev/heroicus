@@ -2,12 +2,13 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {DescribeInstancesCommand, EC2Client, TerminateInstancesCommand} from '@aws-sdk/client-ec2';
 import {withErrorHandler} from '../../errorHandler';
 import {getClientToken, readUserInfo} from '../../utils/aws';
+import {getRegionId} from '../../utils/templates';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     throw 'Not POST';
   }
-  const {token} = JSON.parse(req.body);
+  const {token, region} = JSON.parse(req.body);
 
   const {expired} = await readUserInfo(token);
 
@@ -15,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     throw 'Not expired';
   }
 
-  const ec2 = new EC2Client({region: 'us-east-2'});
+  const ec2 = new EC2Client({region: getRegionId(region)});
 
   const command = new DescribeInstancesCommand({
     Filters: [{Name: 'client-token', Values: [getClientToken(token)]}]

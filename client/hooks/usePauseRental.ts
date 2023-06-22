@@ -5,7 +5,7 @@ import {useEffect} from 'react';
 import {useContractWriteStatus} from './useContractWriteStatus';
 import {HeroicusAddress} from '../utils/network';
 
-export const usePauseRental = (tokenId: number) => {
+export const usePauseRental = (tokenId: number, region: number) => {
 
   // const [executing, setExecuting] = useState(false);
   const {push} = useRouter();
@@ -19,10 +19,10 @@ export const usePauseRental = (tokenId: number) => {
   const {execute, status, statusMsg} = useContractWriteStatus(config);
 
   useEffect(() => {
-    if (status === 'success') {
+    if (status === 'success' || status === 'error') {
       fetch('/api/stop', {
         method: 'POST',
-        body: JSON.stringify({token: tokenId})
+        body: JSON.stringify({token: tokenId, region})
       }).then(() => {
         void push('/portal');
       });

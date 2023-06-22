@@ -9,6 +9,7 @@ import RegionSelect from "./RegionSelect";
 import {useRouter} from "next/router";
 import ActionButton from "./common/ActionButton";
 import {formatUSDC} from "../utils/numberUtils";
+import {useBalance} from "../hooks/useBalance";
 
 interface Props {
   templateId: string;
@@ -24,6 +25,7 @@ const FullTemplateCard = ({templateId}: Props) => {
   const templateInfo = useTemplateInfo({templateId});
   const templateDetails = TEMPLATE_LIST.find(t => t.id === templateId);
   const {price, amount} = useEstimatePrice(templateInfo, hours);
+  const {balance} = useBalance();
   const {
     execute,
     enough,
@@ -38,17 +40,18 @@ const FullTemplateCard = ({templateId}: Props) => {
   } = useRent(templateInfo?.name, templateDetails?.metadata, region, amount || BigInt(0));
 
   const writeButton = () => {
-    if (prepareError) {
+    if (error) {
+      return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">{error}</button>;
+    } else if (balance < (amount || 0)) {
+      return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">USDC balance too low</button>;
+    } else if (prepareError) {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">Not enough resources available to rent this server</button>;
-    } else if (hours > 0 && !error) {
-
+    } else {
       const approveText = enough ? 'USDC Approved' : `Allow Heroicus to spend USDC`;
       return <div className="mt-5">
         <ActionButton disabled={enough} handleClick={() => executeAllowance()}>{approveText}</ActionButton>
         <ActionButton additionalClasses="mt-3" disabled={!enough} handleClick={() => execute()}>Pay {price} USDC</ActionButton>
       </div>;
-    } else {
-      return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">{error}</button>;
     }
   };
 

@@ -32,3 +32,7 @@ export const REGIONS: { [key: number]: [string, string] } = {
   // 3: ['eu-central-1', 'Europe'],
   // 4: ['ap-northeast-2', 'Asia']
 };
+
+export const getRegionId = (num: any) => {
+  return REGIONS[num][0];
+};

@@ -26,7 +26,7 @@ export const useMyRental = ({token}: Props): { myRental: UserInfo | undefined, r
     expires: Number(userStruct.expires) * 1000,
     templateId: parseBytes32String(userStruct.templateId),
     expired: data[1],
-    region: userStruct.region
+    region: Number(userStruct.region)
   };
   return {myRental: formatted, refetch};
 };

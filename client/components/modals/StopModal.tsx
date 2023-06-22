@@ -15,7 +15,7 @@ interface Props {
 }
 
 const StopModal = ({rental, onClose}: Props) => {
-  const {execute, status, statusMsg} = usePauseRental(rental.token);
+  const {execute, status, statusMsg} = usePauseRental(rental.token, rental.region);
   const templateInfo = useTemplateInfo({templateId: rental.templateId});
   const {price} = useEstimateRefund(templateInfo, rental);
 

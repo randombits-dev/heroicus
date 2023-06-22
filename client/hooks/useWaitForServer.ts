@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
 
+let interval: any;
 export const useWaitForServer = (templateId: string, ip: string) => {
   const [ready, setReady] = useState(false);
 
-  const runTest = (interval: any) => {
+  const runTest = () => {
     fetch(`/api/status?template=${templateId}&ip=${ip}`).then((res) => {
       if (res.status === 200) {
         setReady(true);
@@ -18,12 +19,15 @@ export const useWaitForServer = (templateId: string, ip: string) => {
     if (!ip) {
       return;
     }
-    const interval: any = setInterval(() => runTest(interval), templateId.startsWith('diffusion') ? 20000 : 5000);
-    runTest(interval);
+    interval = setInterval(() => runTest(), templateId.startsWith('diffusion') ? 20000 : 5000);
+    runTest();
   };
 
   useEffect(() => {
     retry();
+    return () => {
+      clearInterval(interval);
+    };
   }, [ip]);
 
   return {ready, retry};

@@ -26,7 +26,7 @@ export const readUserInfo = async (token: string) => {
     expires: Number(userStruct.expires) * 1000,
     templateId: parseBytes32String(userStruct.templateId),
     expired: userInfo[1],
-    region: userStruct.region
+    region: Number(userStruct.region)
   };
 };
 
