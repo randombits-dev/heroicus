@@ -29,13 +29,13 @@ After your server rental transaction completes, you will be taken to server page
 
 If you sign into your server right away, the server will most likely not be started yet. Please be patient.
 
-#### Stable Diffusion
+Docker servers typically start within a minute. Stable Diffusion servers take up to 10 minutes to startup.
 
-Takes around 3 minutes to startup. You will see the Automatic1111 UI when it is ready.
+## 7. Launch your server UI
 
-#### Docker
+When the server has finished starting, you will see a "Launch" button. This button will open a new tab that opens the software preinstalled on the server.
 
-Takes around 1 minute to startup. You will see the Portainer UI when it is ready. For security reasons, make sure to create an admin password right away.
+Docker servers will launch the Portainer Admin console. Stable Diffusion servers will launch the Automatic1111 interface.
 
 
 

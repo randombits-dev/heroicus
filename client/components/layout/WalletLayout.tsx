@@ -16,6 +16,9 @@ export default function WalletLayout({flex, children}: PropsWithChildren<{ flex?
     if (address) {
       return <>
         <Navbar/>
+        <div className="bg-neutral-950 shadow-2xl rounded-lg lg:m-10 m-1 px-10 py-5 flex flex-col text-center">
+          Warning: This is an alpha release, and the servers should only be used for non-sensitive data purposes.
+        </div>
         {children}
       </>;
     } else {
