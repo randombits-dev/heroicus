@@ -47,14 +47,6 @@ const FullTemplateCard = ({templateId}: Props) => {
         <ActionButton disabled={enough} handleClick={() => executeAllowance()}>{approveText}</ActionButton>
         <ActionButton additionalClasses="mt-3" disabled={!enough} handleClick={() => execute()}>Pay {price} USDC</ActionButton>
       </div>;
-      // if (enough) {
-      //   return <button className="bg-blue-900 px-10 py-3 w-full mt-5" onClick={() => execute()}>Pay {price} USDC</button>;
-      // } else {
-      //   return <div className="mt-5 flex gap-2">
-      //     <ActionButton handleClick={() => executeAllowance()}>Approve {price} USDC</ActionButton>
-      //     <ActionButton handleClick={() => executeAllowance()}>Approve ∞ USDC</ActionButton>
-      //   </div>;
-      // }
     } else {
       return <button className="bg-neutral-800 px-10 py-3 w-full mt-5">{error}</button>;
     }

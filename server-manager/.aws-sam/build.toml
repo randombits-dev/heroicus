@@ -5,7 +5,7 @@ codeuri = "G:\\dev\\projects\\ftm-rental\\server-manager"
 runtime = "nodejs18.x"
 architecture = "x86_64"
 handler = "src/server-manager.checkRunning"
-manifest_hash = "4090507476bd590712d83af3f12dc05d"
+manifest_hash = "d9b8c130cc304cc446f612b7af51a5f3"
 packagetype = "Zip"
 functions = ["ServerManager"]
 
@@ -17,6 +17,7 @@ Minify = true
 Target = "es2020"
 Sourcemap = true
 EntryPoints = ["src/server-manager.ts"]
+
 
 
 

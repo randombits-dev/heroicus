@@ -31,12 +31,7 @@ export function RentalContainer({rental, refetch: refetchRental}: Props) {
 
   const renderBottom = () => {
     if (ready) {
-      return <div>
-        <ActionButton additionalClasses="bg-green-900 mt-10 hover:bg-green-800" handleClick={use}>Launch Server</ActionButton>
-        <ExtendButton rental={rental} onExtended={() => refetchRental()}/>
-        <RestartButton rental={rental}/>
-        <StopButton rental={rental}/>
-      </div>;
+      return <ActionButton additionalClasses="bg-green-900 mt-10 hover:bg-green-800" handleClick={use}>Launch Server</ActionButton>;
     } else if (url) {
       const message = rental.templateId.startsWith('diffusion') ? 'Stable Diffusion servers can take up to 10 minutes to start' : 'Docker servers usually take 45 seconds to start';
 
@@ -49,9 +44,9 @@ export function RentalContainer({rental, refetch: refetchRental}: Props) {
       return <div className="text-center mt-10">
         <div>An error occurred. Please stop server to get a refund.</div>
       </div>;
-    } else {
+    } else if (!hasSigned) {
       return <div className="text-center mt-10">
-        <button className="bg-blue-900 px-20 py-5" onClick={() => signMessage()}>Sign into server</button>
+        <ActionButton additionalClasses="mt-10" handleClick={() => signMessage()}>Sign into server</ActionButton>
       </div>;
     }
   };
@@ -68,6 +63,13 @@ export function RentalContainer({rental, refetch: refetchRental}: Props) {
         <TemplateSpec name="EXPIRES">{formatExpires(new Date(rental.expires))}</TemplateSpec>
         <TemplateSpec name="TIME LEFT"><Timer end={rental.expires}/></TemplateSpec>
         {renderBottom()}
+        {hasSigned && <div>
+
+          <ExtendButton rental={rental} onExtended={() => refetchRental()}/>
+          <RestartButton rental={rental}/>
+          <StopButton rental={rental}/>
+        </div>
+        }
       </div>
     </div>
   </div>;

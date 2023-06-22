@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: schedule-example
+Description: Server Manager that syncs server status with blockchain
 Transform:
 - AWS::Serverless-2016-10-31
 Resources:
@@ -16,13 +16,14 @@ Resources:
         CloudWatchEvent:
           Type: Schedule
           Properties:
-            Schedule: cron(0 * * * ? *)
-      MemorySize: 128
-      Timeout: 100
-      CodeUri: ServerManager
+            Schedule: rate(1 minutes)
+      MemorySize: 256
+      Timeout: 60
       Environment:
         Variables:
+          CHAIN: fantom
           NODE_OPTIONS: ' --enable-source-maps'
+      CodeUri: ServerManager
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
