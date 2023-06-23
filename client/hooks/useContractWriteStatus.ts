@@ -1,5 +1,6 @@
 import {useContractWrite, useWaitForTransaction} from 'wagmi';
 import {ContractWriteStatus} from '../utils/definitions';
+import {useEffect} from 'react';
 
 const getStatus = ({isLoading, isSuccess, isFetching, isError, error, statusOverrides}: any): [ContractWriteStatus, string] => {
   if (isError) {
@@ -17,9 +18,14 @@ const getStatus = ({isLoading, isSuccess, isFetching, isError, error, statusOver
 
 export const useContractWriteStatus = (config: any, statusOverrides = {}) => {
   const {data, write, isLoading} = useContractWrite(config);
-  const {data: receipt, isSuccess, error, isError, isFetching} = useWaitForTransaction({
+  const {data: receipt, isSuccess, error, isError, isFetching, refetch} = useWaitForTransaction({
     hash: data?.hash
   });
   const [status, statusMsg] = getStatus({isLoading, isSuccess, isError, error, isFetching, statusOverrides});
+  useEffect(() => {
+    if (isError) {
+      void refetch();
+    }
+  }, [isError]);
   return {execute: write, receipt, status, statusMsg};
 };

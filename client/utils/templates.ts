@@ -17,6 +17,15 @@ export const TEMPLATE_LIST = [
     notes: 'Docker and Portainer preinstalled.',
     url: (ip: string) => `http://${ip}:9000`,
     metadata: 'ipfs://bafkreigerughqlsdku4nmaldeugvbty7vgwe5ehc2y2xkrx4ddexvyvrzm'
+  },
+  {
+    id: 'docker.micro',
+    name: 'Micro Docker',
+    cpu: 1,
+    ram: 1,
+    notes: 'A lightweight and cheaper alternative to the regular docker. Docker and Portainer preinstalled.',
+    url: (ip: string) => `http://${ip}:9000`,
+    metadata: 'ipfs://bafkreigerughqlsdku4nmaldeugvbty7vgwe5ehc2y2xkrx4ddexvyvrzm'
   }
 ];
 
@@ -24,6 +33,8 @@ export const SERVER_LIST = [{
   id: 'g4dn.xlarge',
 }, {
   id: 't2.medium'
+}, {
+  id: 't2.micro'
 }];
 
 export const REGIONS: { [key: number]: [string, string] } = {
