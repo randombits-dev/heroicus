@@ -1,3 +1,3 @@
 # Contracts
 
-Heroicus contract: [0x9918d405D957247A9cB2A2E7A504e6fdca59cC0e](https://ftmscan.com/address/0x9918d405D957247A9cB2A2E7A504e6fdca59cC0e)
+Heroicus contract: [0xC6537b534dEe49ff94A3193A65101f367c1C566A](https://ftmscan.com/address/0xC6537b534dEe49ff94A3193A65101f367c1C566A)

@@ -128,12 +128,18 @@ const FullTemplateCard = ({templateId}: Props) => {
         {
           writeButton()
         }
+
+        <div className="mt-5 text-center">
+          Payments are made with LayerZero USDC
+          (<a className="text-sm" target="_blank"
+              href="https://ftmscan.com/token/0x28a92dde19D9989F39A49905d7C9C2FAc7799bDf">0x28a92dde19D9989F39A49905d7C9C2FAc7799bDf</a>)
+        </div>
       </>
     }
   };
 
   return <div className="flex justify-center text-center">
-    <div className="bg-zinc-950 rounded-lg m-10 px-10 py-5 w-96 flex flex-col">
+    <div className="bg-zinc-950 rounded-lg m-10 px-10 py-5 w-[450px] flex flex-col">
       {writeContents()}
     </div>
   </div>;
