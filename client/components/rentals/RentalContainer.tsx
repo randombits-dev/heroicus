@@ -9,8 +9,8 @@ import ActionButton from "../common/ActionButton";
 import ExtendButton from "../modals/ExtendButton";
 import RestartButton from "../modals/RestartButton";
 import StopButton from "../modals/StopButton";
-import image1 from '../../public/images/tmp5szz2naz.png';
-import image2 from '../../public/images/tmpbw4bcxkf.png';
+import image1 from '../../public/images/tmp5szz2naz.webp';
+import image2 from '../../public/images/tmpbw4bcxkf.webp';
 import Image from "next/image";
 
 
@@ -39,7 +39,7 @@ export function RentalContainer({rental, refetch: refetchRental}: Props) {
         <div className="spinner"></div>
         <div>Starting server...</div>
         <div className="mt-5">{message}</div>
-      </div>
+      </div>;
     } else if (error) {
       return <div className="text-center mt-10">
         <div>An error occurred. Please stop server to get a refund.</div>
@@ -76,4 +76,4 @@ export function RentalContainer({rental, refetch: refetchRental}: Props) {
   </div>;
 }
 
-export default RentalContainer
+export default RentalContainer;
