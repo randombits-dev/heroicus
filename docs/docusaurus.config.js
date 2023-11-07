@@ -1,8 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+import {themes} from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -68,7 +67,7 @@ const config = {
           position: 'left',
         },
         {
-          href: 'https://github.com/nienow/heroicus',
+          href: 'https://github.com/randombits-dev/heroicus',
           label: 'GitHub',
           position: 'right',
         },
@@ -96,14 +95,14 @@ const config = {
         },
         {
           label: 'GitHub',
-          href: 'https://github.com/nienow/heroicus',
+          href: 'https://github.com/randombits-dev/heroicus',
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Random Bits`,
     },
     prism: {
-      theme: darkCodeTheme,
-      darkTheme: darkCodeTheme,
+      theme: themes.dracula,
+      darkTheme: themes.dracula,
     },
     colorMode: {
       defaultMode: 'dark',
