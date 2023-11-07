@@ -4,7 +4,7 @@ import {TEMPLATE_LIST} from '../utils/templates';
 import {TemplateInfo} from '../utils/definitions';
 import {useServerList} from './useServerList';
 import {HeroicusAddress} from '../utils/network';
-import {decodeBytes32String, encodeBytes32String} from "ethers";
+import {decodeBytes32String, encodeBytes32String} from 'ethers';
 
 let cache: TemplateInfo[];
 export const useTemplateList = (): TemplateInfo[] => {
