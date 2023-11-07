@@ -4,8 +4,6 @@ import {withErrorHandler} from '../../errorHandler';
 import {getClientToken, readUserInfo} from '../../utils/aws';
 import {getRegionId} from '../../utils/templates';
 
-export const runtime = 'edge';
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     throw 'Not POST';

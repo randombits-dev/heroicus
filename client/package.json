@@ -22,7 +22,6 @@
     "wagmi": "1.2.1"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "1.0.2",
     "@headlessui/react": "1.7.14",
     "@heroicons/react": "2.0.18",
     "@types/node": "17.0.31",
