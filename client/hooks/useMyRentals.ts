@@ -1,6 +1,6 @@
 import {useAccount, useContractRead, useContractReads} from 'wagmi';
 import {heroicusABI} from '../generated';
-import {parseBytes32String} from 'ethers/lib/utils';
+import {decodeBytes32String} from 'ethers';
 import {UserInfo} from '../utils/definitions';
 import {HeroicusAddress} from '../utils/network';
 
@@ -38,7 +38,7 @@ export const useMyRentals = (): { myRentals: UserInfo[] } => {
       token: Number(results![i].result),
       user: item.result[0].user,
       expires: Number(item.result[0].expires) * 1000,
-      templateId: parseBytes32String(item.result[0].templateId),
+      templateId: decodeBytes32String(item.result[0].templateId),
       region: Number(item.result[0].region),
       expired: item.result[1]
     })).filter(item => !item.expired);

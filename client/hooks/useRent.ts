@@ -1,7 +1,7 @@
 import {usePrepareContractWrite} from 'wagmi';
 import {decodeEventLog} from 'viem';
 import {heroicusABI} from '../generated';
-import {formatBytes32String} from 'ethers/lib/utils';
+import {encodeBytes32String} from "ethers";
 import {useRouter} from 'next/router';
 import {useContractWriteStatus} from './useContractWriteStatus';
 import {useEffect, useState} from 'react';
@@ -30,7 +30,7 @@ export const useRent = (template: string | undefined, metadata: string | undefin
       address: HeroicusAddress,
       abi: heroicusABI,
       functionName: 'rent',
-      args: [metadata, formatBytes32String(template), region, amount]
+      args: [metadata, encodeBytes32String(template), region, amount]
     };
   }
 

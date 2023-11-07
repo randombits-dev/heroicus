@@ -2,7 +2,7 @@ import {DescribeInstancesCommand, EC2Client, RunInstancesCommand} from '@aws-sdk
 import {REGIONS} from './templates';
 import {heroicusABI} from '../generated';
 import {createViemClient, createViemWallet, getOwnerAccount, HeroicusAddress} from './network';
-import {parseBytes32String} from 'ethers/lib/utils';
+import {decodeBytes32String} from "ethers";
 
 export const getClientToken = (tokenId: number): string => {
   return HeroicusAddress + '_15' + tokenId;
@@ -24,7 +24,7 @@ export const readUserInfo = async (token: string) => {
     token: Number(token),
     user: userStruct.user,
     expires: Number(userStruct.expires) * 1000,
-    templateId: parseBytes32String(userStruct.templateId),
+    templateId: decodeBytes32String(userStruct.templateId),
     expired: userInfo[1],
     region: Number(userStruct.region)
   };

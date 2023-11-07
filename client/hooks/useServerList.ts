@@ -1,9 +1,9 @@
 import {useContractReads} from 'wagmi';
 import {heroicusABI} from '../generated';
-import {formatBytes32String} from 'ethers/lib/utils';
 import {SERVER_LIST} from '../utils/templates';
 import {ServerInfo} from '../utils/definitions';
 import {HeroicusAddress} from '../utils/network';
+import {encodeBytes32String} from "ethers";
 
 let cache: ServerInfo[];
 export const useServerList = (): ServerInfo[] => {
@@ -12,7 +12,7 @@ export const useServerList = (): ServerInfo[] => {
     address: HeroicusAddress,
     abi: heroicusABI,
     functionName: 'serverConfigs',
-    args: [formatBytes32String(id)],
+    args: [encodeBytes32String(id)],
     enabled: !cache
   }));
 
