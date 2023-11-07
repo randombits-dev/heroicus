@@ -1,9 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@openzeppelin/contracts':
-    specifier: ^4.9.0-rc.1
-    version: 4.9.0-rc.1
+    specifier: ^5.0.0
+    version: 5.0.0
   dotenv:
     specifier: ^16.0.0
     version: 16.0.0
@@ -873,8 +877,8 @@ packages:
       - supports-color
     dev: true
 
-  /@openzeppelin/contracts@4.9.0-rc.1:
-    resolution: {integrity: sha512-JKHhWA6MAfliGliYJCuEntG/les6zmlXWFZT2VwvH/7r5Kpfced3YREFWvtZC6GyTnusio7Sa6nim++jt925cg==}
+  /@openzeppelin/contracts@5.0.0:
+    resolution: {integrity: sha512-bv2sdS6LKqVVMLI5+zqnNrNU/CA+6z6CmwFXm/MzmOPBRSO5reEJN7z0Gbzvs0/bv/MZZXNklubpwy3v2+azsw==}
     dev: false
 
   /@scure/base@1.1.1:
@@ -1306,6 +1310,7 @@ packages:
   /amdefine@1.0.1:
     resolution: {integrity: sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==}
     engines: {node: '>=0.4.2'}
+    requiresBuild: true
     dev: true
     optional: true
 
