@@ -1,5 +1,7 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 
+export const runtime = 'edge';
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const ip = req.query?.ip || '';
   const templateId = req.query?.template || '';

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import image1 from '../public/images/tmp5szz2naz.png';
-import image2 from '../public/images/tmpbw4bcxkf.png';
+import image1 from '../public/images/tmp5szz2naz.webp';
+import image2 from '../public/images/tmpbw4bcxkf.webp';
 import discord from '../public/images/discord.svg';
 import github from '../public/images/github.svg';
 import heroicus1 from '../public/images/heroicus.png';
@@ -123,7 +123,7 @@ export function Index() {
         </div>
       </div>
     </div>
-  </>
+  </>;
 }
 
-export default Index
+export default Index;

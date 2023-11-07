@@ -1,7 +1,7 @@
 {
-  "name": "erc4907-box",
+  "name": "heroicus",
   "version": "1.0.0",
-  "description": "A simple demo for ERC4907",
+  "description": "A server rental platform using NFTs",
   "directories": {
     "test": "test"
   },
@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/emojidao/ERC4907Box.git"
+    "url": "git+https://github.com/randombits-dev/heroicus.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/emojidao/ERC4907Box/issues"
+    "url": "https://github.com/randombits-dev/heroicus/issues"
   },
-  "homepage": "https://github.com/emojidao/ERC4907Box#readme",
+  "homepage": "https://heroicus.xyz",
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.0-rc.1",
     "dotenv": "^16.0.0",

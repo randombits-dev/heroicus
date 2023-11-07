@@ -1,7 +1,6 @@
 {
-  "name": "docs",
-  "version": "0.0.0",
-  "private": true,
+  "name": "heroicus-docs",
+  "version": "0.0.1",
   "scripts": {
     "start docs": "docusaurus start --port 3001",
     "build docs": "docusaurus build",
